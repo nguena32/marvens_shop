@@ -47,21 +47,27 @@ class AuthController extends Controller
             $stmt->execute(['u' => $username]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($user && password_verify($password, $user['password_hash'])) {
-                // Régénération de session (anti session fixation)
-                Session::regenerate(true);
-                Session::set('admin_user_id', $user['id']);
-                Session::set('admin_user_name', $user['name'] ?? $user['username']);
-                Session::set('admin_user_role', $user['role']);
-
-                return $this->redirect('/admin/dashboard');
+            if (!$user) {
+                Session::set('flash_error', 'Utilisateur non trouvé en base.');
+                return $this->redirect('/admin/login');
             }
-        } catch (\Exception $e) {
-            // Log sécurisé sans exposer l'erreur
-        }
 
-        Session::set('flash_error', 'Identifiants invalides.');
-        return $this->redirect('/admin/login');
+            if (!password_verify($password, $user['password_hash'])) {
+                Session::set('flash_error', 'Mot de passe incorrect pour cet utilisateur.');
+                return $this->redirect('/admin/login');
+            }
+
+            // Régénération de session (anti session fixation)
+            Session::regenerate(true);
+            Session::set('admin_user_id', $user['id']);
+            Session::set('admin_user_name', $user['name'] ?? $user['username']);
+            Session::set('admin_user_role', $user['role']);
+
+            return $this->redirect('/admin/dashboard');
+        } catch (\Exception $e) {
+            Session::set('flash_error', 'Erreur système : ' . $e->getMessage());
+            return $this->redirect('/admin/login');
+        }
     }
 
     public function logout(Request $request): Response
