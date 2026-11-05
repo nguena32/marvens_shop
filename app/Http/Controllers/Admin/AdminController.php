@@ -57,7 +57,22 @@ class AdminController extends Controller
         $totalRevenue = (int) $pdo->query("SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE payment_status = 'paid'")->fetchColumn();
         $totalProducts = (int) $pdo->query("SELECT COUNT(*) FROM products WHERE is_active = 1")->fetchColumn();
 
-        $recentOrders = $this->orderRepo->findAllPaginated(5, 0);
+        // Récupération des articles en stock faible ou critique
+        $lowStockStmt = $pdo->query("
+            SELECT pv.id, pv.variant_name, pv.stock_quantity, p.name as product_name, p.main_image_url
+            FROM product_variants pv
+            JOIN products p ON pv.product_id = p.id
+            WHERE pv.is_available = 1 AND pv.stock_quantity <= 5
+            ORDER BY pv.stock_quantity ASC
+            LIMIT 3
+        ");
+        $lowStockItems = $lowStockStmt ? $lowStockStmt->fetchAll(PDO::FETCH_ASSOC) : [];
+
+        // Filtre de statut optionnel pour le tableau interactif
+        $statusFilter = $request->query('status');
+        $statusFilter = is_string($statusFilter) && trim($statusFilter) !== '' ? trim($statusFilter) : null;
+
+        $recentOrders = $this->orderRepo->findAllPaginated(10, 0, $statusFilter);
 
         return $this->render('admin.pages.dashboard', [
             'total_orders' => $totalOrders,
@@ -65,6 +80,8 @@ class AdminController extends Controller
             'total_revenue' => $totalRevenue,
             'total_products' => $totalProducts,
             'recent_orders' => $recentOrders,
+            'low_stock_items' => $lowStockItems,
+            'current_filter' => $statusFilter,
         ]);
     }
 

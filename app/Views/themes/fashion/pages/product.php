@@ -37,7 +37,7 @@
         <div class="product-layout">
             <div class="product-gallery">
                 <?php if (!empty($product['main_image_url'])): ?>
-                    <img src="/<?= htmlspecialchars($product['main_image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">
+                    <img src="/<?= ltrim(htmlspecialchars($product['main_image_url']), '/') ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">
                 <?php else: ?>
                     <?= htmlspecialchars($product['name']) ?>
                 <?php endif; ?>

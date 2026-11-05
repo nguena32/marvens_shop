@@ -78,7 +78,7 @@
                     <div class="card">
                         <div class="card-img">
                             <?php if (!empty($p['main_image_url'])): ?>
-                                <img src="/<?= htmlspecialchars($p['main_image_url']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" style="width:100%; height:100%; object-fit:cover;">
+                                <img src="/<?= ltrim(htmlspecialchars($p['main_image_url']), '/') ?>" alt="<?= htmlspecialchars($p['name']) ?>" style="width:100%; height:100%; object-fit:cover;">
                             <?php else: ?>
                                 <?= htmlspecialchars($p['name']) ?>
                             <?php endif; ?>
