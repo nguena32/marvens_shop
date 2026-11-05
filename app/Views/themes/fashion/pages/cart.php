@@ -1,104 +1,141 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Mon Panier — Marvens Shop</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #8d4b00; --surface: #fff8f5; --surface-card: #ffffff; --border: #dbc2b0; --text-main: #231a13; --text-muted: #554336; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--surface); color: var(--text-main); line-height: 1.5; padding-bottom: 3rem; }
-        header { background: #fff; border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; }
-        .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
-        h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; margin-bottom: 1.5rem; }
-        .cart-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 2rem; }
-        th { background: #fdeade; padding: 0.8rem 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; }
-        td { padding: 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        .cart-summary { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; max-width: 400px; margin-left: auto; }
-        .summary-line { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 1rem; }
-        .total-line { font-size: 1.25rem; font-weight: 700; color: var(--primary); border-top: 1px solid var(--border); padding-top: 0.8rem; }
-        .btn-checkout { background: var(--primary); color: #fff; padding: 0.8rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600; display: block; text-align: center; margin-top: 1.2rem; border: none; cursor: pointer; }
-        .btn-back { color: var(--text-muted); text-decoration: underline; font-size: 0.9rem; display: inline-block; margin-top: 1rem; }
-        .btn-danger { background: none; border: none; color: #ba1a1a; cursor: pointer; text-decoration: underline; font-size: 0.85rem; }
+        @layer base {
+            html, body { margin:0; padding:0; }
+            body { overscroll-behavior:none; }
+        }
+        ::-webkit-scrollbar { display:none; }
     </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#8d4b00",
+                        "primary-container": "#b15f00",
+                        "on-primary": "#ffffff",
+                        "surface": "#fff8f5",
+                        "surface-container": "#fdeade",
+                        "surface-container-high": "#f7e5d9",
+                        "surface-container-low": "#fff1e9",
+                        "background": "#F8FAFC",
+                        "border": "#E2E8F0",
+                        "text": "#0F172A",
+                        "on-surface": "#231a13",
+                        "on-surface-variant": "#554336"
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                    spacing: { "space-xl": "3rem", "margin": "2rem", "space-xs": "0.25rem", "space-sm": "0.5rem", "gutter": "1.5rem", "space-md": "1rem", "space-lg": "1.5rem" },
+                    fontFamily: {
+                        "headline-sm": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 </head>
-<body>
-    <header>
-        <div class="header-content">
-            <a href="/" class="logo">MARVENS SHOP</a>
-            <a href="/catalogue" style="color: var(--text-main); text-decoration: none; font-size: 0.9rem;">Continuer mes achats</a>
+<body class="bg-background font-body-md text-text">
+    <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+        <div class="h-20 max-w-7xl mx-auto px-gutter flex items-center justify-between gap-space-lg">
+            <a href="/" class="flex items-center gap-space-md text-decoration-none">
+                <div class="h-9 w-9 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold text-lg">M</div>
+                <span class="text-headline-sm font-headline-sm text-text">Marvens Shop</span>
+            </a>
+            <a href="/catalogue" class="text-label-md text-on-surface-variant hover:text-on-surface">Continuer mes achats</a>
         </div>
     </header>
 
-    <div class="container">
-        <h1>Votre Panier</h1>
+    <main class="w-full pt-28 pb-space-xl min-h-screen">
+        <div class="max-w-4xl mx-auto px-gutter flex flex-col gap-space-lg">
+            <h1 class="text-headline-lg font-headline-lg text-on-surface">Votre Panier</h1>
 
-        <?php if (empty($cart['items'])): ?>
-            <div style="background: #fff; border: 1px solid var(--border); padding: 3rem; text-align: center; border-radius: 8px;">
-                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1rem;">Votre panier est actuellement vide.</p>
-                <a href="/catalogue" class="btn-checkout" style="display: inline-block;">Parcourir les produits</a>
-            </div>
-        <?php else: ?>
-            <table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>Article</th>
-                        <th>Prix unitaire</th>
-                        <th>Quantité</th>
-                        <th>Sous-total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($cart['items'] as $key => $item): ?>
-                        <tr>
-                            <td>
-                                <strong><?= htmlspecialchars($item['name']) ?></strong>
-                                <?php if (!empty($item['variant_info'])): ?>
-                                    <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($item['variant_info']) ?></div>
-                                <?php endif; ?>
-                            </td>
-                            <td><?= number_format($item['unit_price'], 0, ',', ' ') ?> FCFA</td>
-                            <td>
-                                <form method="POST" action="/panier/modifier" style="display: flex; gap: 0.5rem; align-items: center;">
-                                    <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
-                                    <input type="hidden" name="item_key" value="<?= htmlspecialchars($key) ?>">
-                                    <input type="number" name="quantity" value="<?= (int) $item['quantity'] ?>" min="1" max="99" style="width: 60px; padding: 0.3rem;">
-                                    <button type="submit" style="padding: 0.3rem 0.5rem; cursor: pointer;">MAJ</button>
-                                </form>
-                            </td>
-                            <td><strong><?= number_format($item['line_total'], 0, ',', ' ') ?> FCFA</strong></td>
-                            <td>
-                                <form method="POST" action="/panier/supprimer">
-                                    <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
-                                    <input type="hidden" name="item_key" value="<?= htmlspecialchars($key) ?>">
-                                    <button type="submit" class="btn-danger">Supprimer</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <?php if (empty($cart['items'])): ?>
+                <div class="bg-surface border border-border p-space-xl text-center rounded-2xl shadow-sm">
+                    <span class="material-symbols-outlined text-5xl text-outline mb-2">shopping_bag</span>
+                    <p class="text-headline-sm text-on-surface mb-space-md">Votre panier est actuellement vide.</p>
+                    <a href="/catalogue" class="inline-block bg-primary text-on-primary px-space-lg py-space-sm rounded-xl font-medium hover:bg-primary-container transition-colors shadow-sm">
+                        Découvrir les articles
+                    </a>
+                </div>
+            <?php else: ?>
+                <div class="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-container-low text-label-md text-on-surface-variant border-b border-border">
+                                <th class="p-space-md">Article</th>
+                                <th class="p-space-md">Prix</th>
+                                <th class="p-space-md">Quantité</th>
+                                <th class="p-space-md text-right">Sous-total</th>
+                                <th class="p-space-md text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-border text-body-md text-on-surface">
+                            <?php foreach ($cart['items'] as $it): ?>
+                                <tr>
+                                    <td class="p-space-md font-medium">
+                                        <?= htmlspecialchars($it['product_name']) ?>
+                                        <?php if (!empty($it['variant_name'])): ?>
+                                            <div class="text-body-sm text-on-surface-variant"><?= htmlspecialchars($it['variant_name']) ?></div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="p-space-md"><?= number_format((float)$it['unit_price'], 0, ',', ' ') ?> FCFA</td>
+                                    <td class="p-space-md">
+                                        <form action="/panier/modifier" method="POST" class="inline-flex items-center gap-1">
+                                            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                                            <input type="hidden" name="item_key" value="<?= htmlspecialchars($it['key']) ?>">
+                                            <input type="number" name="quantity" value="<?= (int)$it['quantity'] ?>" min="1" max="99" class="w-16 bg-surface-container border border-border rounded px-2 py-1 text-center" onchange="this.form.submit()">
+                                        </form>
+                                    </td>
+                                    <td class="p-space-md font-semibold text-right"><?= number_format((float)$it['subtotal'], 0, ',', ' ') ?> FCFA</td>
+                                    <td class="p-space-md text-center">
+                                        <form action="/panier/supprimer" method="POST">
+                                            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                                            <input type="hidden" name="item_key" value="<?= htmlspecialchars($it['key']) ?>">
+                                            <button type="submit" class="text-red-600 hover:text-red-800 p-1 rounded hover:bg-red-50" title="Supprimer">
+                                                <span class="material-symbols-outlined text-[20px]">delete</span>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-            <div class="cart-summary">
-                <div class="summary-line">
-                    <span>Articles (<?= (int) $cart['count'] ?>)</span>
-                    <span><?= number_format($cart['subtotal'], 0, ',', ' ') ?> FCFA</span>
+                <div class="bg-surface rounded-2xl border border-border p-space-lg max-w-sm ml-auto shadow-sm flex flex-col gap-space-sm">
+                    <div class="flex justify-between text-body-md text-on-surface-variant">
+                        <span>Articles (<?= (int)$cart['count'] ?>) :</span>
+                        <span><?= number_format((float)$cart['subtotal'], 0, ',', ' ') ?> FCFA</span>
+                    </div>
+                    <div class="flex justify-between text-headline-sm font-headline-sm text-primary pt-space-xs border-t border-border">
+                        <span>Total :</span>
+                        <span><?= number_format((float)$cart['subtotal'], 0, ',', ' ') ?> FCFA</span>
+                    </div>
+                    <a href="/checkout" class="mt-space-md w-full bg-primary hover:bg-primary-container text-on-primary py-space-sm rounded-xl font-headline-sm font-bold text-center transition-colors shadow-md flex items-center justify-center gap-2">
+                        Valider la commande &rarr;
+                    </a>
                 </div>
-                <div class="summary-line">
-                    <span>Frais de livraison</span>
-                    <span style="font-size: 0.85rem; color: var(--text-muted);">Calculés à l'étape suivante</span>
-                </div>
-                <div class="summary-line total-line">
-                    <span>Sous-total</span>
-                    <span><?= number_format($cart['subtotal'], 0, ',', ' ') ?> FCFA</span>
-                </div>
-                <a href="/checkout" class="btn-checkout">Valider la commande</a>
-            </div>
-        <?php endif; ?>
-    </div>
+            <?php endif; ?>
+        </div>
+    </main>
+
+    <footer class="w-full bg-surface-container-low py-space-lg border-t border-border">
+        <div class="max-w-7xl mx-auto px-gutter text-center text-on-surface-variant text-body-sm">
+            © <?= date('Y') ?> Marvens Shop. Tous droits réservés.
+        </div>
+    </footer>
 </body>
 </html>

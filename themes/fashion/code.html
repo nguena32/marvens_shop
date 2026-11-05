@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-tint": "#904d00",
+          "on-error": "#ffffff",
+          "outline-variant": "#dbc2b0",
+          "secondary-container": "#dae2fd",
+          "surface": "#fff8f5",
+          "surface-container-highest": "#f2dfd3",
+          "border": "#E2E8F0",
+          "secondary-fixed": "#dae2fd",
+          "on-primary-container": "#fffbff",
+          "background": "#F8FAFC",
+          "inverse-surface": "#392e26",
+          "primary-container": "#b15f00",
+          "surface-dim": "#e9d7cb",
+          "primary": "#8d4b00",
+          "on-primary": "#ffffff",
+          "surface-variant": "#f2dfd3",
+          "tertiary-container": "#007abd",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed": "#001d32",
+          "on-primary-fixed-variant": "#6e3900",
+          "on-secondary-container": "#5c647a",
+          "on-surface-variant": "#554336",
+          "primary-fixed": "#ffdcc3",
+          "outline": "#887364",
+          "text": "#0F172A",
+          "surface-container-low": "#fff1e9",
+          "error-container": "#ffdad6",
+          "surface-bright": "#fff8f5",
+          "on-tertiary-container": "#fdfcff",
+          "on-primary-fixed": "#2f1500",
+          "surface-container-high": "#f7e5d9",
+          "secondary": "#565e74",
+          "primary-fixed-dim": "#ffb77d",
+          "on-secondary-fixed": "#131b2e",
+          "on-background": "#231a13",
+          "tertiary-fixed-dim": "#96ccff",
+          "on-secondary-fixed-variant": "#3f465c",
+          "tertiary-fixed": "#cee5ff",
+          "tertiary": "#006096",
+          "on-error-container": "#93000a",
+          "inverse-primary": "#ffb77d",
+          "surface-container": "#fdeade",
+          "error": "#ba1a1a",
+          "on-tertiary-fixed-variant": "#004a75",
+          "on-surface": "#231a13",
+          "secondary-fixed-dim": "#bec6e0",
+          "inverse-on-surface": "#ffede3",
+          "surface-container-lowest": "#ffffff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-xl": "3rem",
+          "margin": "2rem",
+          "space-xs": "0.25rem",
+          "space-sm": "0.5rem",
+          "gutter": "1.5rem",
+          "space-md": "1rem",
+          "space-lg": "1.5rem"
+        },
+        "fontFamily": {
+          "headline-sm": [
+            "Space Grotesk"
+          ],
+          "label-md": [
+            "Inter"
+          ],
+          "body-sm": [
+            "Inter"
+          ],
+          "headline-lg": [
+            "Space Grotesk"
+          ],
+          "headline-md": [
+            "Space Grotesk"
+          ],
+          "label-sm": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Space Grotesk"
+          ],
+          "body-lg": [
+            "Inter"
+          ],
+          "body-md": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "500"
+            }
+          ],
+          "body-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-xl": [
+            "48px",
+            {
+              "lineHeight": "56px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-text"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-7xl mx-auto px-gutter flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md"><img alt="Marvens Shop Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnDJ7xMjke_DlB1-B585au_so6c8agA1jH3ovg_VzB9hynKKku4Ijz9fjUFGXZuh0nnrwkm2wtAHVcBAq9PFmdLNWUpqGHYy_9xqiyo2z7HPFP753fwi0yct00jXVr9TZjTGukrwD7_PLbsjY2bKvl2zUsqKhRKle5FXX_Kyt37GwhaxpL0rzYzhwia1gKLT3n18oDpSmyBaPOFqj-iXHNh8jKehylLXD8w7mVmEm3"/><span class="text-headline-sm font-headline-sm text-text">Marvens Shop</span></div><nav class="hidden md:flex items-center gap-space-lg" data-active-classes="bg-primary-container text-on-primary-container font-bold rounded-lg"><a class="text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="catalog" href="#">Catalog</a><a class="text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="categories" href="#">Categories</a><a class="text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="about" href="#">About</a></nav><div class="flex items-center gap-space-md"><div class="hidden lg:flex items-center bg-surface-container px-space-md py-space-xs rounded-xl border border-border"><span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-2">search</span><input class="bg-transparent text-label-md text-text outline-none w-48" placeholder="Search products..." type="text"/></div><a class="relative p-space-sm rounded-xl hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant transition-colors" data-path="cart" href="#"><span class="material-symbols-outlined">shopping_bag</span><span class="absolute top-0 right-0 bg-primary text-on-primary text-label-sm w-4 h-4 rounded-full flex items-center justify-center">2</span></a><a class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-space-md py-space-sm rounded-xl text-label-md transition-colors" data-path="whatsapp-chat" href="#"><span class="material-symbols-outlined text-[18px]">chat</span><span class="hidden sm:inline">WhatsApp</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background"><div class="flex flex-col w-full">
+<!-- Main Catalog & E-Commerce Layout inspired by reference -->
+<div class="max-w-7xl mx-auto px-gutter py-space-lg w-full flex flex-col gap-space-xl">
+<!-- Top Hero Section with Sidebar & Promotional Banner -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-space-lg items-stretch">
+<!-- Left Sidebar: Categories (Hidden on mobile, toggleable) -->
+<div class="hidden lg:flex flex-col bg-surface rounded-xl p-space-md shadow-sm justify-between">
+<div class="flex flex-col gap-space-xs">
+<div class="text-label-md font-headline-sm px-space-sm py-space-xs text-on-surface-variant flex items-center justify-between mb-space-xs">
+<span>Catégories</span>
+<span class="material-symbols-outlined text-[18px]">menu</span>
+</div>
+<a class="flex items-center justify-between px-space-sm py-space-sm rounded-lg bg-primary-container text-on-primary-container font-medium text-label-md transition-colors" href="#">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">checkroom</span> Prêt-à-porter Femme</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-space-sm rounded-lg hover:bg-surface-container text-on-surface-variant text-label-md transition-colors" href="#">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">diamond</span> Robes de Soirée</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-space-sm rounded-lg hover:bg-surface-container text-on-surface-variant text-label-md transition-colors" href="#">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">styler</span> Ensembles &amp; Tailleurs</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-space-sm rounded-lg hover:bg-surface-container text-on-surface-variant text-label-md transition-colors" href="#">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">flash_auto</span> Sacs &amp; Maroquinerie</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-space-sm rounded-lg hover:bg-surface-container text-on-surface-variant text-label-md transition-colors" href="#">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">drive_file_rename_outline</span> Accessoires &amp; Bijoux</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-space-sm rounded-lg hover:bg-surface-container text-on-surface-variant text-label-md transition-colors" href="#">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">local_fire_department</span> Nouveautés Tendance</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<div class="bg-surface-container p-space-md rounded-xl mt-space-md">
+<div class="text-label-md font-headline-sm text-primary mb-1">Service WhatsApp</div>
+<p class="text-body-sm text-on-surface-variant mb-space-sm">Commandez directement avec Amina pour un conseil personnalisé.</p>
+<a class="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white py-space-sm rounded-lg text-label-md transition-colors" href="https://wa.me/">
+<span class="material-symbols-outlined text-[18px]">chat</span> Discuter sur WhatsApp
+          </a>
+</div>
+</div>
+<!-- Right Banner: Hero Showcase -->
+<div class="lg:col-span-3 relative rounded-2xl overflow-hidden bg-gradient-to-r from-surface-container-highest to-surface-container p-space-xl flex flex-col justify-center min-h-[420px]">
+<div class="absolute inset-0 z-0 opacity-20 bg-cover bg-center" data-alt="A sophisticated editorial fashion background featuring subtle neutral tones, silk textures, and abstract architectural shadows." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBaWKqvjmJ-cJA0Ig7s3jfdExIb1GlCpH5XGncnqccTDT-7Tla3dMBhRpJArwBUIgzy9QI8s-MV3kVKqV1iPVAozuej5nqdww_Qox6-YNKojZJVTaZd2HLYQxM9GkSRN8qK-zBb4nhfsPcRU-tqWySBSk5uISK55mIQcPD0tsr-fZIb5T98S7Q67JOeSZwFFjd0q6fEcKjvrH709GvIO20VHFKYVUxUtY5jdpW0vEsk')"></div>
+<div class="relative z-10 max-w-lg flex flex-col items-start gap-space-md">
+<span class="bg-primary-container text-on-primary-container px-space-md py-space-xs rounded-full text-label-sm font-bold uppercase tracking-wider">Collection Exclusive 2024</span>
+<h1 class="text-headline-xl text-on-surface font-headline-xl">Élégance &amp; Style au Féminin par Amina</h1>
+<p class="text-body-lg text-on-surface-variant">Découvrez les dernières tendances de prêt-à-porter féminin, robes somptueuses et accessoires de luxe disponibles immédiatement à Douala.</p>
+<div class="flex items-center gap-space-md mt-space-sm">
+<a class="bg-primary hover:bg-primary/90 text-on-primary px-space-xl py-space-md rounded-xl text-label-md font-bold transition-transform hover:scale-105 shadow-md flex items-center gap-2" href="#catalog">
+<span>Découvrir la Boutique</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<a class="bg-surface hover:bg-surface-bright text-on-surface border border-border px-space-xl py-space-md rounded-xl text-label-md font-medium transition-colors flex items-center gap-2" href="https://wa.me/">
+<span class="material-symbols-outlined text-[18px] text-emerald-600">chat</span> Commande Rapide
+            </a>
+</div>
+</div>
+<div class="absolute right-0 bottom-0 top-0 w-1/2 hidden md:block pointer-events-none">
+<div class="w-full h-full bg-cover bg-right-top" data-alt="High fashion portrait of a confident African woman wearing an exquisite lavender designer suit from Amina Fashion collection, studio lighting, professional e-commerce hero shot." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAE8k3-95JznBjzrCuUmVxc9Avk85I6ntq6uM2RSVDd4fxeVVa5pEdLrTGBi2z9ONlfGhVtYcCsXIhukb5URo2eYVWEyjkgSUK1xiiyZlHa7W8ciyDejLSrfhFG3w99krBpBh5ctuRH9eZ6NfgN-pM29lM3gDM02nTr4nY9vtGCYW5BaKiVxMpvZlWmwmUvCx5Qu_U8_LdXs0ok0g1oyMaLisUWqKwKU7udOmnRX4FQ')"></div>
+</div>
+</div>
+</div>
+<!-- Category Circular Carousel / Grid -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface">Explorez par Catégorie</h2>
+<span class="text-body-sm text-on-surface-variant">Collections soigneusement sélectionnées</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-space-md">
+<!-- Category Item 1 -->
+<a class="flex flex-col items-center gap-space-sm group" href="#">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-surface-container overflow-hidden border border-border flex items-center justify-center group-hover:border-primary transition-all">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" data-alt="Close up of trendy women's dresses neatly folded on a boutique shelf, warm golden lighting, high-end fashion retail aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCD2pYaqv_j7Y2CoJpU2K4O0ZvB9Rocflut_Au2IA2Fz6dTX_wSzAI1UM-8S2KMaDwwHlYGYT89_Mu0OoMcCYOopQmhDxulhfxNTjj8PGgWNTW6N4_Nn3qYnfnc1lA5yxzYhF5gj-mdPwJj-t8akJ_jqU8fsQyCgKxkHmqG1FXo5T448-_4nDJnQFWjVuPv4Tho0D5geo5plsD4KjiY7XT_795CmlhnP9y3zMIqmKRW')"></div>
+</div>
+<span class="text-label-md text-on-surface group-hover:text-primary transition-colors text-center">Robes</span>
+</a>
+<!-- Category Item 2 -->
+<a class="flex flex-col items-center gap-space-sm group" href="#">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-surface-container overflow-hidden border border-border flex items-center justify-center group-hover:border-primary transition-all">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" data-alt="Tailored women blazer and trouser set in pastel beige color, minimalist presentation against a clean editorial studio backdrop." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBOKadSXkbsjtHwryo34C7DGN6Juvm-MZtYNQmtcA65app9uo3AMYqtdWQ6WLSBMCFlZwG0TUI3q5cOyyhspSbgeljNHMrGT-iqKklvf9LGMeXAalvkQf-B2CtaRyvu0pBx8w2_qyoEAo3JJPvkW560b1OhJ8eQJYtXwQKNxCoKPQNZbRQz16dlYvzur8fXZj1a9ApkyRp1Try3BtR9nP6G8vGX0gmiSZ1sn3CW7UW_')"></div>
+</div>
+<span class="text-label-md text-on-surface group-hover:text-primary transition-colors text-center">Tailleurs</span>
+</a>
+<!-- Category Item 3 -->
+<a class="flex flex-col items-center gap-space-sm group" href="#">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-surface-container overflow-hidden border border-border flex items-center justify-center group-hover:border-primary transition-all">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" data-alt="Luxury leather handbag for women in vibrant yellow color, gold hardware accents, premium fashion styling." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBt2tNIuADOmlvR75chXPIrc7Icz3oG7-2QnK5QY5kqLjFTnr5iH_3PtHlbir0NjVSwzhsRRD6qCpwK_6rnDkuleD9xgW7niz36FbkZu3aHRSo8N2UwxCdr0aWqMIpfd7m3v2VWkgNijEdDDQesd1DZRNZC2UVt2DC-82lDZMBplwNJBY7LdJKF_Y5JDBK6ggGZCcTndeBJlQ8tx-OrfiZ8OmS3DeBQJJ9tGUd7WFO1')"></div>
+</div>
+<span class="text-label-md text-on-surface group-hover:text-primary transition-colors text-center">Sacs à Main</span>
+</a>
+<!-- Category Item 4 -->
+<a class="flex flex-col items-center gap-space-sm group" href="#">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-surface-container overflow-hidden border border-border flex items-center justify-center group-hover:border-primary transition-all">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" data-alt="Elegant gold necklaces and luxury bracelets arranged aesthetically on white marble, fashion accessories collection." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAiqbS2lOCEnZyyG8Ho3Tg1DizoDxGGyqyUZnMoTfr9BiFXj5K-2jkY9uzm4RtVjMXUDkYNjErN52oK11q0UYu29e1nPR3jdNDXEAcGC4ojFKhatCHvrR5LWTcokfY2O9ANdRbVI74DDWbl-HFEDWUdN61WvAyvavnTYagRhcGIm2008kVfcY4uBxnLTl3zlwSw0lQnA6-igiFOoSXztLRwJPu1IdmCM4KNmqrmFNRC')"></div>
+</div>
+<span class="text-label-md text-on-surface group-hover:text-primary transition-colors text-center">Bijoux</span>
+</a>
+<!-- Category Item 5 -->
+<a class="flex flex-col items-center gap-space-sm group" href="#">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-surface-container overflow-hidden border border-border flex items-center justify-center group-hover:border-primary transition-all">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" data-alt="Stylish high heels shoes for women in nude patent leather, sophisticated evening wear footwear presentation." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZwQh-xC8nq6ALUBjYyjvIef3mPlni5LuW4lFkl5r7mqwfpYXzTzctSNLtbKaCGOA-Pgj6_yvUa9hhJpy8lj4PQBR7g1OYFWGp1DlJjwIxrFDKCR45RFwkUvh5xmhOzStwC9wnXDW5zPK6-41kllOcdLM2sxdu3ANGc2c5VEBshMlVhgJbwjduhgAOpnGcL9jGowmUdAU9SxomxhmcghDQgDlpL2Q_Ltr_PN6aMHmb')"></div>
+</div>
+<span class="text-label-md text-on-surface group-hover:text-primary transition-colors text-center">Chaussures</span>
+</a>
+<!-- Category Item 6 -->
+<a class="flex flex-col items-center gap-space-sm group" href="#">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-surface-container overflow-hidden border border-border flex items-center justify-center group-hover:border-primary transition-all">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" data-alt="Trendy silk scarves and chic sunglasses displayed together for an upscale resort summer fashion collection." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBaohaJfUfNuUB__YkynRNRjT0rXkbZK6h8KoD3Ixf_a3QisnvoM3F78wiOsTeddLCwJz0su7mjFbftYeC5YmiOmlm-ePMXoc7bW2rT7mpqH4JBEouwznWj-gQu-vQ11BV5A1c5_HJ2CDlqdtiPfn-C6jQOzuDJ4f3jF6MtUS9dt6yLADcRgoiv1TktDMLVBZRNYUtzLuyIWcUTzvyV4_9bfLGC6goLYkbUek2YFIbn')"></div>
+</div>
+<span class="text-label-md text-on-surface group-hover:text-primary transition-colors text-center">Accessoires</span>
+</a>
+<!-- Category Item 7 -->
+<a class="flex flex-col items-center gap-space-sm group" href="#">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-surface-container overflow-hidden border border-border flex items-center justify-center group-hover:border-primary transition-all">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" data-alt="Traditional African print modern chic wear dress with contemporary cut, elegant fusion fashion styling." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCCcvCsNE_5_UcQY_TYMzqTwsq7B48BA-cvkBEgV2hRVH9bK6ty4-uU3vcpYhiT43eIDCjNI1xw5B06mMxnORW9l1zQ71BrZWB8N1DAwBW4cEdHJDnKD7s3p_pkrRb_bSpzxnzI3jcAW0Dao3ynlLRus4XEvoofouu3Uj-1Sdxh4X59Wf4iYLPJT_tygNcPt9py-wz7hKD4AUUn00hwht2VHUMweXXsyYtHLra7OgJo')"></div>
+</div>
+<span class="text-label-md text-on-surface group-hover:text-primary transition-colors text-center">Chic &amp; Ethnique</span>
+</a>
+<!-- Category Item 8 -->
+<a class="flex flex-col items-center gap-space-sm group" href="#">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-surface-container overflow-hidden border border-border flex items-center justify-center group-hover:border-primary transition-all">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" data-alt="Cozy elegant loungewear set for women in soft cashmere fabric, relaxed yet stylish lifestyle apparel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCt_EtictzvuApk9h6V_ZDSVO0iqbcw8mnE82PGczuOrbw-1hszGmTnLCajz6cp5lUQ7H7y3SUsShztew0cWCrpPWL8FuwczZ0vC48dF_RIP_1YPPH3ErU8CEw0IFZ_jybW063tFQ6QUMlUGkPGsVVy5J0v4D-0dhq_onABS8uYclWjosBBuYlhNCHAPkxP1Lk-9UEJebfH-gwB89IXJrADWOYGtdmQW6udYlb_acyn')"></div>
+</div>
+<span class="text-label-md text-on-surface group-hover:text-primary transition-colors text-center">Homewear</span>
+</a>
+</div>
+</div>
+<!-- Trending Products Section with XAF Pricing -->
+<div class="flex flex-col gap-space-md pt-space-md" id="catalog">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">local_fire_department</span>
+<h2 class="text-headline-md font-headline-md text-on-surface">Tendance Actuelle</h2>
+</div>
+<a class="text-label-md text-primary font-bold hover:underline flex items-center gap-1" href="#">Tout voir <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-lg">
+<!-- Product Card 1 -->
+<div class="bg-surface rounded-2xl p-space-md shadow-sm flex flex-col justify-between group">
+<div class="relative w-full h-64 rounded-xl overflow-hidden bg-surface-container mb-space-md">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="Stunning satin midi wrap dress in emerald green color on an invisible mannequin, high fashion retail product photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAHVdnrC3isXpnOFokGrLsMGGkQqlzdx2-FmEIRs0A4vTpmcCde4n3VxDTaRe519S_1iJ9Au_y5nH1joYI46g7WaxtaBtuC4lDHIrGM4sEdRfc2ihekRhZVapWb0mlr8ICQSqMQPXH9G0Km29xFWhuGNfNX-89IFXUGiyr-egiemqGi4VP5xF373Q91TPki4vVuNe0yoWzLx-u_Y01w95e9pFZe6bclIluVT0iRilI-')"></div>
+<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/90 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-primary shadow-sm transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+<span class="absolute bottom-3 left-3 bg-surface-container-highest/90 backdrop-blur-sm px-space-sm py-1 rounded-md text-body-sm font-medium text-on-surface">Nouveau</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant">
+<span>Robes de Soirée</span>
+<div class="flex items-center gap-1 text-amber-600"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.9</div>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Robe Satinée Émeraude</h3>
+<div class="flex items-center justify-between mt-space-sm">
+<span class="text-headline-sm font-headline-sm text-primary">25 000 XAF</span>
+<a class="bg-emerald-600 hover:bg-emerald-700 text-white p-space-sm rounded-xl flex items-center justify-center transition-colors shadow-sm" href="https://wa.me/?text=Bonjour%20Amina,%20je%20souhaite%20commander%20la%20Robe%20Satin%C3%A9e%20%C3%89meraude%20%C3%A0%2025%20000%20XAF." title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface rounded-2xl p-space-md shadow-sm flex flex-col justify-between group">
+<div class="relative w-full h-64 rounded-xl overflow-hidden bg-surface-container mb-space-md">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="Chic two-piece blazer and pant set in pristine cream white tone, tailored women workwear and elegance fashion." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCsfX5DCZ0B8spoo3psaz47E9lYn-SsVDioQ7IWmY-KOcytN0BeMWYeNMoLiAaygr0471hljFE9fKO2MigTfqrJC02tU4mDl0mBZONychDMUsMq_tD6ocD-z_KEoaG6I8ZRfwE9I1uF3Q_8SvjLsilbw97RXHJXO5NErG9O9wKM4fVqnaN4_cq5R8bmy69wrOli9B16vwwAXEx9xzhRb81xMxXZxx6oeXwLAxlMo3-T')"></div>
+<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/90 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-primary shadow-sm transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+<span class="absolute bottom-3 left-3 bg-surface-container-highest/90 backdrop-blur-sm px-space-sm py-1 rounded-md text-body-sm font-medium text-on-surface">-15% Soldes</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant">
+<span>Tailleurs &amp; Ensembles</span>
+<div class="flex items-center gap-1 text-amber-600"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.8</div>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Tailleur Blanc Cassé</h3>
+<div class="flex items-center justify-between mt-space-sm">
+<div class="flex items-center gap-2">
+<span class="text-headline-sm font-headline-sm text-primary">35 000 XAF</span>
+<span class="text-body-sm text-on-surface-variant line-through">42 000 XAF</span>
+</div>
+<a class="bg-emerald-600 hover:bg-emerald-700 text-white p-space-sm rounded-xl flex items-center justify-center transition-colors shadow-sm" href="https://wa.me/?text=Bonjour%20Amina,%20je%20souhaite%20commander%20le%20Tailleur%20Blanc%20Cass%C3%A9%20%C3%A0%2035%20000%20XAF." title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface rounded-2xl p-space-md shadow-sm flex flex-col justify-between group">
+<div class="relative w-full h-64 rounded-xl overflow-hidden bg-surface-container mb-space-md">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="Luxury quilted leather shoulder bag in black with golden chain strap, premium women accessories styling." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBiwG43bnDs3pMjt27AL1tA9oBQ3rTeb8py5V_dLRpKOaTcNhIiqnqnQ45JwMywBvp4grDt1DkeYq-clWG_L21diHfgdMkC-a-8TDmsD8Ud8MPvtplYew9JspeE-v40lAQG-xJVDU3td0LHlI6s1rDQzNqswxGLEOwyC_W-f1wtc6TuaoKCwBLtzNgNdTj4IBQk1Inp-rvvhrvoRYeMEKyaYjpTOJB0nZp28tvThJCF')"></div>
+<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/90 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-primary shadow-sm transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+<span class="absolute bottom-3 left-3 bg-surface-container-highest/90 backdrop-blur-sm px-space-sm py-1 rounded-md text-body-sm font-medium text-on-surface">Populaire</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant">
+<span>Sacs &amp; Maroquinerie</span>
+<div class="flex items-center gap-1 text-amber-600"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.9</div>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Sac Matelassé Noir &amp; Or</h3>
+<div class="flex items-center justify-between mt-space-sm">
+<span class="text-headline-sm font-headline-sm text-primary">18 500 XAF</span>
+<a class="bg-emerald-600 hover:bg-emerald-700 text-white p-space-sm rounded-xl flex items-center justify-center transition-colors shadow-sm" href="https://wa.me/?text=Bonjour%20Amina,%20je%20souhaite%20commander%20le%20Sac%20Matelass%C3%A9%20Noir%20%26%20Or%20%C3%A0%2018%20500%20XAF." title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface rounded-2xl p-space-md shadow-sm flex flex-col justify-between group">
+<div class="relative w-full h-64 rounded-xl overflow-hidden bg-surface-container mb-space-md">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="Boho chic floral summer long dress in lightweight chiffon fabric, outdoor fashion styling." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqxvUpCTniJBIthkFTocsA_Be8VxoGZunlJIngsXXzr0wYPErfVGPcBCwnb4RVHj1529Y_gEBY1MTLezm4PQnKugFF6Vk9BNpQqkEufmGfw2-tgANtv2QPTO5HzhJBCyGXLiZujT0PzK8U59VncF3bbwxy0H453sQ7f9yx5Wk3wqICdHfFkXFGEz5DukSzvLtcZg4YFm6KhKOzhMq7-Rkz9GWKN7NfWlI2JTW9LhYl')"></div>
+<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/90 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-primary shadow-sm transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+<span class="absolute bottom-3 left-3 bg-surface-container-highest/90 backdrop-blur-sm px-space-sm py-1 rounded-md text-body-sm font-medium text-on-surface">Exclusif</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant">
+<span>Robes d'été</span>
+<div class="flex items-center gap-1 text-amber-600"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.7</div>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Robe Longue Florale Bohème</h3>
+<div class="flex items-center justify-between mt-space-sm">
+<span class="text-headline-sm font-headline-sm text-primary">22 000 XAF</span>
+<a class="bg-emerald-600 hover:bg-emerald-700 text-white p-space-sm rounded-xl flex items-center justify-center transition-colors shadow-sm" href="https://wa.me/?text=Bonjour%20Amina,%20je%20souhaite%20commander%20la%20Robe%20Longue%20Florale%20Boh%C3%A8me%20%C3%A0%2022%20000%20XAF." title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Promotional Dual Banners (Summer Sale & New Arrivals) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<!-- Promo 1 -->
+<div class="relative rounded-2xl overflow-hidden bg-surface-container-high p-space-xl flex flex-col justify-between min-h-[280px]">
+<div class="absolute inset-0 z-0 opacity-15 bg-cover bg-center" data-alt="Summer sale concept with blue pastel handbag, straw hat and sunglasses against a pristine soft blue background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqXWJ8mBLXB2ZznZTze-GAlSWCLnAv-JY9c0OGdGlF7POLf1W9Q8lr09CDFcHZUoJiExFT1KFzKgc6cmlj9ozQ8oL6TiV3BL0Kb8Drv9FytES4NxtWSQViOulnc31L4LfEseJy1Jy289aTYDKR0kTuL5SR4ZtTJfyNA82i8j0Wr5u2LjGt7gk1I-XiCd9AnaDar2kCcYO6s9NUzDJBZsSo6Co0kp3oZf0HQ0KPK5h6')"></div>
+<div class="relative z-10 max-w-xs flex flex-col items-start gap-space-sm">
+<span class="text-label-sm font-bold uppercase tracking-wider text-primary">Solde d'été</span>
+<h3 class="text-headline-md font-headline-md text-on-surface">Jusqu'à -50% sur les Bestsellers</h3>
+<p class="text-body-md text-on-surface-variant">Profitez de réductions exceptionnelles sur notre sélection de sacs et accessoires.</p>
+<a class="mt-space-sm bg-primary hover:bg-primary/90 text-on-primary px-space-lg py-space-sm rounded-xl text-label-md font-medium transition-colors shadow-sm" href="#catalog">
+            Voir les Soldes
+          </a>
+</div>
+</div>
+<!-- Promo 2 -->
+<div class="relative rounded-2xl overflow-hidden bg-surface-container-highest p-space-xl flex flex-col justify-between min-h-[280px]">
+<div class="absolute inset-0 z-0 opacity-15 bg-cover bg-center" data-alt="New arrival minimalist white leather sneakers and vase with tropical leaves on warm beige background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBpbwF8-j6BDx8JzBqtD2J3cow9Dxxcr6CQ1NLnusxEFK8ef6w4CECsUpZxcPxSIwOKdI6BVB8Hyns-NPcNk72VsFw2BF5XLQTPcC_F-5npnZgzC54vOjZWRDsBIfMAAjoRRllPop3PaBvUcBA8A9ucEZlBLnfYFm2c8AJyYTxUh9PVLc6-98G6Fo4lMF0N8Cihq-s46eG-uAJ8AGitty4SLpi3w_NiZdD1-1JhtTxa')"></div>
+<div class="relative z-10 max-w-xs flex flex-col items-start gap-space-sm">
+<span class="text-label-sm font-bold uppercase tracking-wider text-primary">Nouveautés</span>
+<h3 class="text-headline-md font-headline-md text-on-surface">Les Coups de Cœur d'Amina</h3>
+<p class="text-body-md text-on-surface-variant">Des pièces uniques choisies avec soin pour sublimer votre quotidien.</p>
+<a class="mt-space-sm bg-surface hover:bg-surface-bright text-on-surface border border-border px-space-lg py-space-sm rounded-xl text-label-md font-medium transition-colors shadow-sm" href="#catalog">
+            Explorer
+          </a>
+</div>
+</div>
+</div>
+<!-- Featured Collections Showcase -->
+<div class="flex flex-col gap-space-md pt-space-md pb-space-xl">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface">Collections Phares</h2>
+<a class="text-label-md text-primary font-bold hover:underline flex items-center gap-1" href="#">Tout voir <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-lg">
+<!-- Collection 1 -->
+<div class="relative rounded-2xl overflow-hidden bg-surface-container h-80 flex flex-col justify-end p-space-lg group">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Elegant woman in silk loungewear robe posing in luxurious apartment interior, high-end fashion editorial." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDYncgMlDOVu62uoW81965HeyPqdnobC_gDoZF1TBYQUmRnLk2tgbiK3az0ZjnTKHXbO3Jk7OYM0hlBwnAovjs6DOylGrc8guRs43Fkk_tHwXJ6rvuuaczcN_mvnv-YRBrJI7RkAfVolBGVHyO6z5WUtE9a2vIgW3XW3TTckeRHvagHLxBRMm3OZGG0YHacdeiuAJe0RXwpv5GB7FHmKF4aO984zuidV_O-i7rZJmKh')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="relative z-10 flex flex-col gap-1 text-white">
+<span class="text-body-sm font-medium text-surface-fixed">Style Quotidien</span>
+<h3 class="text-headline-sm font-headline-sm">Tenues Élégantes</h3>
+<span class="text-body-sm underline mt-2 cursor-pointer">Découvrir la collection</span>
+</div>
+</div>
+<!-- Collection 2 -->
+<div class="relative rounded-2xl overflow-hidden bg-surface-container h-80 flex flex-col justify-end p-space-lg group">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="High-end skincare bottles and luxury cosmetics arranged on a marble tray, clean minimalist beauty setup." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDnbv1eScsTQ13nXZxMTtjEaG5lsf_dyCTp7OrWgKyZtDXngH_Mm5VBxpnqAIriTwq3z8_TDT9p_Rh8jA9wqNOcCTVRfXapQbJLH_VkotF7djSzh03Xx-mEeyxwMPcJQu0K3iAxqx-xH-jTmMcxl4us56h3T7V1jroOrWRnxAzMLr5mGPKxyo9zdJY3jBH3PCkQYXcalP12CvNw9uSVqb0Olia3ptEFvtV_kyBdhPyD')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="relative z-10 flex flex-col gap-1 text-white">
+<span class="text-body-sm font-medium text-surface-fixed">Soins &amp; Beauté</span>
+<h3 class="text-headline-sm font-headline-sm">Essentiels Glow</h3>
+<span class="text-body-sm underline mt-2 cursor-pointer">Découvrir la collection</span>
+</div>
+</div>
+<!-- Collection 3 -->
+<div class="relative rounded-2xl overflow-hidden bg-surface-container h-80 flex flex-col justify-end p-space-lg group">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Luxury gold bracelets, rings and designer watches on dark velvet background, elegant jewelry showcase." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDbNgC5aqf8b-kAwO8nYievOTmM2LeEfqgrBm90MwEgNW4xBLYe0OQQpltZdxxFXZZ8evMNBjIMMSfSvAdaOUL7ZnK22OVcK1hZUW5PNr43C09PqNBHw7vXWx01T1MYuXszhxBKmHiOkKj3YegUDMR_bKMjtNWYHorBFPZUY8LS224o1bpp0hcsYEZMsW9BUVh8ibrs4if5DYHkb6VD7QB8mnDj0JXnqQ5VCUXXr2af')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="relative z-10 flex flex-col gap-1 text-white">
+<span class="text-body-sm font-medium text-surface-fixed">Brilliance</span>
+<h3 class="text-headline-sm font-headline-sm">Accessoires &amp; Bijoux</h3>
+<span class="text-body-sm underline mt-2 cursor-pointer">Découvrir la collection</span>
+</div>
+</div>
+<!-- Collection 4 -->
+<div class="relative rounded-2xl overflow-hidden bg-surface-container h-80 flex flex-col justify-end p-space-lg group">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Minimalist home decor items, scented candles and decorative ceramic vases on wooden shelf, cozy interior styling." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAaakBwyVcdIWloYAJEvceOCHF-7zz_IWzSTqRTaBAX3ynyU-dduVnazv-8EjvAtBveVeZBUrvNFrr8Q_unudkRdYPK_3Uwq9Czq9spiCgcB7jJ6t1h-iCxBRpcvvYBFph4x04dn8W9ep72WndFo5mfyzvX-CjF1PZNVp2QND5_26UuvD9K8Gddj76tPCAeNhrW7mJvzhWrvoMKTA-NJgkvmAwDxAzhJ_3ynDx-v41F')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="relative z-10 flex flex-col gap-1 text-white">
+<span class="text-body-sm font-medium text-surface-fixed">Art de Vivre</span>
+<h3 class="text-headline-sm font-headline-sm">Living &amp; Déco</h3>
+<span class="text-body-sm underline mt-2 cursor-pointer">Découvrir la collection</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Features bar inspired by reference footer badges -->
+<div class="bg-surface rounded-2xl p-space-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-lg shadow-sm mb-space-xl">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">local_shipping</span>
+</div>
+<div>
+<h4 class="text-label-md font-headline-sm text-on-surface">Livraison Rapide</h4>
+<p class="text-body-sm text-on-surface-variant">À Douala &amp; partout au Cameroun</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">published_with_changes</span>
+</div>
+<div>
+<h4 class="text-label-md font-headline-sm text-on-surface">Retours Faciles</h4>
+<p class="text-body-sm text-on-surface-variant">Sous 7 jours en boutique</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+</div>
+<div>
+<h4 class="text-label-md font-headline-sm text-on-surface">Paiement Sécurisé</h4>
+<p class="text-body-sm text-on-surface-variant">Orange Money, MTN &amp; Espèces</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">support_agent</span>
+</div>
+<div>
+<h4 class="text-label-md font-headline-sm text-on-surface">Support 24/7</h4>
+<p class="text-body-sm text-on-surface-variant">Assistance WhatsApp directe</p>
+</div>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-low py-space-xl border-t border-border"><div class="max-w-7xl mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-space-md text-on-surface-variant text-body-sm"><div>© 2024 Marvens Shop. All rights reserved.</div><div class="flex gap-space-lg"><a class="hover:text-on-surface transition-colors" href="#">Privacy Policy</a><a class="hover:text-on-surface transition-colors" href="#">Terms of Service</a><a class="hover:text-on-surface transition-colors" href="#">Contact</a></div></div></footer></body></html>
