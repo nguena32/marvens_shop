@@ -1,3 +1,6 @@
+<?php
+$active_tab = 'dashboard';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -68,31 +71,10 @@
                         "tertiary-fixed-dim": "#dec29a",
                         "surface-container-lowest": "#ffffff"
                     },
-                    borderRadius: {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
-                    },
-                    spacing: {
-                        "space-sm": "8px",
-                        "space-lg": "24px",
-                        "space-xs": "4px",
-                        "margin": "32px",
-                        "space-xl": "48px",
-                        "space-md": "16px",
-                        "gutter": "24px"
-                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                    spacing: { "space-sm": "8px", "space-lg": "24px", "space-xs": "4px", "margin": "32px", "space-xl": "48px", "space-md": "16px", "gutter": "24px" },
                     fontFamily: {
-                        "body-md": ["Inter"],
-                        "body-lg": ["Inter"],
-                        "label-sm": ["Inter"],
-                        "headline-md": ["Inter"],
-                        "headline-lg": ["Inter"],
-                        "body-sm": ["Inter"],
-                        "headline-xl": ["Inter"],
-                        "label-md": ["Inter"],
-                        "headline-sm": ["Inter"]
+                        "body-md": ["Inter"], "body-lg": ["Inter"], "label-sm": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "body-sm": ["Inter"], "headline-xl": ["Inter"], "label-md": ["Inter"], "headline-sm": ["Inter"]
                     },
                     fontSize: {
                         "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
@@ -113,84 +95,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
 </head>
 <body class="bg-background font-body-md text-on-surface">
-    <!-- Aside Sidebar conforme au design Swiss Editorial Commerce -->
-    <aside class="fixed left-0 top-0 h-full w-72 bg-surface border-r border-border z-50 flex flex-col pt-space-lg pb-space-lg">
-        <div class="px-space-lg mb-space-lg flex items-center gap-space-sm">
-            <div class="h-9 w-9 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold text-lg tracking-wider">
-                M
-            </div>
-            <span class="font-headline-md text-on-surface tracking-tight">Marvens Shop</span>
-        </div>
-        <nav class="flex-1 px-space-md space-y-space-xs" data-active-classes="bg-secondary-container text-on-secondary-container font-medium rounded-xl">
-            <a class="flex items-center px-space-md py-space-sm rounded-xl bg-secondary-container text-on-secondary-container font-medium transition-all" data-path="tableau-de-bord" href="/admin/dashboard">
-                <span class="material-symbols-outlined mr-space-md">dashboard</span>Tableau de bord
-            </a>
-            <a class="flex items-center px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="catalogue" href="/admin/produits">
-                <span class="material-symbols-outlined mr-space-md">inventory_2</span>Catalogue
-            </a>
-            <a class="flex items-center px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="commandes" href="/admin/commandes">
-                <span class="material-symbols-outlined mr-space-md">shopping_bag</span>Commandes
-                <?php if (($pending_orders ?? 0) > 0): ?>
-                    <span class="ml-auto text-xs bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded-full"><?= (int) $pending_orders ?></span>
-                <?php endif; ?>
-            </a>
-            <a class="flex items-center px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="import" href="/admin/import">
-                <span class="material-symbols-outlined mr-space-md">cloud_download</span>Importations
-            </a>
-            <a class="flex items-center px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="themes" href="/admin/themes">
-                <span class="material-symbols-outlined mr-space-md">palette</span>Thèmes & Apparence
-            </a>
-        </nav>
-        
-        <div class="px-space-md mb-space-md">
-            <form method="POST" action="/admin/logout">
-                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
-                <button type="submit" class="w-full flex items-center px-space-md py-space-sm rounded-xl text-error hover:bg-error-container hover:text-on-error-container transition-all text-label-md font-medium">
-                    <span class="material-symbols-outlined mr-space-md">logout</span>Déconnexion
-                </button>
-            </form>
-        </div>
 
-        <div class="px-space-lg pt-space-md border-t border-border flex items-center justify-between">
-            <div class="flex items-center gap-space-sm">
-                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span class="text-label-sm text-on-surface-variant">Boutique Ouverte</span>
-            </div>
-            <a href="/" target="_blank" class="text-xs text-outline hover:text-on-surface flex items-center gap-1" title="Voir la boutique en ligne">
-                <span class="material-symbols-outlined text-[16px]">visibility</span>
-            </a>
-        </div>
-    </aside>
+    <?php include dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
     <div class="pl-72">
-        <!-- Header Supérieur -->
-        <header class="fixed top-0 left-72 right-0 h-16 bg-surface/80 backdrop-blur-xl border-b border-border z-40 flex items-center justify-between px-space-lg">
-            <div class="flex items-center gap-space-md w-96">
-                <span class="material-symbols-outlined text-outline">search</span>
-                <input class="w-full bg-transparent text-body-md text-on-surface placeholder:text-outline focus:outline-none" placeholder="Rechercher commandes, clients, produits..." type="text"/>
-            </div>
-            <div class="flex items-center gap-space-md">
-                <a href="/admin/commandes?status=pending" class="relative p-space-xs text-on-surface-variant hover:text-on-surface" title="Commandes en attente">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <?php if (($pending_orders ?? 0) > 0): ?>
-                        <span class="absolute top-0 right-0 w-2 h-2 rounded-full bg-secondary"></span>
-                    <?php endif; ?>
-                </a>
-                <a href="/admin/produits/nouveau" class="bg-primary text-on-primary px-space-md py-1.5 rounded-lg text-label-sm font-medium hover:bg-surface-container-high hover:text-on-surface transition-all flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">add</span> Nouveau Produit
-                </a>
-                <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer" title="Administrateur">
-                    <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
-                </div>
-            </div>
-        </header>
+        <?php include dirname(__DIR__) . '/partials/header.php'; ?>
 
         <main class="relative pt-16 bg-background min-h-screen">
             <div class="flex flex-col w-full p-space-lg space-y-space-xl">
                 
                 <!-- Section 1: Real-time Pilot Header (4 Cards) -->
                 <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
-                    <!-- Card 1: Daily Revenue -->
                     <div class="bg-surface rounded-lg p-space-md shadow-sm border border-border flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                             <span class="text-label-sm text-outline uppercase tracking-wider">Chiffre d'affaires</span>
@@ -207,7 +122,6 @@
                         </div>
                     </div>
 
-                    <!-- Card 2: Pending WhatsApp Orders -->
                     <div class="bg-surface rounded-lg p-space-md shadow-sm border border-border flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                             <span class="text-label-sm text-outline uppercase tracking-wider">Validation WhatsApp</span>
@@ -223,7 +137,6 @@
                         </a>
                     </div>
 
-                    <!-- Card 3: Conversion Rate Yaoundé / Actifs -->
                     <div class="bg-surface rounded-lg p-space-md shadow-sm border border-border flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                             <span class="text-label-sm text-outline uppercase tracking-wider">Catalogue Actif</span>
@@ -240,7 +153,6 @@
                         </div>
                     </div>
 
-                    <!-- Card 4: Meta API Sync -->
                     <div class="bg-surface rounded-lg p-space-md shadow-sm border border-border flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                             <span class="text-label-sm text-outline uppercase tracking-wider">Meta API Sync</span>
@@ -259,7 +171,6 @@
 
                 <!-- Section 2: Quick Management & Shortcuts (Meta & WhatsApp Gateway) -->
                 <section class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
-                    <!-- Meta / Instagram Shopping Import -->
                     <div class="bg-surface rounded-lg p-space-lg border border-border flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-space-md">
@@ -283,7 +194,6 @@
                         </div>
                     </div>
 
-                    <!-- WhatsApp Direct Gateway -->
                     <div class="bg-surface rounded-lg p-space-lg border border-border flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-space-md">
@@ -337,7 +247,6 @@
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <!-- Stock Item 1 -->
                             <div class="bg-surface-container-low p-space-md rounded-lg border border-border flex items-center gap-space-md">
                                 <div class="w-16 h-16 rounded bg-cover bg-center shrink-0" style="background-image: url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200')"></div>
                                 <div class="flex-1 min-w-0">
@@ -348,7 +257,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Stock Item 2 -->
                             <div class="bg-surface-container-low p-space-md rounded-lg border border-border flex items-center gap-space-md">
                                 <div class="w-16 h-16 rounded bg-cover bg-center shrink-0" style="background-image: url('https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200')"></div>
                                 <div class="flex-1 min-w-0">
@@ -359,7 +267,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Stock Item 3 -->
                             <div class="bg-surface-container-low p-space-md rounded-lg border border-border flex items-center gap-space-md">
                                 <div class="w-16 h-16 rounded bg-cover bg-center shrink-0" style="background-image: url('https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=200')"></div>
                                 <div class="flex-1 min-w-0">

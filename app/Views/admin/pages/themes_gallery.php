@@ -1,82 +1,146 @@
+<?php
+$active_tab = 'themes';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Thèmes & Apparence — Marvens Shop</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --border: #e4e2e4; --text: #1b1b1d; --text-muted: #76777d; --primary: #000; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: #f6f3f5; color: var(--text); padding: 2rem; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
-        p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
-        .themes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-        .theme-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; padding: 1.2rem; display: flex; flex-direction: column; }
-        .theme-preview { width: 100%; aspect-ratio: 16/10; background: #eee; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 1rem; }
-        .btn-activate { background: #000; color: #fff; padding: 0.6rem; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-top: auto; }
-        .badge-active { background: #dcfce7; color: #15803d; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 0.5rem; }
+        @layer base {
+            html, body { margin:0; padding:0; }
+            body { overscroll-behavior:none; }
+        }
+        ::-webkit-scrollbar { display:none; }
     </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-container": "#fe932c",
+                        "tertiary": "#000000",
+                        "surface-container-low": "#f6f3f5",
+                        "primary": "#000000",
+                        "outline": "#76777d",
+                        "surface-container": "#f0edef",
+                        "on-surface": "#1b1b1d",
+                        "secondary": "#904d00",
+                        "surface-container-highest": "#e4e2e4",
+                        "surface-container-high": "#eae7e9",
+                        "surface": "#FFFFFF",
+                        "background": "#F8FAFC",
+                        "border": "#E2E8F0",
+                        "on-surface-variant": "#45464d",
+                        "error": "#ba1a1a"
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                    spacing: { "space-sm": "8px", "space-lg": "24px", "space-xs": "4px", "space-xl": "48px", "space-md": "16px" },
+                    fontFamily: { "body-md": ["Inter"], "headline-md": ["Inter"], "headline-sm": ["Inter"] }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
 </head>
-<body>
-    <div class="container">
-        <a href="/admin/dashboard" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">&larr; Retour au tableau de bord</a>
-        <h1 style="margin-top: 0.5rem;">Bibliothèque de Thèmes</h1>
-        <p>Sélectionnez le template visuel de votre boutique. <strong>Vos produits, catégories et commandes restent 100% intacts lors du changement.</strong></p>
+<body class="bg-background font-body-md text-on-surface">
 
-        <div class="themes-grid">
-            <!-- Thème Fashion -->
-            <div class="theme-card">
-                <?php if ($active_theme === 'fashion'): ?>
-                    <span class="badge-active">ACTIF ACTUELLEMENT</span>
-                <?php endif; ?>
-                <div class="theme-preview" style="background: #fff8f5; color: #8d4b00;">Fashion (Éditorial Ambre)</div>
-                <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Theme Fashion</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Style prêt-à-porter chaleureux, tons ambrés et élégance éditoriale.</p>
-                <?php if ($active_theme !== 'fashion'): ?>
-                    <form method="POST" action="/admin/themes/activer">
-                        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
-                        <input type="hidden" name="theme" value="fashion">
-                        <button type="submit" class="btn-activate" style="width: 100%;">Activer ce thème</button>
-                    </form>
-                <?php endif; ?>
-            </div>
+    <?php include dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
-            <!-- Thème Bello -->
-            <div class="theme-card">
-                <?php if ($active_theme === 'bello'): ?>
-                    <span class="badge-active">ACTIF ACTUELLEMENT</span>
-                <?php endif; ?>
-                <div class="theme-preview" style="background: #fdfaf6; color: #c2410c;">Bello (Chaleureux & Doux)</div>
-                <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Theme Bello</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Mise en avant visuelle soignée, contrastes doux et lisibilité épurée.</p>
-                <?php if ($active_theme !== 'bello'): ?>
-                    <form method="POST" action="/admin/themes/activer">
-                        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
-                        <input type="hidden" name="theme" value="bello">
-                        <button type="submit" class="btn-activate" style="width: 100%;">Activer ce thème</button>
-                    </form>
-                <?php endif; ?>
-            </div>
+    <div class="pl-72">
+        <?php include dirname(__DIR__) . '/partials/header.php'; ?>
 
-            <!-- Thème Luxe -->
-            <div class="theme-card">
-                <?php if ($active_theme === 'luxe'): ?>
-                    <span class="badge-active">ACTIF ACTUELLEMENT</span>
-                <?php endif; ?>
-                <div class="theme-preview" style="background: #18181b; color: #f4f4f5;">Luxe (Sombre & Premium)</div>
-                <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Theme Luxe</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Ambiance nocturne haut de gamme pour articles d'exception et maroquinerie.</p>
-                <?php if ($active_theme !== 'luxe'): ?>
-                    <form method="POST" action="/admin/themes/activer">
-                        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
-                        <input type="hidden" name="theme" value="luxe">
-                        <button type="submit" class="btn-activate" style="width: 100%;">Activer ce thème</button>
-                    </form>
-                <?php endif; ?>
+        <main class="relative pt-16 bg-background min-h-screen p-space-lg">
+            <div class="max-w-7xl mx-auto flex flex-col gap-space-lg">
+                
+                <div class="bg-surface p-space-lg rounded-2xl border border-border shadow-sm">
+                    <h1 class="text-2xl font-bold text-on-surface">Bibliothèque de Thèmes</h1>
+                    <p class="text-sm text-outline">Personnalisez l'apparence publique de votre boutique sans jamais altérer vos produits, commandes ou réglages.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+                    <!-- Thème Fashion -->
+                    <div class="bg-surface rounded-2xl border border-border p-space-md shadow-sm flex flex-col justify-between">
+                        <div>
+                            <?php if ($active_theme === 'fashion'): ?>
+                                <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full mb-3">
+                                    <span class="material-symbols-outlined text-[14px]">check_circle</span> ACTIF ACTUELLEMENT
+                                </span>
+                            <?php endif; ?>
+                            <div class="aspect-video w-full rounded-xl bg-[#fff8f5] border border-border flex items-center justify-center font-bold text-[#8d4b00] mb-space-md text-sm">
+                                Fashion (Éditorial Ambre)
+                            </div>
+                            <h3 class="font-bold text-base text-on-surface">Theme Fashion</h3>
+                            <p class="text-xs text-outline mt-1 mb-space-lg">Style prêt-à-porter féminin raffiné, tons ambrés et élégance éditoriale moderne.</p>
+                        </div>
+                        <?php if ($active_theme !== 'fashion'): ?>
+                            <form method="POST" action="/admin/themes/activer">
+                                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                                <input type="hidden" name="theme" value="fashion">
+                                <button type="submit" class="w-full bg-primary text-on-primary py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                                    Activer ce thème
+                                </button>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Thème Bello -->
+                    <div class="bg-surface rounded-2xl border border-border p-space-md shadow-sm flex flex-col justify-between">
+                        <div>
+                            <?php if ($active_theme === 'bello'): ?>
+                                <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full mb-3">
+                                    <span class="material-symbols-outlined text-[14px]">check_circle</span> ACTIF ACTUELLEMENT
+                                </span>
+                            <?php endif; ?>
+                            <div class="aspect-video w-full rounded-xl bg-[#fdfaf6] border border-border flex items-center justify-center font-bold text-[#c2410c] mb-space-md text-sm">
+                                Bello (Chaleureux & Doux)
+                            </div>
+                            <h3 class="font-bold text-base text-on-surface">Theme Bello</h3>
+                            <p class="text-xs text-outline mt-1 mb-space-lg">Mise en avant visuelle soignée, contrastes doux et lisibilité commerciale épurée.</p>
+                        </div>
+                        <?php if ($active_theme !== 'bello'): ?>
+                            <form method="POST" action="/admin/themes/activer">
+                                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                                <input type="hidden" name="theme" value="bello">
+                                <button type="submit" class="w-full bg-primary text-on-primary py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                                    Activer ce thème
+                                </button>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Thème Luxe -->
+                    <div class="bg-surface rounded-2xl border border-border p-space-md shadow-sm flex flex-col justify-between">
+                        <div>
+                            <?php if ($active_theme === 'luxe'): ?>
+                                <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full mb-3">
+                                    <span class="material-symbols-outlined text-[14px]">check_circle</span> ACTIF ACTUELLEMENT
+                                </span>
+                            <?php endif; ?>
+                            <div class="aspect-video w-full rounded-xl bg-[#18181b] border border-border flex items-center justify-center font-bold text-[#f4f4f5] mb-space-md text-sm">
+                                Luxe (Sombre & Premium)
+                            </div>
+                            <h3 class="font-bold text-base text-on-surface">Theme Luxe</h3>
+                            <p class="text-xs text-outline mt-1 mb-space-lg">Ambiance nocturne haut de gamme pour articles d'exception, horlogerie et maroquinerie.</p>
+                        </div>
+                        <?php if ($active_theme !== 'luxe'): ?>
+                            <form method="POST" action="/admin/themes/activer">
+                                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                                <input type="hidden" name="theme" value="luxe">
+                                <button type="submit" class="w-full bg-primary text-on-primary py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                                    Activer ce thème
+                                </button>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
             </div>
-        </div>
+        </main>
     </div>
 </body>
 </html>
