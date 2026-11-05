@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maquette Dashboard — Marvens Shop (Swiss Commerce)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --admin-bg: #FFFFFF;
+      --admin-sidebar: #f6f3f5;
+      --admin-border: #e4e2e4;
+      --admin-text: #1b1b1d;
+      --admin-text-muted: #76777d;
+      --admin-primary: #000000;
+      --admin-accent: #904d00;
+      --status-pending: #f59e0b;
+      --status-confirmed: #3b82f6;
+      --status-delivered: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--admin-bg); color: var(--admin-text); display: flex; min-height: 100vh; }
+    aside { width: 250px; background: var(--admin-sidebar); border-right: 1px solid var(--admin-border); padding: 1.5rem 1rem; display: flex; flex-direction: column; }
+    .brand { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 2rem; padding-left: 0.5rem; border-left: 3px solid var(--admin-accent); }
+    .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+    .nav-item a { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0.8rem; text-decoration: none; color: var(--admin-text); font-size: 0.9rem; font-weight: 500; border-radius: 4px; transition: 0.15s; }
+    .nav-item.active a, .nav-item a:hover { background: #fff; border: 1px solid var(--admin-border); }
+    .badge-count { background: #000; color: #fff; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 999px; }
+    main { flex-grow: 1; padding: 2rem; overflow-y: auto; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--admin-border); }
+    .topbar h1 { font-size: 1.5rem; font-weight: 700; }
+    .btn-action { background: #000; color: #fff; padding: 0.6rem 1.2rem; border-radius: 4px; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .kpi-card { border: 1px solid var(--admin-border); padding: 1.2rem; border-radius: 4px; background: #fff; }
+    .kpi-label { font-size: 0.8rem; color: var(--admin-text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 0.4rem; }
+    .kpi-value { font-size: 1.6rem; font-weight: 700; }
+    .card-table { border: 1px solid var(--admin-border); border-radius: 4px; overflow: hidden; background: #fff; }
+    .card-header { padding: 1rem 1.2rem; border-bottom: 1px solid var(--admin-border); font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
+    th { padding: 0.8rem 1.2rem; background: var(--admin-sidebar); border-bottom: 1px solid var(--admin-border); font-weight: 600; color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; }
+    td { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--admin-border); }
+    tr:last-child td { border-bottom: none; }
+    .status-badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.75rem; font-weight: 600; }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-confirmed { background: #dbeafe; color: #1e40af; }
+    .status-delivered { background: #d1fae5; color: #065f46; }
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      aside { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <div class="brand">MARVENS SHOP ADMIN</div>
+    <ul class="nav-menu">
+      <li class="nav-item active"><a href="#"><span>Tableau de bord</span></a></li>
+      <li class="nav-item"><a href="#"><span>Commandes</span> <span class="badge-count">3</span></a></li>
+      <li class="nav-item"><a href="#"><span>Produits</span></a></li>
+      <li class="nav-item"><a href="#"><span>Catégories</span></a></li>
+      <li class="nav-item"><a href="#"><span>Thèmes & Apparence</span></a></li>
+      <li class="nav-item"><a href="#"><span>Import Catalogue</span></a></li>
+      <li class="nav-item"><a href="#"><span>Paramètres</span></a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Tableau de bord</h1>
+        <p style="font-size: 0.85rem; color: var(--admin-text-muted);">Instance : Boutique Douala — Mode cPanel Actif</p>
+      </div>
+      <a href="#" class="btn-action">+ Nouveau Produit</a>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">CA Réalisé (Payé)</div>
+        <div class="kpi-value">485 000 FCFA</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Commandes à Traiter</div>
+        <div class="kpi-value" style="color: var(--status-pending);">3</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Commandes</div>
+        <div class="kpi-value">28</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Articles Publiés</div>
+        <div class="kpi-value">42</div>
+      </div>
+    </div>
+
+    <div class="card-table">
+      <div class="card-header">
+        <span>Dernières Commandes Reçues</span>
+        <a href="#" style="font-size: 0.8rem; color: #000; text-decoration: underline;">Voir tout l'historique</a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Réf. Commande</th>
+            <th>Date & Heure</th>
+            <th>Client</th>
+            <th>Montant</th>
+            <th>Statut Commande</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>#CMD-20261105-0042</strong></td>
+            <td>05/11/2026 10:14</td>
+            <td>Amina N. (Akwa)</td>
+            <td>16 500 FCFA</td>
+            <td><span class="status-badge status-pending">En attente</span></td>
+            <td><a href="#" style="color: #000; text-decoration: underline; font-size: 0.8rem;">Détail & WhatsApp</a></td>
+          </tr>
+          <tr>
+            <td><strong>#CMD-20261105-0041</strong></td>
+            <td>05/11/2026 09:30</td>
+            <td>Samuel E. (Bonapriso)</td>
+            <td>38 000 FCFA</td>
+            <td><span class="status-badge status-confirmed">Confirmée</span></td>
+            <td><a href="#" style="color: #000; text-decoration: underline; font-size: 0.8rem;">Détail & WhatsApp</a></td>
+          </tr>
+          <tr>
+            <td><strong>#CMD-20261104-0040</strong></td>
+            <td>04/11/2026 16:45</td>
+            <td>Carine M. (Bastos)</td>
+            <td>24 000 FCFA</td>
+            <td><span class="status-badge status-delivered">Livrée</span></td>
+            <td><a href="#" style="color: #000; text-decoration: underline; font-size: 0.8rem;">Détail & WhatsApp</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,12 @@
+/.env
+/.env.local
+/.env.*.local
+/storage/logs/*.log
+/storage/sessions/*
+/storage/uploads/*
+/storage/private/*
+/database/*.sqlite
+/vendor/
+*.log
+.DS_Store
+Thumbs.db

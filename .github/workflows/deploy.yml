@@ -1,0 +1,30 @@
+name: Deploy Marvens Shop
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Deploy to cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSW }}
+          local-dir: ./
+          server-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            Docs/**
+            Framework MARVENS CREATIVE BRIEF - MARVENS SHOP/**
+            MARVENS_CREATIVE_BRIEF_MARVENS_SHOP_20261104_151943.zip
+            themes/**

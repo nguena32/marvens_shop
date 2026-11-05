@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maquette Storefront — Marvens Shop (Thème Fashion)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ms-color-primary: #8d4b00;
+      --ms-color-primary-hover: #b15f00;
+      --ms-color-surface: #fff8f5;
+      --ms-color-surface-card: #ffffff;
+      --ms-color-surface-subtle: #fdeade;
+      --ms-color-text-main: #231a13;
+      --ms-color-text-muted: #554336;
+      --ms-color-border: #dbc2b0;
+      --ms-color-whatsapp: #25D366;
+      --ms-font-headline: 'Space Grotesk', sans-serif;
+      --ms-font-body: 'Inter', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--ms-font-body); background-color: var(--ms-color-surface); color: var(--ms-color-text-main); line-height: 1.5; }
+    header { background: #fff; border-bottom: 1px solid var(--ms-color-border); padding: 1rem 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .header-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: var(--ms-font-headline); font-size: 1.5rem; font-weight: 700; color: var(--ms-color-primary); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--ms-color-text-main); font-weight: 500; font-size: 0.95rem; }
+    .nav-actions { display: flex; align-items: center; gap: 1rem; }
+    .cart-badge-btn { position: relative; background: var(--ms-color-surface-subtle); border: 1px solid var(--ms-color-border); padding: 0.5rem 0.8rem; border-radius: 6px; cursor: pointer; text-decoration: none; color: var(--ms-color-text-main); font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+    .cart-count { background: var(--ms-color-primary); color: #fff; font-size: 0.75rem; border-radius: 999px; padding: 0.1rem 0.45rem; }
+    .hero { max-width: 1200px; margin: 1.5rem auto; padding: 2.5rem 1.5rem; background: var(--ms-color-surface-subtle); border-radius: 12px; border: 1px solid var(--ms-color-border); display: flex; flex-direction: column; gap: 1rem; }
+    .hero h1 { font-family: var(--ms-font-headline); font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.2; color: var(--ms-color-text-main); }
+    .hero p { max-width: 600px; color: var(--ms-color-text-muted); font-size: 1.05rem; }
+    .hero-btn { align-self: flex-start; background: var(--ms-color-primary); color: #fff; padding: 0.8rem 1.8rem; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block; transition: 0.2s; }
+    .hero-btn:hover { background: var(--ms-color-primary-hover); }
+    .section-title { font-family: var(--ms-font-headline); font-size: 1.6rem; margin: 2rem 0 1rem; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+    .product-card { background: var(--ms-color-surface-card); border: 1px solid var(--ms-color-border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+    .product-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(35,26,19,0.08); }
+    .product-img { width: 100%; aspect-ratio: 1/1; background: #eedfd5; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--ms-color-text-muted); }
+    .product-info { padding: 1rem; display: flex; flex-direction: column; flex-grow: 1; gap: 0.4rem; }
+    .product-cat { font-size: 0.75rem; text-transform: uppercase; color: var(--ms-color-text-muted); letter-spacing: 0.05em; }
+    .product-title { font-family: var(--ms-font-headline); font-size: 1.1rem; font-weight: 600; }
+    .product-price { font-size: 1.15rem; font-weight: 700; color: var(--ms-color-primary); margin-top: auto; padding-top: 0.5rem; }
+    .product-btn { background: var(--ms-color-primary); color: #fff; text-align: center; padding: 0.6rem; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 0.6rem; }
+    .whatsapp-float-bar { background: var(--ms-color-whatsapp); color: #fff; text-align: center; padding: 0.8rem; font-weight: 600; border-radius: 6px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 2rem; }
+    footer { border-top: 1px solid var(--ms-color-border); background: #fff; padding: 2rem 1.5rem; margin-top: 4rem; text-align: center; color: var(--ms-color-text-muted); font-size: 0.85rem; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <a href="#" class="logo">MARVENS SHOP</a>
+      <ul class="nav-links">
+        <li><a href="#">Accueil</a></li>
+        <li><a href="#">Nouveautés</a></li>
+        <li><a href="#">Vêtements</a></li>
+        <li><a href="#">Accessoires</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#panier" class="cart-badge-btn">
+          <span>Panier</span>
+          <span class="cart-count">2</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
+    <section class="hero">
+      <h1>Mode & Prêt-à-porter exclusif</h1>
+      <p>Découvrez notre sélection tendance. Commandez directement en quelques clics et finalisez vos achats facilement sur WhatsApp.</p>
+      <a href="#catalogue" class="hero-btn">Explorer le catalogue</a>
+    </section>
+
+    <h2 class="section-title">Sélection du moment</h2>
+    <div class="product-grid" id="catalogue">
+      <div class="product-card">
+        <div class="product-img">Robe Sahara (Photo)</div>
+        <div class="product-info">
+          <span class="product-cat">Robes</span>
+          <h3 class="product-title">Robe Sahara Longue</h3>
+          <div class="product-price">18 500 FCFA</div>
+          <a href="#" class="product-btn">Ajouter au panier</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">Ensemble Lin (Photo)</div>
+        <div class="product-info">
+          <span class="product-cat">Ensembles</span>
+          <h3 class="product-title">Ensemble Veste Lin</h3>
+          <div class="product-price">24 000 FCFA</div>
+          <a href="#" class="product-btn">Ajouter au panier</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">Sac Cuir Artisanal (Photo)</div>
+        <div class="product-info">
+          <span class="product-cat">Accessoires</span>
+          <h3 class="product-title">Sac Cuir Artisanal</h3>
+          <div class="product-price">15 000 FCFA</div>
+          <a href="#" class="product-btn">Ajouter au panier</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">Chemise Imprimée (Photo)</div>
+        <div class="product-info">
+          <span class="product-cat">Chemises</span>
+          <h3 class="product-title">Chemise Soie Imprimée</h3>
+          <div class="product-price">12 500 FCFA</div>
+          <a href="#" class="product-btn">Ajouter au panier</a>
+        </div>
+      </div>
+    </div>
+
+    <a href="#" class="whatsapp-float-bar">
+      <span>Besoin d'un conseil ? Discutez avec nous sur WhatsApp</span>
+    </a>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Marvens Shop — Boutique propulsée par Marvens Group. Tous droits réservés.</p>
+  </footer>
+</body>
+</html>

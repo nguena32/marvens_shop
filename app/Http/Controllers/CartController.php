@@ -1,0 +1,140 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Http\Controllers;
+
+use App\Core\Request;
+use App\Core\Response;
+use App\Core\Database;
+use App\Core\Validator;
+use App\Repositories\ProductRepository;
+use App\Repositories\OrderRepository;
+use App\Application\Services\CartService;
+use App\Application\Services\CheckoutService;
+use App\Core\Session;
+use Exception;
+
+/**
+ * Contrôleur du Panier, de la validation de commande et de la confirmation
+ */
+class CartController extends Controller
+{
+    private ProductRepository $productRepo;
+    private OrderRepository $orderRepo;
+    private CartService $cartService;
+    private CheckoutService $checkoutService;
+
+    public function __construct()
+    {
+        $pdo = Database::getConnection();
+        $this->productRepo = new ProductRepository($pdo);
+        $this->orderRepo = new OrderRepository($pdo);
+        $this->cartService = new CartService($this->productRepo);
+        $this->checkoutService = new CheckoutService($this->orderRepo, $this->cartService);
+    }
+
+    public function index(Request $request): Response
+    {
+        $calc = $this->cartService->getCartCalculation();
+        return $this->render('themes.fashion.pages.cart', [
+            'cart' => $calc,
+        ]);
+    }
+
+    public function add(Request $request): Response
+    {
+        $this->validateCsrf($request);
+
+        $productId = (int) $request->input('product_id');
+        $quantity = max(1, (int) $request->input('quantity', 1));
+        $variant = $request->input('variant');
+
+        $this->cartService->addItem($productId, $quantity, $variant ? (string) $variant : null);
+
+        // Si requête AJAX
+        if ($request->isMethod('POST') && $request->input('ajax')) {
+            $calc = $this->cartService->getCartCalculation();
+            return $this->json(['success' => true, 'count' => $calc['count']]);
+        }
+
+        return $this->redirect('/panier');
+    }
+
+    public function update(Request $request): Response
+    {
+        $this->validateCsrf($request);
+        $itemKey = (string) $request->input('item_key');
+        $quantity = (int) $request->input('quantity', 1);
+
+        $this->cartService->updateQuantity($itemKey, $quantity);
+        return $this->redirect('/panier');
+    }
+
+    public function remove(Request $request): Response
+    {
+        $this->validateCsrf($request);
+        $itemKey = (string) $request->input('item_key');
+        $this->cartService->removeItem($itemKey);
+        return $this->redirect('/panier');
+    }
+
+    public function showCheckout(Request $request): Response
+    {
+        $calc = $this->cartService->getCartCalculation();
+        if (empty($calc['items'])) {
+            return $this->redirect('/panier');
+        }
+
+        $errors = Session::get('checkout_errors', []);
+        Session::remove('checkout_errors');
+
+        return $this->render('themes.fashion.pages.checkout', [
+            'cart' => $calc,
+            'errors' => $errors,
+        ]);
+    }
+
+    public function processCheckout(Request $request): Response
+    {
+        $this->validateCsrf($request);
+
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'customer_name' => 'required|min:2',
+            'customer_whatsapp' => 'required|min:8',
+            'delivery_mode' => 'required|in:delivery,pickup',
+        ]);
+
+        if ($validator->fails()) {
+            Session::set('checkout_errors', $validator->getErrors());
+            return $this->redirect('/checkout');
+        }
+
+        try {
+            $result = $this->checkoutService->processCheckout($data);
+            return $this->redirect('/commande/confirmation/' . $result['order_number']);
+        } catch (Exception $e) {
+            Session::set('checkout_errors', ['global' => [$e->getMessage()]]);
+            return $this->redirect('/checkout');
+        }
+    }
+
+    public function confirmation(Request $request, array $params): Response
+    {
+        $orderNumber = $params['order_number'] ?? '';
+        $order = $this->orderRepo->findByOrderNumber($orderNumber);
+
+        if (!$order) {
+            return Response::html("<h1>404 — Commande introuvable</h1>", 404);
+        }
+
+        $items = $order['items'] ?? [];
+        $whatsappUrl = $this->checkoutService->generateWhatsAppLink($order, $items);
+
+        return $this->render('themes.fashion.pages.order_confirmation', [
+            'order' => $order,
+            'items' => $items,
+            'whatsapp_url' => $whatsappUrl,
+        ]);
+    }
+}
