@@ -43,8 +43,11 @@ class AuthController extends Controller
 
         try {
             $pdo = Database::getConnection();
-            $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :u OR email = :u LIMIT 1');
-            $stmt->execute(['u' => $username]);
+            $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username OR email = :email LIMIT 1');
+            $stmt->execute([
+                'username' => $username,
+                'email' => $username,
+            ]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$user) {
