@@ -144,11 +144,13 @@ class SettingsService
         $this->set('shop_currency', $currency);
         $this->set('shop_timezone', trim($data['timezone'] ?? 'Africa/Douala'));
 
-        if (!empty($data['logo_url'])) {
-            $this->set('shop_logo_url', $data['logo_url']);
+        $logoUrl = trim($data['logo_url'] ?? '');
+        if ($logoUrl !== '') {
+            $this->set('shop_logo_url', $logoUrl);
         }
-        if (!empty($data['favicon_url'])) {
-            $this->set('shop_favicon_url', $data['favicon_url']);
+        $faviconUrl = trim($data['favicon_url'] ?? '');
+        if ($faviconUrl !== '') {
+            $this->set('shop_favicon_url', $faviconUrl);
         }
 
         return ['success' => true];

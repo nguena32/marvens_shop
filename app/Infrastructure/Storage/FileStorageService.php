@@ -17,7 +17,7 @@ class FileStorageService
     public function __construct(
         string $storageRoot,
         int $maxSizeMb = 5,
-        array $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp']
+        array $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/svg+xml']
     ) {
         $this->storageRoot = rtrim($storageRoot, '/\\');
         $this->maxSizeBytes = $maxSizeMb * 1024 * 1024;
@@ -25,7 +25,7 @@ class FileStorageService
     }
 
     /**
-     * Téléversement et sécurisation d'un fichier image produit
+     * Téléversement et sécurisation d'un fichier image produit ou logo/branding
      */
     public function storePublicUpload(array $file, string $subFolder = 'products'): string
     {
@@ -42,8 +42,14 @@ class FileStorageService
         $mime = finfo_file($finfo, $file['tmp_name']);
         finfo_close($finfo);
 
+        // Cas particulier de compatibilité pour les favicons .ico
+        $clientExt = strtolower(pathinfo($file['name'] ?? '', PATHINFO_EXTENSION));
+        if ($clientExt === 'ico' && ($mime === 'image/x-icon' || $mime === 'image/vnd.microsoft.icon' || $mime === 'application/octet-stream')) {
+            $mime = 'image/x-icon';
+        }
+
         if (!in_array($mime, $this->allowedMimeTypes, true)) {
-            throw new RuntimeException("Format de fichier non autorisé : {$mime}. Formats acceptés : JPEG, PNG, WEBP.");
+            throw new RuntimeException("Format de fichier non autorisé : {$mime}. Formats acceptés : JPEG, PNG, WEBP, ICO, SVG.");
         }
 
         // Déterminer l'extension sûre
@@ -51,6 +57,8 @@ class FileStorageService
             'image/jpeg' => 'jpg',
             'image/png' => 'png',
             'image/webp' => 'webp',
+            'image/x-icon', 'image/vnd.microsoft.icon' => 'ico',
+            'image/svg+xml' => 'svg',
             default => 'bin',
         };
 

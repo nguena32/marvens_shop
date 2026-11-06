@@ -9,14 +9,17 @@ use App\Core\Session;
 use App\Core\View;
 use App\Application\Services\SettingsService;
 use App\Http\Middleware\AuthMiddleware;
+use App\Infrastructure\Storage\FileStorageService;
 
 class SettingsController
 {
     private SettingsService $settingsService;
+    private FileStorageService $storage;
 
     public function __construct()
     {
         $this->settingsService = new SettingsService();
+        $this->storage = new FileStorageService(dirname(__DIR__, 3) . '/public');
     }
 
     private function requireAuth(): ?Response
@@ -60,7 +63,33 @@ class SettingsController
             return Response::redirect('/admin/parametres/boutique');
         }
 
-        $res = $this->settingsService->updateShopInfo($request->all());
+        $data = $request->all();
+
+        // Gestion de l'upload du Logo
+        $logoFile = $request->file('logo_file');
+        if ($logoFile && !empty($logoFile['tmp_name'])) {
+            try {
+                $uploadedLogo = $this->storage->storePublicUpload($logoFile, 'branding');
+                $data['logo_url'] = '/' . ltrim($uploadedLogo, '/');
+            } catch (\Exception $e) {
+                Session::flash('error', 'Erreur lors du téléversement du logo : ' . $e->getMessage());
+                return Response::redirect('/admin/parametres/boutique');
+            }
+        }
+
+        // Gestion de l'upload du Favicon
+        $faviconFile = $request->file('favicon_file');
+        if ($faviconFile && !empty($faviconFile['tmp_name'])) {
+            try {
+                $uploadedFavicon = $this->storage->storePublicUpload($faviconFile, 'branding');
+                $data['favicon_url'] = '/' . ltrim($uploadedFavicon, '/');
+            } catch (\Exception $e) {
+                Session::flash('error', 'Erreur lors du téléversement du favicon : ' . $e->getMessage());
+                return Response::redirect('/admin/parametres/boutique');
+            }
+        }
+
+        $res = $this->settingsService->updateShopInfo($data);
         if ($res['success']) {
             $this->settingsService->logActivity(
                 (int)Session::get('admin_user_id'),
@@ -68,9 +97,9 @@ class SettingsController
                 'settings_shop_update',
                 null,
                 null,
-                'Mise à jour des coordonnées et informations de la boutique'
+                'Mise à jour des coordonnées et identité de la boutique'
             );
-            Session::flash('success', 'Les informations de la boutique ont été enregistrées avec succès.');
+            Session::flash('success', 'Les informations et visuels de la boutique ont été enregistrés avec succès.');
         } else {
             $errMsg = reset($res['errors']);
             Session::flash('error', $errMsg ?: 'Erreur lors de la validation du formulaire.');
