@@ -23,6 +23,12 @@
                 <span class="ml-auto text-xs bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded-full"><?= (int) $pending_orders ?></span>
             <?php endif; ?>
         </a>
+        <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'customers' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/clients">
+            <span class="material-symbols-outlined mr-space-md">group</span>Clients
+        </a>
+        <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'statistics' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/statistiques">
+            <span class="material-symbols-outlined mr-space-md">insights</span>Statistiques
+        </a>
         <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'import' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/import">
             <span class="material-symbols-outlined mr-space-md">cloud_download</span>Importations
         </a>

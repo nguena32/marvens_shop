@@ -10,6 +10,7 @@ use App\Core\Database;
 use App\Repositories\OrderRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\CategoryRepository;
+use App\Repositories\CustomerRepository;
 use App\Domain\Entities\Order;
 use App\Http\Middleware\AuthMiddleware;
 use App\Infrastructure\Storage\FileStorageService;
@@ -28,6 +29,7 @@ class AdminController extends Controller
     private OrderRepository $orderRepo;
     private ProductRepository $productRepo;
     private CategoryRepository $categoryRepo;
+    private CustomerRepository $customerRepo;
     private FileStorageService $storage;
     private CsvImportService $csvImport;
     private MetaCatalogConnector $metaConnector;
@@ -39,6 +41,7 @@ class AdminController extends Controller
         $this->orderRepo = new OrderRepository($pdo);
         $this->productRepo = new ProductRepository($pdo);
         $this->categoryRepo = new CategoryRepository($pdo);
+        $this->customerRepo = new CustomerRepository($pdo);
         $this->storage = new FileStorageService(dirname(__DIR__, 3) . '/storage');
         $this->csvImport = new CsvImportService($this->productRepo, $this->categoryRepo);
         $this->metaConnector = new MetaCatalogConnector();
@@ -55,10 +58,26 @@ class AdminController extends Controller
         if ($res = $this->requireAuth()) return $res;
 
         $pdo = Database::getConnection();
-        $totalOrders = (int) $pdo->query("SELECT COUNT(*) FROM orders")->fetchColumn();
-        $pendingOrders = (int) $pdo->query("SELECT COUNT(*) FROM orders WHERE order_status = 'pending'")->fetchColumn();
-        $totalRevenue = (int) $pdo->query("SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE payment_status = 'paid'")->fetchColumn();
+
+        // 8.1 Statistiques précises par statut
+        $statusCounts = $this->orderRepo->getDashboardCounts();
+        
+        // 8.5 Définition certifiée du CA : commandes payées OU livrées (MS-BIZ-08 / T-026)
+        $commercialStats = $this->orderRepo->getCommercialStats();
+        $totalRevenue = $commercialStats['revenue_certified'];
+
+        $totalOrders = $statusCounts['total'];
+        $pendingOrders = $statusCounts[Order::STATUS_PENDING] ?? 0;
+        $confirmedOrders = $statusCounts[Order::STATUS_CONFIRMED] ?? 0;
+        $paymentPendingOrders = $statusCounts[Order::STATUS_PAYMENT_PENDING] ?? 0;
+        $paidOrders = $statusCounts[Order::STATUS_PAID] ?? 0;
+        $preparingOrders = $statusCounts[Order::STATUS_PREPARING] ?? 0;
+        $shippedOrders = $statusCounts[Order::STATUS_SHIPPED] ?? 0;
+        $deliveredOrders = $statusCounts[Order::STATUS_DELIVERED] ?? 0;
+        $cancelledOrders = $statusCounts[Order::STATUS_CANCELLED] ?? 0;
+
         $totalProducts = (int) $pdo->query("SELECT COUNT(*) FROM products WHERE is_active = 1")->fetchColumn();
+        $totalCustomers = (int) $this->customerRepo->count();
 
         // Récupération des articles en stock faible ou critique
         $lowStockStmt = $pdo->query("
@@ -80,11 +99,23 @@ class AdminController extends Controller
         return $this->render('admin.pages.dashboard', [
             'total_orders' => $totalOrders,
             'pending_orders' => $pendingOrders,
+            'confirmed_orders' => $confirmedOrders,
+            'payment_pending_orders' => $paymentPendingOrders,
+            'paid_orders' => $paidOrders,
+            'preparing_orders' => $preparingOrders,
+            'shipped_orders' => $shippedOrders,
+            'delivered_orders' => $deliveredOrders,
+            'cancelled_orders' => $cancelledOrders,
+            'status_counts' => $statusCounts,
             'total_revenue' => $totalRevenue,
+            'revenue_potential' => $commercialStats['revenue_potential'],
             'total_products' => $totalProducts,
+            'total_customers' => $totalCustomers,
             'recent_orders' => $recentOrders,
             'low_stock_items' => $lowStockItems,
+            'top_products' => $commercialStats['top_products'],
             'current_filter' => $statusFilter,
+            'csrf_token' => Session::getCsrfToken(),
         ]);
     }
 
@@ -93,11 +124,64 @@ class AdminController extends Controller
         if ($res = $this->requireAuth()) return $res;
 
         $status = $request->query('status');
-        $orders = $this->orderRepo->findAllPaginated(50, 0, $status ? (string)$status : null);
+        $status = is_string($status) && trim($status) !== '' ? trim($status) : null;
+        
+        $search = $request->query('search');
+        $search = is_string($search) && trim($search) !== '' ? trim($search) : null;
+
+        $paymentStatus = $request->query('payment_status');
+        $paymentStatus = is_string($paymentStatus) && trim($paymentStatus) !== '' ? trim($paymentStatus) : null;
+
+        $deliveryMode = $request->query('delivery_mode');
+        $deliveryMode = is_string($deliveryMode) && trim($deliveryMode) !== '' ? trim($deliveryMode) : null;
+
+        $dateFrom = $request->query('date_from');
+        $dateFrom = is_string($dateFrom) && trim($dateFrom) !== '' ? trim($dateFrom) : null;
+
+        $dateTo = $request->query('date_to');
+        $dateTo = is_string($dateTo) && trim($dateTo) !== '' ? trim($dateTo) : null;
+
+        $page = max(1, (int) $request->query('page', 1));
+        $limit = 25;
+        $offset = ($page - 1) * $limit;
+
+        $orders = $this->orderRepo->findAllAdvanced(
+            $limit, 
+            $offset, 
+            $status, 
+            $search, 
+            $paymentStatus, 
+            $deliveryMode, 
+            $dateFrom, 
+            $dateTo
+        );
+
+        $totalCount = $this->orderRepo->countAdvanced(
+            $status, 
+            $search, 
+            $paymentStatus, 
+            $deliveryMode, 
+            $dateFrom, 
+            $dateTo
+        );
+
+        $totalPages = max(1, (int) ceil($totalCount / $limit));
+
+        $statusCounts = $this->orderRepo->getDashboardCounts();
 
         return $this->render('admin.pages.orders_list', [
             'orders' => $orders,
             'current_status' => $status,
+            'current_search' => $search,
+            'current_payment_status' => $paymentStatus,
+            'current_delivery_mode' => $deliveryMode,
+            'current_date_from' => $dateFrom,
+            'current_date_to' => $dateTo,
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'total_count' => $totalCount,
+            'status_counts' => $statusCounts,
+            'csrf_token' => Session::getCsrfToken(),
         ]);
     }
 
@@ -106,27 +190,30 @@ class AdminController extends Controller
         if ($res = $this->requireAuth()) return $res;
 
         $id = (int) ($params['id'] ?? 0);
-        $pdo = Database::getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM orders WHERE id = :id LIMIT 1");
-        $stmt->execute(['id' => $id]);
-        $order = $stmt->fetch(PDO::FETCH_ASSOC);
+        $order = $this->orderRepo->findById($id);
 
         if (!$order) {
             return Response::html("<h1>404 — Commande introuvable</h1>", 404);
         }
 
-        $iStmt = $pdo->prepare("SELECT * FROM order_items WHERE order_id = :id");
-        $iStmt->execute(['id' => $id]);
-        $items = $iStmt->fetchAll(PDO::FETCH_ASSOC);
+        $items = $order['items'] ?? [];
+        $history = $this->orderRepo->getStatusHistory($id);
 
-        $hStmt = $pdo->prepare("SELECT * FROM order_status_history WHERE order_id = :id ORDER BY changed_at DESC");
-        $hStmt->execute(['id' => $id]);
-        $history = $hStmt->fetchAll(PDO::FETCH_ASSOC);
+        // Récupération de l'historique d'autres commandes de ce client (Module 8.4)
+        $previousOrders = $this->customerRepo->getOrdersByCustomer((string)$order['customer_whatsapp']);
+        // Filtrer la commande courante
+        $previousOrders = array_filter($previousOrders, fn($o) => (int)$o['id'] !== $id);
+
+        $feedback = Session::get('order_feedback');
+        Session::remove('order_feedback');
 
         return $this->render('admin.pages.order_detail', [
             'order' => $order,
             'items' => $items,
             'history' => $history,
+            'previous_orders' => $previousOrders,
+            'feedback' => $feedback,
+            'csrf_token' => Session::getCsrfToken(),
         ]);
     }
 
@@ -137,18 +224,130 @@ class AdminController extends Controller
 
         $id = (int) ($params['id'] ?? 0);
         $newStatus = (string) $request->input('order_status');
-        $comment = $request->input('comment') ? (string) $request->input('comment') : null;
+        $comment = $request->input('comment') ? trim((string) $request->input('comment')) : null;
 
-        $pdo = Database::getConnection();
-        $stmt = $pdo->prepare("SELECT order_status FROM orders WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        $curr = $stmt->fetchColumn();
-
-        if ($curr && Order::canTransition($curr, $newStatus)) {
-            $this->orderRepo->updateStatus($id, $newStatus, $comment);
+        $success = $this->orderRepo->updateStatus($id, $newStatus, $comment);
+        if ($success) {
+            Session::set('order_feedback', [
+                'type' => 'success',
+                'message' => "Le statut de la commande a été changé avec succès vers : " . Order::getStatusLabel($newStatus)
+            ]);
+        } else {
+            Session::set('order_feedback', [
+                'type' => 'error',
+                'message' => "Transition de statut interdite par les règles de gestion (MS-BIZ-06)."
+            ]);
         }
 
         return $this->redirect('/admin/commandes/' . $id);
+    }
+
+    public function updateOrderPayment(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int) ($params['id'] ?? 0);
+        $paymentStatus = (string) $request->input('payment_status');
+        $comment = $request->input('payment_note') ? trim((string) $request->input('payment_note')) : null;
+
+        $success = $this->orderRepo->updatePaymentStatus($id, $paymentStatus, $comment);
+        if ($success) {
+            Session::set('order_feedback', [
+                'type' => 'success',
+                'message' => "Statut de paiement mis à jour : " . strtoupper($paymentStatus)
+            ]);
+        } else {
+            Session::set('order_feedback', [
+                'type' => 'error',
+                'message' => "Échec de mise à jour du statut de paiement."
+            ]);
+        }
+
+        return $this->redirect('/admin/commandes/' . $id);
+    }
+
+    /**
+     * Module 8.4 : Gestion des clients
+     */
+    public function customers(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $search = $request->query('search');
+        $search = is_string($search) && trim($search) !== '' ? trim($search) : null;
+
+        $page = max(1, (int) $request->query('page', 1));
+        $limit = 25;
+        $offset = ($page - 1) * $limit;
+
+        $customers = $this->customerRepo->findAll($search, $limit, $offset);
+        $totalCount = $this->customerRepo->count($search);
+        $totalPages = max(1, (int) ceil($totalCount / $limit));
+
+        return $this->render('admin.pages.customers_list', [
+            'customers' => $customers,
+            'current_search' => $search,
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'total_count' => $totalCount,
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
+    }
+
+    /**
+     * Module 8.4 : Fiche détaillée d'un client et historique des commandes
+     */
+    public function customerDetail(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $id = (int) ($params['id'] ?? 0);
+        $customer = $this->customerRepo->findById($id);
+
+        if (!$customer) {
+            return Response::html("<h1>404 — Client introuvable</h1>", 404);
+        }
+
+        $orders = $this->customerRepo->getOrdersByCustomer((string)$customer['whatsapp']);
+
+        return $this->render('admin.pages.customer_detail', [
+            'customer' => $customer,
+            'orders' => $orders,
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
+    }
+
+    /**
+     * Module 8.5 : Tableau de bord des Statistiques Commerciales Complètes
+     */
+    public function statistics(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $period = $request->query('period', 'all');
+        $stats = $this->orderRepo->getCommercialStats($period);
+        $statusCounts = $this->orderRepo->getDashboardCounts();
+        $totalCustomers = $this->customerRepo->count();
+
+        // Produits en promotion active
+        $pdo = Database::getConnection();
+        $promoStmt = $pdo->query("
+            SELECT id, name, price, promotional_price, main_image_url 
+            FROM products 
+            WHERE promotional_price IS NOT NULL AND promotional_price > 0 AND is_active = 1
+            ORDER BY id DESC
+        ");
+        $activePromos = $promoStmt ? $promoStmt->fetchAll(PDO::FETCH_ASSOC) : [];
+
+        return $this->render('admin.pages.statistics', [
+            'stats' => $stats,
+            'status_counts' => $statusCounts,
+            'total_customers' => $totalCustomers,
+            'active_promos' => $activePromos,
+            'period' => $period,
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
     }
 
     public function products(Request $request): Response

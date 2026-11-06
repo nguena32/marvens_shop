@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 /**
- * Encapsulation de la réponse HTTP sortante
+ * Encapsulation de la réponse HTTP sortante avec En-têtes de sécurité OWASP systématiques
  */
 class Response
 {
@@ -38,18 +38,6 @@ class Response
         return new self('', $statusCode, ['Location' => $url]);
     }
 
-    public function send(): void
-    {
-        if (!headers_sent()) {
-            http_response_code($this->statusCode);
-            foreach ($this->headers as $name => $value) {
-                header("{$name}: {$value}");
-            }
-        }
-
-        echo $this->content;
-    }
-
     public function getStatusCode(): int
     {
         return $this->statusCode;
@@ -58,5 +46,53 @@ class Response
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    public function setHeader(string $name, string $value): self
+    {
+        $this->headers[$name] = $value;
+        return $this;
+    }
+
+    public function send(): void
+    {
+        if (!headers_sent()) {
+            http_response_code($this->statusCode);
+
+            // En-têtes de sécurité renforcés (OWASP Security Headers)
+            $defaultSecurityHeaders = [
+                'X-Content-Type-Options' => 'nosniff',
+                'X-Frame-Options' => 'SAMEORIGIN',
+                'X-XSS-Protection' => '1; mode=block',
+                'Referrer-Policy' => 'strict-origin-when-cross-origin',
+                'X-Permitted-Cross-Domain-Policies' => 'none',
+            ];
+
+            // Si HTTPS est actif ou configuré, activer HSTS
+            $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+                       (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ||
+                       (Config::get('app.session_secure_cookie', false) === true);
+
+            if ($isHttps) {
+                $defaultSecurityHeaders['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+            }
+
+            foreach ($defaultSecurityHeaders as $secHeader => $secValue) {
+                if (!isset($this->headers[$secHeader])) {
+                    header("{$secHeader}: {$secValue}");
+                }
+            }
+
+            foreach ($this->headers as $name => $value) {
+                header("{$name}: {$value}");
+            }
+        }
+
+        echo $this->content;
     }
 }

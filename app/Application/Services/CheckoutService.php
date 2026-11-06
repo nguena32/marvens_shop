@@ -75,6 +75,14 @@ class CheckoutService
         // Persistance atomique dans la base de données
         $orderId = $this->orderRepo->createWithItems($orderData, $items);
 
+        // Enregistrement / mise à jour du profil client (Module 8.4)
+        try {
+            $customerRepo = new \App\Repositories\CustomerRepository(\App\Core\Database::getConnection());
+            $customerRepo->recordCustomerFromOrder($orderData);
+        } catch (\Throwable $e) {
+            // Tolérance si table non migrée ou indisponible
+        }
+
         // Vider le panier après succès
         $this->cartService->clear();
 

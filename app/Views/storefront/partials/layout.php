@@ -19,6 +19,14 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title><?= htmlspecialchars($pageTitle) ?></title>
+    <!-- PWA Manifest & App Icons -->
+    <link rel="manifest" href="/manifest.json"/>
+    <meta name="theme-color" content="<?= htmlspecialchars($colors['primary'] ?? '#4f46e5') ?>"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+    <meta name="apple-mobile-web-app-title" content="<?= htmlspecialchars($shop_name ?? 'Marvens Shop') ?>"/>
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png"/>
+
     <style>
         @layer base {
             html, body { margin:0; padding:0; }
@@ -311,5 +319,33 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
             <div class="mt-2 sm:mt-0">Propulsé par <strong class="text-on-surface">Marvens Shop MVP</strong></div>
         </div>
     </footer>
+
+    <!-- Service Worker PWA & Bannière d'état réseau -->
+    <div id="pwa-offline-badge" style="display:none; position:fixed; bottom:1rem; left:50%; transform:translateX(-50%); z-index:9999; background:#1f2937; color:#f9fafb; padding:0.6rem 1.2rem; border-radius:9999px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.3); font-size:12px; font-weight:600; display:flex; align-items:center; gap:0.5rem;">
+        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444;"></span>
+        Mode Hors-Ligne actif
+    </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then((reg) => {
+                    console.log('PWA ServiceWorker actif avec scope:', reg.scope);
+                }).catch((err) => {
+                    console.warn('Enregistrement ServiceWorker ignoré:', err);
+                });
+            });
+        }
+
+        const offlineBadge = document.getElementById('pwa-offline-badge');
+        function updateOnlineStatus() {
+            if (offlineBadge) {
+                offlineBadge.style.display = navigator.onLine ? 'none' : 'flex';
+            }
+        }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+    </script>
 </body>
 </html>

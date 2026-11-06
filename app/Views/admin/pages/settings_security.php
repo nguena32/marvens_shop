@@ -62,7 +62,76 @@
             </form>
         </div>
 
-        <!-- 2. Journal d'Audit et Activité Récente -->
+        <!-- 2. Gestion des Sauvegardes et Restauration (Module 9.3) -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-indigo-600">backup</span> Sauvegardes du Système & Restauration
+                    </h2>
+                    <p class="text-xs text-gray-500 mt-0.5">Sauvegardez l'état de la base de données ou les fichiers téléversés pour une maintenance et reprise d'activité sereines.</p>
+                </div>
+                <div class="flex gap-2">
+                    <form method="POST" action="/admin/parametres/securite/sauvegarde/db">
+                        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                        <button type="submit" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg text-xs flex items-center gap-1 border border-indigo-200">
+                            <span class="material-symbols-outlined text-sm">database</span> Sauvegarder Base SQL
+                        </button>
+                    </form>
+                    <form method="POST" action="/admin/parametres/securite/sauvegarde/fichiers">
+                        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                        <button type="submit" class="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold rounded-lg text-xs flex items-center gap-1 border border-gray-200">
+                            <span class="material-symbols-outlined text-sm">folder_zip</span> Archiver Médias
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <?php if (!empty($backups)): ?>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-100 text-gray-400 font-semibold text-[11px] uppercase">
+                                <th class="py-2 px-3">Date</th>
+                                <th class="py-2 px-3">Fichier</th>
+                                <th class="py-2 px-3">Type</th>
+                                <th class="py-2 px-3">Taille</th>
+                                <th class="py-2 px-3 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            <?php foreach ($backups as $b): ?>
+                                <tr>
+                                    <td class="py-2.5 px-3 text-xs text-gray-500"><?= htmlspecialchars((string)$b['created_at']) ?></td>
+                                    <td class="py-2.5 px-3 font-mono text-xs text-gray-800 font-semibold"><?= htmlspecialchars((string)$b['filename']) ?></td>
+                                    <td class="py-2.5 px-3">
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold <?= $b['backup_type'] === 'db' ? 'bg-indigo-50 text-indigo-700' : 'bg-amber-50 text-amber-700' ?>">
+                                            <?= strtoupper(htmlspecialchars((string)$b['backup_type'])) ?>
+                                        </span>
+                                    </td>
+                                    <td class="py-2.5 px-3 text-xs text-gray-600"><?= number_format((float)$b['size_bytes'] / 1024, 1) ?> Ko</td>
+                                    <td class="py-2.5 px-3 text-right">
+                                        <?php if ($b['backup_type'] === 'db'): ?>
+                                            <form method="POST" action="/admin/parametres/securite/restauration" onsubmit="return confirm('Attention : la restauration écrasera les données actuelles de la base. Confirmer ?');" class="inline">
+                                                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                                                <input type="hidden" name="filename" value="<?= htmlspecialchars((string)$b['filename']) ?>">
+                                                <button type="submit" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded text-xs inline-flex items-center gap-1 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[13px]">restore</span> Restaurer
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php else: ?>
+                <div class="py-4 text-center text-xs text-gray-400">Aucune archive créée pour l'instant. Utilisez les boutons ci-dessus pour déclencher une sauvegarde manuelle.</div>
+            <?php endif; ?>
+        </div>
+
+        <!-- 3. Journal d'Audit et Activité Récente -->
         <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
             <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <span class="material-symbols-outlined text-indigo-600">history</span> Journal des Activités & Événements de Sécurité

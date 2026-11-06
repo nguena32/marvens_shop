@@ -34,59 +34,21 @@ $active_tab = 'dashboard';
                         "on-error-container": "#93000a",
                         "on-background": "#1b1b1d",
                         "on-primary": "#ffffff",
-                        "on-tertiary-fixed-variant": "#574425",
                         "on-secondary": "#ffffff",
                         "on-secondary-container": "#663500",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
                         "secondary": "#904d00",
-                        "on-tertiary-fixed": "#271901",
-                        "outline-variant": "#c6c6cd",
                         "surface-container-highest": "#e4e2e4",
-                        "tertiary-fixed": "#fcdeb5",
-                        "on-primary-fixed-variant": "#3f465c",
                         "surface-container-high": "#eae7e9",
-                        "secondary-fixed-dim": "#ffb77d",
-                        "inverse-on-surface": "#f3f0f2",
-                        "surface-tint": "#565e74",
-                        "surface-variant": "#e4e2e4",
-                        "primary-fixed": "#dae2fd",
                         "surface": "#FFFFFF",
-                        "on-tertiary-container": "#98805d",
-                        "primary-fixed-dim": "#bec6e0",
-                        "secondary-fixed": "#ffdcc3",
-                        "on-surface-variant": "#45464d",
-                        "on-tertiary": "#ffffff",
-                        "surface-bright": "#fcf8fa",
                         "background": "#F8FAFC",
-                        "surface-dim": "#dcd9db",
                         "border": "#E2E8F0",
-                        "on-error": "#ffffff",
-                        "on-primary-container": "#7c839b",
-                        "error": "#ba1a1a",
-                        "inverse-primary": "#bec6e0",
-                        "primary-container": "#131b2e",
-                        "error-container": "#ffdad6",
-                        "on-secondary-fixed": "#2f1500",
-                        "tertiary-fixed-dim": "#dec29a",
-                        "surface-container-lowest": "#ffffff"
+                        "error": "#ba1a1a"
                     },
                     borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
-                    spacing: { "space-sm": "8px", "space-lg": "24px", "space-xs": "4px", "margin": "32px", "space-xl": "48px", "space-md": "16px", "gutter": "24px" },
-                    fontFamily: {
-                        "body-md": ["Inter"], "body-lg": ["Inter"], "label-sm": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "body-sm": ["Inter"], "headline-xl": ["Inter"], "label-md": ["Inter"], "headline-sm": ["Inter"]
-                    },
-                    fontSize: {
-                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
-                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
-                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
-                        "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
-                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
-                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
-                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
-                    }
+                    spacing: { "space-sm": "8px", "space-lg": "24px", "space-xs": "4px", "margin": "32px", "space-xl": "48px", "space-md": "16px" },
+                    fontFamily: { "body-md": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "headline-sm": ["Inter"] }
                 }
             }
         };
@@ -102,270 +64,234 @@ $active_tab = 'dashboard';
         <?php include dirname(__DIR__) . '/partials/header.php'; ?>
 
         <main class="relative pt-16 bg-background min-h-screen">
-            <div class="flex flex-col w-full p-space-lg space-y-space-xl">
+            <div class="flex flex-col w-full p-space-lg space-y-space-lg">
                 
-                <!-- Section 1: Real-time Pilot Header (4 Cards) -->
+                <!-- En-tête avec raccourcis d'accès rapide (Module 8.1) -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-space-md bg-surface p-space-lg rounded-2xl border border-border shadow-sm">
+                    <div>
+                        <h1 class="text-2xl font-bold text-on-surface tracking-tight">Tableau de Bord Commercial</h1>
+                        <p class="text-sm text-outline">Supervision globale, accès direct aux commandes, catalogue, clients et réglages</p>
+                    </div>
+
+                    <!-- 8.1 Raccourcis d'accès rapide -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <a href="/admin/commandes" class="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[16px]">shopping_bag</span> Commandes (<?= (int)$total_orders ?>)
+                        </a>
+                        <a href="/admin/produits" class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border">
+                            <span class="material-symbols-outlined text-[16px]">inventory_2</span> Catalogue
+                        </a>
+                        <a href="/admin/clients" class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border">
+                            <span class="material-symbols-outlined text-[16px]">group</span> Clients (<?= (int)($total_customers ?? 0) ?>)
+                        </a>
+                        <a href="/admin/parametres/boutique" class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border">
+                            <span class="material-symbols-outlined text-[16px]">settings</span> Paramètres
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 8.1 Cartes d'indicateurs clés & Chiffre d'Affaires certifié -->
                 <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
-                    <div class="bg-surface rounded-lg p-space-md shadow-sm border border-border flex flex-col justify-between">
+                    <!-- CA Réalisé (Payé ou Livré) -->
+                    <div class="bg-surface rounded-2xl p-space-md shadow-sm border border-border flex flex-col justify-between">
                         <div class="flex items-center justify-between">
-                            <span class="text-label-sm text-outline uppercase tracking-wider">Chiffre d'affaires</span>
-                            <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">payments</span>
+                            <span class="text-xs font-semibold text-outline uppercase tracking-wider">CA Réalisé (Payé / Livré)</span>
+                            <span class="material-symbols-outlined text-emerald-600" style="font-variation-settings: 'FILL' 1;">payments</span>
                         </div>
                         <div class="my-space-md">
-                            <h3 class="text-headline-lg text-on-surface"><?= number_format($total_revenue ?? 0, 0, ',', ' ') ?> FCFA</h3>
-                            <span class="text-body-sm text-emerald-600 flex items-center gap-1 mt-1">
-                                <span class="material-symbols-outlined text-[16px]">trending_up</span> Envois & ventes confirmées
+                            <h3 class="text-2xl font-bold text-on-surface"><?= number_format($total_revenue ?? 0, 0, ',', ' ') ?> FCFA</h3>
+                            <span class="text-xs text-emerald-600 flex items-center gap-1 mt-1">
+                                <span class="material-symbols-outlined text-[14px]">verified</span> Règle MS-BIZ-08 conforme
                             </span>
                         </div>
-                        <div class="w-full bg-surface-container h-1 rounded-full overflow-hidden">
-                            <div class="bg-secondary h-full w-[75%]"></div>
+                        <div class="text-[11px] text-outline">
+                            Potentiel brut engagé : <span class="font-semibold text-on-surface"><?= number_format($revenue_potential ?? 0, 0, ',', ' ') ?> FCFA</span>
                         </div>
                     </div>
 
-                    <div class="bg-surface rounded-lg p-space-md shadow-sm border border-border flex flex-col justify-between">
+                    <!-- Commandes en attente -->
+                    <div class="bg-surface rounded-2xl p-space-md shadow-sm border border-border flex flex-col justify-between">
                         <div class="flex items-center justify-between">
-                            <span class="text-label-sm text-outline uppercase tracking-wider">Validation WhatsApp</span>
-                            <span class="material-symbols-outlined text-[#25D366]" style="font-variation-settings: 'FILL' 1;">chat</span>
+                            <span class="text-xs font-semibold text-outline uppercase tracking-wider">En attente (Pending)</span>
+                            <span class="material-symbols-outlined text-amber-500" style="font-variation-settings: 'FILL' 1;">hourglass_empty</span>
                         </div>
                         <div class="my-space-md">
-                            <h3 class="text-headline-lg text-on-surface"><?= (int) ($pending_orders ?? 0) ?></h3>
-                            <span class="text-body-sm text-outline mt-1 block">En attente de confirmation client</span>
+                            <h3 class="text-2xl font-bold text-amber-600"><?= (int) ($pending_orders ?? 0) ?></h3>
+                            <span class="text-xs text-outline mt-1 block">Nécessite contact WhatsApp</span>
                         </div>
-                        <a href="/admin/commandes?status=pending" class="flex items-center justify-between text-label-sm hover:underline">
-                            <span class="text-secondary font-medium">Action requise</span>
-                            <span class="material-symbols-outlined text-sm text-outline">arrow_forward</span>
+                        <a href="/admin/commandes?status=pending" class="flex items-center justify-between text-xs text-secondary font-semibold hover:underline">
+                            <span>Traiter les attentes</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
                         </a>
                     </div>
 
-                    <div class="bg-surface rounded-lg p-space-md shadow-sm border border-border flex flex-col justify-between">
+                    <!-- Commandes payées & confirmées -->
+                    <div class="bg-surface rounded-2xl p-space-md shadow-sm border border-border flex flex-col justify-between">
                         <div class="flex items-center justify-between">
-                            <span class="text-label-sm text-outline uppercase tracking-wider">Catalogue Actif</span>
-                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">location_on</span>
+                            <span class="text-xs font-semibold text-outline uppercase tracking-wider">Payées / Confirmées</span>
+                            <span class="material-symbols-outlined text-blue-600" style="font-variation-settings: 'FILL' 1;">task_alt</span>
                         </div>
                         <div class="my-space-md">
-                            <h3 class="text-headline-lg text-on-surface"><?= (int) ($total_products ?? 0) ?> ref</h3>
-                            <span class="text-body-sm text-emerald-600 flex items-center gap-1 mt-1">
-                                <span class="material-symbols-outlined text-[16px]">check_circle</span> Produits publiés en ligne
-                            </span>
-                        </div>
-                        <div class="w-full bg-surface-container h-1 rounded-full overflow-hidden">
-                            <div class="bg-primary h-full w-[85%]"></div>
-                        </div>
-                    </div>
-
-                    <div class="bg-surface rounded-lg p-space-md shadow-sm border border-border flex flex-col justify-between">
-                        <div class="flex items-center justify-between">
-                            <span class="text-label-sm text-outline uppercase tracking-wider">Meta API Sync</span>
-                            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                        </div>
-                        <div class="my-space-md">
-                            <h3 class="text-headline-sm text-on-surface">Connecté &amp; Actif</h3>
-                            <span class="text-body-sm text-outline mt-1 block">Passerelle Catalogue & WA</span>
-                        </div>
-                        <div class="flex items-center justify-between text-label-sm text-outline">
-                            <span>Catalog ID: #98421</span>
-                            <a href="/admin/import" class="hover:text-on-surface"><span class="material-symbols-outlined text-sm">sync</span></a>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 2: Quick Management & Shortcuts (Meta & WhatsApp Gateway) -->
-                <section class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
-                    <div class="bg-surface rounded-lg p-space-lg border border-border flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-space-md">
-                                <div class="flex items-center gap-space-sm">
-                                    <span class="material-symbols-outlined text-secondary text-2xl">storefront</span>
-                                    <h4 class="text-headline-sm text-on-surface">Catalogue Meta / Instagram</h4>
-                                </div>
-                                <span class="text-label-sm bg-primary-fixed text-on-primary-fixed px-space-sm py-1 rounded-full">Auto-sync</span>
+                            <div class="flex items-baseline gap-2">
+                                <h3 class="text-2xl font-bold text-on-surface"><?= (int)($paid_orders ?? 0) ?> <span class="text-xs font-normal text-outline">payées</span></h3>
+                                <span class="text-sm font-semibold text-blue-600">/ <?= (int)($confirmed_orders ?? 0) ?> <span class="text-xs font-normal text-outline">conf.</span></span>
                             </div>
-                            <p class="text-body-md text-outline mb-space-lg">
-                                Synchronisez instantanément vos nouveautés depuis votre gestionnaire de commerce Facebook et Instagram Shopping ou importez via fichier CSV.
-                            </p>
+                            <span class="text-xs text-outline mt-1 block">Préparation ou expédition prête</span>
                         </div>
-                        <div class="flex items-center gap-space-md">
-                            <a href="/admin/import" class="bg-[#D97706] text-on-primary px-space-md py-2.5 rounded-lg text-label-md font-medium hover:bg-[#b45309] transition-all flex items-center gap-space-sm">
-                                <span class="material-symbols-outlined text-[18px]">cloud_download</span> Importer le catalogue
-                            </a>
-                            <a href="/admin/produits" class="border border-border text-on-surface px-space-md py-2.5 rounded-lg text-label-md font-medium hover:bg-surface-container-low transition-all">
-                                Configurer les règles
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="bg-surface rounded-lg p-space-lg border border-border flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-space-md">
-                                <div class="flex items-center gap-space-sm">
-                                    <span class="material-symbols-outlined text-[#25D366] text-2xl">forum</span>
-                                    <h4 class="text-headline-sm text-on-surface">Passerelle WhatsApp Direct</h4>
-                                </div>
-                                <span class="text-label-sm bg-emerald-100 text-emerald-800 px-space-sm py-1 rounded-full">En ligne</span>
-                            </div>
-                            <p class="text-body-md text-outline mb-space-lg">
-                                Suivez les commandes en temps réel, relancez les clients et envoyez des récapitulatifs instantanés directement via WhatsApp.
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-space-md">
-                            <a href="/admin/commandes" class="bg-surface-container-high text-on-surface px-space-md py-2.5 rounded-lg text-label-md font-medium hover:bg-surface-container-highest transition-all flex items-center gap-space-sm">
-                                <span class="material-symbols-outlined text-[18px]">settings</span> Paramètres WhatsApp
-                            </a>
-                            <a href="/admin/commandes" class="border border-border text-on-surface px-space-md py-2.5 rounded-lg text-label-md font-medium hover:bg-surface-container-low transition-all">
-                                Modèles de messages
-                            </a>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 3: Critical Stock Management -->
-                <section class="bg-surface rounded-lg p-space-lg border border-border">
-                    <div class="flex items-center justify-between mb-space-lg">
-                        <div>
-                            <h3 class="text-headline-md text-on-surface">Gestion des stocks critiques</h3>
-                            <p class="text-body-sm text-outline">Articles nécessitant un réapprovisionnement urgent pour la zone CEMAC</p>
-                        </div>
-                        <a href="/admin/produits" class="text-secondary text-label-md font-medium hover:underline flex items-center gap-1">
-                            Voir tout le stock <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        <a href="/admin/commandes?status=confirmed" class="flex items-center justify-between text-xs text-blue-600 font-semibold hover:underline">
+                            <span>Voir le carnet actif</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
                         </a>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
-                        <?php if (!empty($low_stock_items)): ?>
-                            <?php foreach ($low_stock_items as $item): ?>
-                                <div class="bg-surface-container-low p-space-md rounded-lg border border-border flex items-center gap-space-md">
-                                    <div class="w-16 h-16 rounded bg-cover bg-center shrink-0 bg-surface-container" style="background-image: url('<?= htmlspecialchars($item['main_image_url'] ?? 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200') ?>')"></div>
-                                    <div class="flex-1 min-w-0">
-                                        <h5 class="text-label-md text-on-surface truncate"><?= htmlspecialchars($item['product_name']) ?></h5>
-                                        <span class="text-body-sm text-error font-medium">
-                                            <?= (int)$item['stock_quantity'] <= 1 ? 'Rupture imminente (' . (int)$item['stock_quantity'] . ')' : 'Restent ' . (int)$item['stock_quantity'] . ' unités' ?>
-                                        </span>
-                                        <div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
-                                            <div class="bg-error h-full" style="width: <?= min(100, (int)$item['stock_quantity'] * 20) ?>%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="bg-surface-container-low p-space-md rounded-lg border border-border flex items-center gap-space-md">
-                                <div class="w-16 h-16 rounded bg-cover bg-center shrink-0" style="background-image: url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200')"></div>
-                                <div class="flex-1 min-w-0">
-                                    <h5 class="text-label-md text-on-surface truncate">Sneakers Urbaines Marvens</h5>
-                                    <span class="text-body-sm text-error font-medium">Restent 3 paires</span>
-                                    <div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
-                                        <div class="bg-error h-full w-[15%]"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-surface-container-low p-space-md rounded-lg border border-border flex items-center gap-space-md">
-                                <div class="w-16 h-16 rounded bg-cover bg-center shrink-0" style="background-image: url('https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200')"></div>
-                                <div class="flex-1 min-w-0">
-                                    <h5 class="text-label-md text-on-surface truncate">Sac Cuir Minimaliste</h5>
-                                    <span class="text-body-sm text-amber-600 font-medium">Restent 5 unités</span>
-                                    <div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
-                                        <div class="bg-amber-500 h-full w-[25%]"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-surface-container-low p-space-md rounded-lg border border-border flex items-center gap-space-md">
-                                <div class="w-16 h-16 rounded bg-cover bg-center shrink-0" style="background-image: url('https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=200')"></div>
-                                <div class="flex-1 min-w-0">
-                                    <h5 class="text-label-md text-on-surface truncate">Montre Chrono Édition Or</h5>
-                                    <span class="text-body-sm text-error font-medium">Rupture imminente (1)</span>
-                                    <div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
-                                        <div class="bg-error h-full w-[5%]"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
+
+                    <!-- Commandes livrées -->
+                    <div class="bg-surface rounded-2xl p-space-md shadow-sm border border-border flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-outline uppercase tracking-wider">Livrées (Finalisées)</span>
+                            <span class="material-symbols-outlined text-emerald-600" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+                        </div>
+                        <div class="my-space-md">
+                            <h3 class="text-2xl font-bold text-emerald-700"><?= (int) ($delivered_orders ?? 0) ?></h3>
+                            <span class="text-xs text-emerald-600 mt-1 block">Remises aux clients avec succès</span>
+                        </div>
+                        <a href="/admin/commandes?status=delivered" class="flex items-center justify-between text-xs text-emerald-700 font-semibold hover:underline">
+                            <span>Consulter les archives</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </a>
                     </div>
                 </section>
 
-                <!-- Section 4: Interactive Recent Orders Table -->
-                <section class="bg-surface rounded-lg border border-border overflow-hidden">
+                <!-- 8.1 & 8.3 Grille Complète des 8 Statuts du Cahier des Charges -->
+                <section class="bg-surface rounded-2xl p-space-lg border border-border shadow-sm">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm mb-space-md border-b border-border pb-3">
+                        <div>
+                            <h3 class="text-lg font-bold text-on-surface">Répartition Complète des Commandes par Statut (Section 8.1 & 8.3)</h3>
+                            <p class="text-xs text-outline">Cycle de traitement de bout en bout des 8 états officiels</p>
+                        </div>
+                        <a href="/admin/statistiques" class="text-xs text-secondary font-semibold hover:underline flex items-center gap-1">
+                            Rapport statistiques complet <span class="material-symbols-outlined text-sm">query_stats</span>
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                        <!-- 1. En attente -->
+                        <a href="/admin/commandes?status=pending" class="p-3 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 transition-all flex flex-col">
+                            <span class="text-[11px] font-semibold text-amber-800">En attente</span>
+                            <span class="text-2xl font-black text-amber-900 mt-1"><?= (int)($status_counts['pending'] ?? 0) ?></span>
+                        </a>
+
+                        <!-- 2. Confirmée -->
+                        <a href="/admin/commandes?status=confirmed" class="p-3 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 transition-all flex flex-col">
+                            <span class="text-[11px] font-semibold text-blue-800">Confirmée</span>
+                            <span class="text-2xl font-black text-blue-900 mt-1"><?= (int)($status_counts['confirmed'] ?? 0) ?></span>
+                        </a>
+
+                        <!-- 3. Paiement en attente -->
+                        <a href="/admin/commandes?status=payment_pending" class="p-3 rounded-xl border border-orange-200 bg-orange-50 hover:bg-orange-100 transition-all flex flex-col">
+                            <span class="text-[11px] font-semibold text-orange-800">Paiement att.</span>
+                            <span class="text-2xl font-black text-orange-900 mt-1"><?= (int)($status_counts['payment_pending'] ?? 0) ?></span>
+                        </a>
+
+                        <!-- 4. Payée -->
+                        <a href="/admin/commandes?status=paid" class="p-3 rounded-xl border border-teal-200 bg-teal-50 hover:bg-teal-100 transition-all flex flex-col">
+                            <span class="text-[11px] font-semibold text-teal-800">Payée</span>
+                            <span class="text-2xl font-black text-teal-900 mt-1"><?= (int)($status_counts['paid'] ?? 0) ?></span>
+                        </a>
+
+                        <!-- 5. En préparation -->
+                        <a href="/admin/commandes?status=preparing" class="p-3 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 transition-all flex flex-col">
+                            <span class="text-[11px] font-semibold text-indigo-800">En prép.</span>
+                            <span class="text-2xl font-black text-indigo-900 mt-1"><?= (int)($status_counts['preparing'] ?? 0) ?></span>
+                        </a>
+
+                        <!-- 6. Expédiée -->
+                        <a href="/admin/commandes?status=shipped" class="p-3 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 transition-all flex flex-col">
+                            <span class="text-[11px] font-semibold text-purple-800">Expédiée</span>
+                            <span class="text-2xl font-black text-purple-900 mt-1"><?= (int)($status_counts['shipped'] ?? 0) ?></span>
+                        </a>
+
+                        <!-- 7. Livrée -->
+                        <a href="/admin/commandes?status=delivered" class="p-3 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 transition-all flex flex-col">
+                            <span class="text-[11px] font-semibold text-emerald-800">Livrée</span>
+                            <span class="text-2xl font-black text-emerald-900 mt-1"><?= (int)($status_counts['delivered'] ?? 0) ?></span>
+                        </a>
+
+                        <!-- 8. Annulée -->
+                        <a href="/admin/commandes?status=cancelled" class="p-3 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 transition-all flex flex-col">
+                            <span class="text-[11px] font-semibold text-red-800">Annulée</span>
+                            <span class="text-2xl font-black text-red-900 mt-1"><?= (int)($status_counts['cancelled'] ?? 0) ?></span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Section 3: Interactive Recent Orders Table -->
+                <section class="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
                     <div class="p-space-lg border-b border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
                         <div>
-                            <h3 class="text-headline-md text-on-surface">Commandes Récentes</h3>
-                            <p class="text-body-sm text-outline">Suivi en temps réel des flux clients et interactions WhatsApp</p>
+                            <h3 class="text-lg font-bold text-on-surface">Commandes Récentes</h3>
+                            <p class="text-xs text-outline">Suivi en temps réel des flux clients et interactions WhatsApp</p>
                         </div>
                         
                         <!-- Status Filters -->
-                        <div class="flex items-center gap-space-xs bg-surface-container-low p-1 rounded-lg border border-border text-label-sm">
-                            <a href="/admin/dashboard" class="px-space-md py-1.5 rounded <?= empty($current_filter) ? 'bg-surface text-on-surface font-medium shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Tous</a>
-                            <a href="/admin/dashboard?status=pending" class="px-space-md py-1.5 rounded <?= ($current_filter === 'pending') ? 'bg-surface text-on-surface font-medium shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">En attente</a>
-                            <a href="/admin/dashboard?status=confirmed" class="px-space-md py-1.5 rounded <?= ($current_filter === 'confirmed') ? 'bg-surface text-on-surface font-medium shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Confirmé WA</a>
-                            <a href="/admin/dashboard?status=shipped" class="px-space-md py-1.5 rounded <?= ($current_filter === 'shipped') ? 'bg-surface text-on-surface font-medium shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Expédié</a>
-                            <a href="/admin/dashboard?status=delivered" class="px-space-md py-1.5 rounded <?= ($current_filter === 'delivered') ? 'bg-surface text-on-surface font-medium shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Livré</a>
+                        <div class="flex flex-wrap items-center gap-1 bg-surface-container-low p-1 rounded-xl border border-border text-xs">
+                            <a href="/admin/dashboard" class="px-3 py-1.5 rounded-lg <?= empty($current_filter) ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Toutes</a>
+                            <a href="/admin/dashboard?status=pending" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'pending') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">En attente</a>
+                            <a href="/admin/dashboard?status=confirmed" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'confirmed') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Confirmées</a>
+                            <a href="/admin/dashboard?status=paid" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'paid') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Payées</a>
+                            <a href="/admin/dashboard?status=shipped" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'shipped') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Expédiées</a>
+                            <a href="/admin/dashboard?status=delivered" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'delivered') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Livrées</a>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table class="w-full text-left border-collapse text-sm">
                             <thead>
-                                <tr class="bg-surface-container-low text-label-sm text-outline border-b border-border">
-                                    <th class="py-space-md px-space-lg font-medium">Commande</th>
-                                    <th class="py-space-md px-space-lg font-medium">Client</th>
-                                    <th class="py-space-md px-space-lg font-medium">Localisation</th>
-                                    <th class="py-space-md px-space-lg font-medium">Montant</th>
-                                    <th class="py-space-md px-space-lg font-medium">Statut</th>
-                                    <th class="py-space-md px-space-lg font-medium text-right">Action WhatsApp</th>
+                                <tr class="bg-surface-container-low text-xs uppercase font-semibold text-outline border-b border-border">
+                                    <th class="py-3 px-4">Commande</th>
+                                    <th class="py-3 px-4">Client</th>
+                                    <th class="py-3 px-4">Localisation</th>
+                                    <th class="py-3 px-4">Montant</th>
+                                    <th class="py-3 px-4">Statut</th>
+                                    <th class="py-3 px-4 text-right">Action WhatsApp</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-border text-body-md text-on-surface">
+                            <tbody class="divide-y divide-border text-on-surface">
                                 <?php if (empty($recent_orders)): ?>
                                     <tr>
-                                        <td colspan="6" class="py-space-xl px-space-lg text-center text-outline">
+                                        <td colspan="6" class="py-12 text-center text-outline">
                                             Aucune commande ne correspond aux critères sélectionnés.
                                         </td>
                                     </tr>
                                 <?php else: ?>
                                     <?php foreach ($recent_orders as $ord): ?>
                                         <tr class="hover:bg-surface-container-low/50 transition-colors">
-                                            <td class="py-space-md px-space-lg font-medium">
-                                                <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="hover:underline">
+                                            <td class="py-3 px-4 font-semibold">
+                                                <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="text-primary hover:underline">
                                                     #<?= htmlspecialchars($ord['order_number']) ?>
                                                 </a>
                                             </td>
-                                            <td class="py-space-md px-space-lg">
+                                            <td class="py-3 px-4">
                                                 <div class="font-medium"><?= htmlspecialchars($ord['customer_name']) ?></div>
-                                                <span class="text-body-sm text-outline"><?= htmlspecialchars($ord['customer_whatsapp']) ?></span>
+                                                <span class="text-xs text-outline"><?= htmlspecialchars($ord['customer_whatsapp']) ?></span>
                                             </td>
-                                            <td class="py-space-md px-space-lg">
-                                                <?= htmlspecialchars(($ord['delivery_city'] ?? 'Yaoundé') . (!empty($ord['delivery_district']) ? ' (' . $ord['delivery_district'] . ')' : '')) ?>
+                                            <td class="py-3 px-4 text-xs">
+                                                <?= htmlspecialchars(($ord['delivery_city'] ?? 'Douala') . (!empty($ord['delivery_district']) ? ' (' . $ord['delivery_district'] . ')' : '')) ?>
                                             </td>
-                                            <td class="py-space-md px-space-lg font-medium">
+                                            <td class="py-3 px-4 font-semibold">
                                                 <?= number_format((float) $ord['total_amount'], 0, ',', ' ') ?> FCFA
                                             </td>
-                                            <td class="py-space-md px-space-lg">
-                                                <?php
-                                                    $statusBadge = match($ord['order_status']) {
-                                                        'pending' => 'bg-amber-100 text-amber-800',
-                                                        'confirmed' => 'bg-blue-100 text-blue-800',
-                                                        'shipped' => 'bg-purple-100 text-purple-800',
-                                                        'delivered' => 'bg-emerald-100 text-emerald-800',
-                                                        'cancelled' => 'bg-red-100 text-red-800',
-                                                        default => 'bg-gray-100 text-gray-800',
-                                                    };
-                                                    $statusLabel = match($ord['order_status']) {
-                                                        'pending' => 'En attente',
-                                                        'confirmed' => 'Confirmé WhatsApp',
-                                                        'shipped' => 'Expédié',
-                                                        'delivered' => 'Livré',
-                                                        'cancelled' => 'Annulé',
-                                                        default => htmlspecialchars($ord['order_status']),
-                                                    };
-                                                ?>
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-sm <?= $statusBadge ?>">
-                                                    <?= $statusLabel ?>
+                                            <td class="py-3 px-4">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border <?= \App\Domain\Entities\Order::getStatusBadgeClass($ord['order_status']) ?>">
+                                                    <?= htmlspecialchars(\App\Domain\Entities\Order::getStatusLabel($ord['order_status'])) ?>
                                                 </span>
                                             </td>
-                                            <td class="py-space-md px-space-lg text-right">
+                                            <td class="py-3 px-4 text-right">
                                                 <?php 
                                                     $cleanPhone = preg_replace('/[^0-9]/', '', (string)$ord['customer_whatsapp']);
                                                     $waMsg = urlencode("Bonjour " . $ord['customer_name'] . ", nous faisons le suivi de votre commande #" . $ord['order_number'] . " sur Marvens Shop.");
                                                     $waUrl = "https://wa.me/" . $cleanPhone . "?text=" . $waMsg;
                                                 ?>
-                                                <a href="<?= $waUrl ?>" target="_blank" class="inline-flex items-center gap-1 bg-[#25D366]/10 text-[#25D366] px-space-md py-1.5 rounded-lg text-label-sm font-medium hover:bg-[#25D366]/20 transition-all">
+                                                <a href="<?= $waUrl ?>" target="_blank" class="inline-flex items-center gap-1 bg-[#25D366]/10 text-[#25D366] px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-[#25D366]/20 transition-all">
                                                     <span class="material-symbols-outlined text-[16px]">chat</span> 
                                                     <?= $ord['order_status'] === 'pending' ? 'Relancer WA' : 'Ouvrir chat' ?>
                                                 </a>
@@ -378,10 +304,10 @@ $active_tab = 'dashboard';
                     </div>
 
                     <!-- Table Footer / Pagination -->
-                    <div class="p-space-md border-t border-border flex items-center justify-between text-body-sm text-outline">
+                    <div class="p-space-md border-t border-border flex items-center justify-between text-xs text-outline">
                         <span>Affichage de <?= count($recent_orders) ?> sur <?= (int) ($total_orders ?? 0) ?> commandes</span>
-                        <div class="flex items-center gap-space-xs">
-                            <a href="/admin/commandes" class="px-space-md py-1.5 rounded border border-border bg-surface text-on-surface hover:bg-surface-container-low font-medium">
+                        <div class="flex items-center gap-2">
+                            <a href="/admin/commandes" class="px-3 py-1.5 rounded-xl border border-border bg-surface text-on-surface hover:bg-surface-container-low font-semibold">
                                 Consulter toutes les commandes &rarr;
                             </a>
                         </div>

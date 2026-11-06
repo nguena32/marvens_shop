@@ -57,32 +57,105 @@ $active_tab = 'orders';
         <main class="relative pt-16 bg-background min-h-screen p-space-lg">
             <div class="max-w-7xl mx-auto flex flex-col gap-space-lg">
                 
+                <!-- En-tête avec compteur total -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-space-md bg-surface p-space-lg rounded-2xl border border-border shadow-sm">
                     <div>
                         <h1 class="text-2xl font-bold text-on-surface tracking-tight">Gestion des Commandes</h1>
-                        <p class="text-sm text-outline">Suivi des commandes, facturation et interactions WhatsApp clients</p>
+                        <p class="text-sm text-outline">Suivi, filtrage par statut/période, recherche client et traitement des commandes</p>
                     </div>
 
-                    <!-- Filtres -->
-                    <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl border border-border text-xs font-medium">
-                        <a href="/admin/commandes" class="px-3 py-1.5 rounded-lg <?= empty($current_status) ? 'bg-surface text-on-surface shadow-sm font-semibold' : 'text-outline hover:text-on-surface' ?>">Toutes</a>
-                        <a href="/admin/commandes?status=pending" class="px-3 py-1.5 rounded-lg <?= ($current_status === 'pending') ? 'bg-surface text-on-surface shadow-sm font-semibold' : 'text-outline hover:text-on-surface' ?>">En attente</a>
-                        <a href="/admin/commandes?status=confirmed" class="px-3 py-1.5 rounded-lg <?= ($current_status === 'confirmed') ? 'bg-surface text-on-surface shadow-sm font-semibold' : 'text-outline hover:text-on-surface' ?>">Confirmées</a>
-                        <a href="/admin/commandes?status=shipped" class="px-3 py-1.5 rounded-lg <?= ($current_status === 'shipped') ? 'bg-surface text-on-surface shadow-sm font-semibold' : 'text-outline hover:text-on-surface' ?>">Expédiées</a>
-                        <a href="/admin/commandes?status=delivered" class="px-3 py-1.5 rounded-lg <?= ($current_status === 'delivered') ? 'bg-surface text-on-surface shadow-sm font-semibold' : 'text-outline hover:text-on-surface' ?>">Livrées</a>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs bg-surface-container-high text-on-surface font-semibold px-3 py-1.5 rounded-xl border border-border">
+                            Total : <?= (int)($total_count ?? count($orders)) ?> commande(s)
+                        </span>
+                        <a href="/admin/statistiques" class="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3.5 py-1.5 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                            <span class="material-symbols-outlined text-[16px]">query_stats</span> Statistiques
+                        </a>
                     </div>
                 </div>
 
+                <!-- 8.2 & 8.3 Filtres de Statut Rapide -->
+                <div class="flex flex-wrap items-center gap-1.5 bg-surface p-2.5 rounded-2xl border border-border text-xs shadow-sm">
+                    <span class="text-outline font-semibold px-2">Statut :</span>
+                    <a href="/admin/commandes" class="px-3 py-1.5 rounded-xl <?= empty($current_status) ? 'bg-primary text-on-primary font-semibold' : 'text-outline hover:text-on-surface bg-surface-container-low' ?>">
+                        Tous (<?= (int)($status_counts['total'] ?? 0) ?>)
+                    </a>
+                    <a href="/admin/commandes?status=pending" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'pending') ? 'bg-amber-600 text-white font-semibold' : 'text-amber-800 bg-amber-50 hover:bg-amber-100' ?>">
+                        En attente (<?= (int)($status_counts['pending'] ?? 0) ?>)
+                    </a>
+                    <a href="/admin/commandes?status=confirmed" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'confirmed') ? 'bg-blue-600 text-white font-semibold' : 'text-blue-800 bg-blue-50 hover:bg-blue-100' ?>">
+                        Confirmées (<?= (int)($status_counts['confirmed'] ?? 0) ?>)
+                    </a>
+                    <a href="/admin/commandes?status=payment_pending" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'payment_pending') ? 'bg-orange-600 text-white font-semibold' : 'text-orange-800 bg-orange-50 hover:bg-orange-100' ?>">
+                        Paiement att. (<?= (int)($status_counts['payment_pending'] ?? 0) ?>)
+                    </a>
+                    <a href="/admin/commandes?status=paid" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'paid') ? 'bg-teal-600 text-white font-semibold' : 'text-teal-800 bg-teal-50 hover:bg-teal-100' ?>">
+                        Payées (<?= (int)($status_counts['paid'] ?? 0) ?>)
+                    </a>
+                    <a href="/admin/commandes?status=preparing" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'preparing') ? 'bg-indigo-600 text-white font-semibold' : 'text-indigo-800 bg-indigo-50 hover:bg-indigo-100' ?>">
+                        En prép. (<?= (int)($status_counts['preparing'] ?? 0) ?>)
+                    </a>
+                    <a href="/admin/commandes?status=shipped" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'shipped') ? 'bg-purple-600 text-white font-semibold' : 'text-purple-800 bg-purple-50 hover:bg-purple-100' ?>">
+                        Expédiées (<?= (int)($status_counts['shipped'] ?? 0) ?>)
+                    </a>
+                    <a href="/admin/commandes?status=delivered" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'delivered') ? 'bg-emerald-600 text-white font-semibold' : 'text-emerald-800 bg-emerald-50 hover:bg-emerald-100' ?>">
+                        Livrées (<?= (int)($status_counts['delivered'] ?? 0) ?>)
+                    </a>
+                    <a href="/admin/commandes?status=cancelled" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'cancelled') ? 'bg-red-600 text-white font-semibold' : 'text-red-800 bg-red-50 hover:bg-red-100' ?>">
+                        Annulées (<?= (int)($status_counts['cancelled'] ?? 0) ?>)
+                    </a>
+                </div>
+
+                <!-- 8.2 Formulaire de Recherche et Filtrage Avancé -->
+                <form method="GET" action="/admin/commandes" class="bg-surface p-space-md rounded-2xl border border-border grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 shadow-sm text-xs">
+                    <div>
+                        <label class="block text-outline font-semibold uppercase mb-1">Recherche</label>
+                        <input type="text" name="search" value="<?= htmlspecialchars($current_search ?? '') ?>" placeholder="N° commande, client, tel..." class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
+                    </div>
+                    <div>
+                        <label class="block text-outline font-semibold uppercase mb-1">Statut Paiement</label>
+                        <select name="payment_status" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
+                            <option value="">Tous</option>
+                            <option value="unpaid" <?= ($current_payment_status ?? '') === 'unpaid' ? 'selected' : '' ?>>Non payé</option>
+                            <option value="pending" <?= ($current_payment_status ?? '') === 'pending' ? 'selected' : '' ?>>En attente</option>
+                            <option value="paid" <?= ($current_payment_status ?? '') === 'paid' ? 'selected' : '' ?>>Payé</option>
+                            <option value="refunded" <?= ($current_payment_status ?? '') === 'refunded' ? 'selected' : '' ?>>Remboursé</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-outline font-semibold uppercase mb-1">Mode Livraison</label>
+                        <select name="delivery_mode" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
+                            <option value="">Tous</option>
+                            <option value="delivery" <?= ($current_delivery_mode ?? '') === 'delivery' ? 'selected' : '' ?>>Livraison à domicile</option>
+                            <option value="pickup" <?= ($current_delivery_mode ?? '') === 'pickup' ? 'selected' : '' ?>>Retrait en boutique</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-outline font-semibold uppercase mb-1">Date début</label>
+                        <input type="date" name="date_from" value="<?= htmlspecialchars($current_date_from ?? '') ?>" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <button type="submit" class="flex-1 bg-primary text-on-primary py-2 rounded-xl font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                            Filtrer
+                        </button>
+                        <a href="/admin/commandes" class="px-3 py-2 border border-border rounded-xl hover:bg-surface-container-low font-semibold text-center" title="Réinitialiser">
+                            <span class="material-symbols-outlined text-[16px]">refresh</span>
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Tableau des Commandes (8.2 Liste des commandes) -->
                 <div class="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-surface-container-low text-xs font-semibold uppercase text-outline border-b border-border">
-                                <th class="py-3 px-4">Référence</th>
+                                <th class="py-3 px-4">Numéro</th>
                                 <th class="py-3 px-4">Date</th>
                                 <th class="py-3 px-4">Client</th>
-                                <th class="py-3 px-4">WhatsApp</th>
+                                <th class="py-3 px-4">Adresse & Quartier</th>
                                 <th class="py-3 px-4">Livraison</th>
-                                <th class="py-3 px-4">Total</th>
+                                <th class="py-3 px-4">Paiement</th>
+                                <th class="py-3 px-4">Montant</th>
                                 <th class="py-3 px-4">Statut</th>
                                 <th class="py-3 px-4 text-right">Actions</th>
                             </tr>
@@ -90,8 +163,8 @@ $active_tab = 'orders';
                         <tbody class="divide-y divide-border text-sm text-on-surface">
                             <?php if (empty($orders)): ?>
                                 <tr>
-                                    <td colspan="8" class="py-12 text-center text-outline">
-                                        Aucune commande trouvée.
+                                    <td colspan="9" class="py-12 text-center text-outline">
+                                        Aucune commande trouvée selon les critères sélectionnés.
                                     </td>
                                 </tr>
                             <?php else: ?>
@@ -105,42 +178,34 @@ $active_tab = 'orders';
                                         <td class="py-3 px-4 text-xs text-outline">
                                             <?= htmlspecialchars(date('d/m/Y H:i', strtotime($ord['created_at']))) ?>
                                         </td>
-                                        <td class="py-3 px-4 font-medium"><?= htmlspecialchars($ord['customer_name']) ?></td>
-                                        <td class="py-3 px-4 text-outline"><?= htmlspecialchars($ord['customer_whatsapp']) ?></td>
+                                        <td class="py-3 px-4 font-medium">
+                                            <div><?= htmlspecialchars($ord['customer_name']) ?></div>
+                                            <span class="text-xs text-outline"><?= htmlspecialchars($ord['customer_whatsapp']) ?></span>
+                                        </td>
+                                        <td class="py-3 px-4 text-xs text-outline">
+                                            <?= htmlspecialchars(($ord['delivery_city'] ?? '') . (!empty($ord['delivery_district']) ? ' (' . $ord['delivery_district'] . ')' : '')) ?>
+                                        </td>
                                         <td class="py-3 px-4 text-xs">
                                             <span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container text-on-surface">
-                                                <?= $ord['delivery_mode'] === 'pickup' ? 'Retrait boutique' : 'Livraison' ?>
+                                                <?= $ord['delivery_mode'] === 'pickup' ? 'Retrait' : 'Domicile' ?>
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-4 text-xs">
+                                            <span class="font-semibold uppercase text-[11px] <?= $ord['payment_status'] === 'paid' ? 'text-teal-700' : 'text-amber-700' ?>">
+                                                <?= htmlspecialchars($ord['payment_status']) ?>
                                             </span>
                                         </td>
                                         <td class="py-3 px-4 font-semibold">
                                             <?= number_format((float)$ord['total_amount'], 0, ',', ' ') ?> FCFA
                                         </td>
                                         <td class="py-3 px-4">
-                                            <?php
-                                                $badgeClass = match($ord['order_status']) {
-                                                    'pending' => 'bg-amber-100 text-amber-800',
-                                                    'confirmed' => 'bg-blue-100 text-blue-800',
-                                                    'shipped' => 'bg-purple-100 text-purple-800',
-                                                    'delivered' => 'bg-emerald-100 text-emerald-800',
-                                                    'cancelled' => 'bg-red-100 text-red-800',
-                                                    default => 'bg-gray-100 text-gray-800',
-                                                };
-                                                $label = match($ord['order_status']) {
-                                                    'pending' => 'En attente',
-                                                    'confirmed' => 'Confirmée',
-                                                    'shipped' => 'Expédiée',
-                                                    'delivered' => 'Livrée',
-                                                    'cancelled' => 'Annulée',
-                                                    default => htmlspecialchars($ord['order_status']),
-                                                };
-                                            ?>
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold <?= $badgeClass ?>">
-                                                <?= $label ?>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border <?= \App\Domain\Entities\Order::getStatusBadgeClass($ord['order_status']) ?>">
+                                                <?= htmlspecialchars(\App\Domain\Entities\Order::getStatusLabel($ord['order_status'])) ?>
                                             </span>
                                         </td>
                                         <td class="py-3 px-4 text-right">
-                                            <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="inline-flex items-center gap-1 bg-primary text-on-primary px-3 py-1 rounded-lg text-xs font-medium hover:bg-surface-container-high hover:text-on-surface transition-all">
-                                                Traiter
+                                            <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="inline-flex items-center gap-1 bg-primary text-on-primary px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                                                Détails &rarr;
                                             </a>
                                         </td>
                                     </tr>
@@ -148,6 +213,20 @@ $active_tab = 'orders';
                             <?php endif; ?>
                         </tbody>
                     </table>
+
+                    <!-- Pagination -->
+                    <?php if (($total_pages ?? 1) > 1): ?>
+                        <div class="p-space-md border-t border-border flex items-center justify-between text-xs text-outline">
+                            <span>Page <?= (int)($current_page ?? 1) ?> sur <?= (int)$total_pages ?></span>
+                            <div class="flex items-center gap-1">
+                                <?php for ($p = 1; $p <= $total_pages; $p++): ?>
+                                    <a href="?page=<?= $p ?>&status=<?= urlencode((string)($current_status ?? '')) ?>&search=<?= urlencode((string)($current_search ?? '')) ?>" class="px-2.5 py-1 rounded-lg border border-border <?= ($p === ($current_page ?? 1)) ? 'bg-primary text-on-primary font-bold' : 'hover:bg-surface-container-low' ?>">
+                                        <?= $p ?>
+                                    </a>
+                                <?php endfor; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
             </div>

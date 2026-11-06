@@ -358,17 +358,85 @@ class SettingsController
         if ($redirect = $this->requireAuth()) return $redirect;
 
         $logs = $this->settingsService->getActivityLogs(30);
+        $backupService = new \App\Application\Services\BackupService();
+        $backups = $backupService->getBackupsList();
         $success = Session::getFlash('success');
         $error = Session::getFlash('error');
 
         $html = View::render('admin.pages.settings_security', [
             'active_tab' => 'settings_security',
             'logs' => $logs,
+            'backups' => $backups,
             'csrf_token' => Session::csrfToken(),
             'success' => $success,
             'error' => $error,
         ]);
         return Response::html($html);
+    }
+
+    public function backupDatabase(Request $request): Response
+    {
+        if ($redirect = $this->requireAuth()) return $redirect;
+        if (!$this->validateCsrf($request)) {
+            Session::flash('error', 'Jeton CSRF invalide.');
+            return Response::redirect('/admin/parametres/securite');
+        }
+
+        try {
+            $backupService = new \App\Application\Services\BackupService();
+            $userId = (int)Session::get('admin_user_id');
+            $res = $backupService->backupDatabase($userId);
+            Session::flash('success', 'Sauvegarde de la base de données créée avec succès (' . $res['filename'] . ').');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Échec de la sauvegarde : ' . $e->getMessage());
+        }
+
+        return Response::redirect('/admin/parametres/securite');
+    }
+
+    public function backupFiles(Request $request): Response
+    {
+        if ($redirect = $this->requireAuth()) return $redirect;
+        if (!$this->validateCsrf($request)) {
+            Session::flash('error', 'Jeton CSRF invalide.');
+            return Response::redirect('/admin/parametres/securite');
+        }
+
+        try {
+            $backupService = new \App\Application\Services\BackupService();
+            $userId = (int)Session::get('admin_user_id');
+            $res = $backupService->backupUploads($userId);
+            Session::flash('success', 'Archive des fichiers médias créée avec succès (' . $res['filename'] . ').');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Échec de la sauvegarde fichiers : ' . $e->getMessage());
+        }
+
+        return Response::redirect('/admin/parametres/securite');
+    }
+
+    public function restoreDatabase(Request $request): Response
+    {
+        if ($redirect = $this->requireAuth()) return $redirect;
+        if (!$this->validateCsrf($request)) {
+            Session::flash('error', 'Jeton CSRF invalide.');
+            return Response::redirect('/admin/parametres/securite');
+        }
+
+        $filename = (string)$request->input('filename');
+        if (empty($filename)) {
+            Session::flash('error', 'Nom de fichier de sauvegarde requis.');
+            return Response::redirect('/admin/parametres/securite');
+        }
+
+        try {
+            $backupService = new \App\Application\Services\BackupService();
+            $backupService->restoreDatabase($filename);
+            Session::flash('success', "Restauration effectuée avec succès depuis l'archive {$filename}.");
+        } catch (\Exception $e) {
+            Session::flash('error', 'Échec de la restauration : ' . $e->getMessage());
+        }
+
+        return Response::redirect('/admin/parametres/securite');
     }
 
     public function updatePassword(Request $request): Response

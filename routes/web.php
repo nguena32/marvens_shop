@@ -10,13 +10,17 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StorefrontController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PwaController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SettingsController;
 
 /** @var Router $router */
 
-// 1. Diagnostic de santé
+// 1. Diagnostic de santé & PWA
 $router->get('/health', [HealthController::class, 'check'], 'health.check');
+$router->get('/manifest.json', [PwaController::class, 'manifest'], 'pwa.manifest');
+$router->get('/sw.js', [PwaController::class, 'serviceWorker'], 'pwa.sw');
+$router->get('/offline', [PwaController::class, 'offline'], 'pwa.offline');
 
 // 2. Storefront Public (Parcours Client & Pages Pratiques)
 $router->get('/', [StorefrontController::class, 'home'], 'storefront.home');
@@ -45,11 +49,19 @@ $router->get('/admin/login', [AuthController::class, 'showLogin'], 'admin.login'
 $router->post('/admin/login', [AuthController::class, 'login'], 'admin.login.post');
 $router->post('/admin/logout', [AuthController::class, 'logout'], 'admin.logout');
 
-// 5. Dashboard et Gestion Commerciale
+// 5. Dashboard et Gestion Commerciale (Module 8)
 $router->get('/admin/dashboard', [AdminController::class, 'dashboard'], 'admin.dashboard');
 $router->get('/admin/commandes', [AdminController::class, 'orders'], 'admin.orders');
 $router->get('/admin/commandes/{id}', [AdminController::class, 'orderDetail'], 'admin.order.detail');
 $router->post('/admin/commandes/{id}/statut', [AdminController::class, 'updateOrderStatus'], 'admin.order.status');
+$router->post('/admin/commandes/{id}/paiement', [AdminController::class, 'updateOrderPayment'], 'admin.order.payment');
+
+// 5.1 Clients & Historique (Module 8.4)
+$router->get('/admin/clients', [AdminController::class, 'customers'], 'admin.customers');
+$router->get('/admin/clients/{id}', [AdminController::class, 'customerDetail'], 'admin.customer.detail');
+
+// 5.2 Statistiques Commerciales (Module 8.5)
+$router->get('/admin/statistiques', [AdminController::class, 'statistics'], 'admin.statistics');
 
 // 6. Catalogue Admin & Produits
 $router->get('/admin/produits', [AdminController::class, 'products'], 'admin.products');
@@ -122,9 +134,12 @@ $router->post('/admin/parametres/notifications', [SettingsController::class, 'sa
 $router->get('/admin/parametres/integrations', [SettingsController::class, 'integrations'], 'admin.settings.integrations');
 $router->post('/admin/parametres/integrations', [SettingsController::class, 'saveIntegrations'], 'admin.settings.integrations.save');
 
-// 5.7 Sécurité & Audit
+// 5.7 Sécurité, Sauvegardes & Audit (Module 9)
 $router->get('/admin/parametres/securite', [SettingsController::class, 'security'], 'admin.settings.security');
 $router->post('/admin/parametres/securite/mot-de-passe', [SettingsController::class, 'updatePassword'], 'admin.settings.security.password');
+$router->post('/admin/parametres/securite/sauvegarde/db', [SettingsController::class, 'backupDatabase'], 'admin.settings.security.backup.db');
+$router->post('/admin/parametres/securite/sauvegarde/fichiers', [SettingsController::class, 'backupFiles'], 'admin.settings.security.backup.files');
+$router->post('/admin/parametres/securite/restauration', [SettingsController::class, 'restoreDatabase'], 'admin.settings.security.restore');
 
 // 5.8 Analytics & Suivi
 $router->get('/admin/parametres/analytics', [SettingsController::class, 'analytics'], 'admin.settings.analytics');
