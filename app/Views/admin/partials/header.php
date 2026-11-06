@@ -10,11 +10,11 @@
                 <span class="absolute top-0 right-0 w-2 h-2 rounded-full bg-secondary"></span>
             <?php endif; ?>
         </a>
-        <a href="/admin/produits/nouveau" class="bg-primary text-on-primary px-space-md py-1.5 rounded-lg text-label-sm font-medium hover:bg-surface-container-high hover:text-on-surface transition-all flex items-center gap-1">
+        <a href="/admin/produits/nouveau" class="bg-primary text-white px-space-md py-1.5 rounded-lg text-label-sm font-medium hover:opacity-90 transition-all flex items-center gap-1">
             <span class="material-symbols-outlined text-[16px]">add</span> Nouveau Produit
         </a>
-        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer" title="Administrateur">
-            <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
-        </div>
+        <a href="/admin/parametres/utilisateurs" class="w-8 h-8 rounded-full bg-surface-container border border-border flex items-center justify-center cursor-pointer text-on-surface hover:bg-surface-container-high transition-colors" title="Profil Administrateur">
+            <span class="material-symbols-outlined text-[18px]">person</span>
+        </a>
     </div>
 </header>

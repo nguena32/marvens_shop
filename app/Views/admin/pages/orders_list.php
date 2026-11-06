@@ -25,6 +25,7 @@ $active_tab = 'orders';
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -68,7 +69,7 @@ $active_tab = 'orders';
                         <span class="text-xs bg-surface-container-high text-on-surface font-semibold px-3 py-1.5 rounded-xl border border-border">
                             Total : <?= (int)($total_count ?? count($orders)) ?> commande(s)
                         </span>
-                        <a href="/admin/statistiques" class="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3.5 py-1.5 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                        <a href="/admin/statistiques" class="inline-flex items-center gap-1.5 bg-primary text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold hover:opacity-90 transition-all">
                             <span class="material-symbols-outlined text-[16px]">query_stats</span> Statistiques
                         </a>
                     </div>
@@ -77,7 +78,7 @@ $active_tab = 'orders';
                 <!-- 8.2 & 8.3 Filtres de Statut Rapide -->
                 <div class="flex flex-wrap items-center gap-1.5 bg-surface p-2.5 rounded-2xl border border-border text-xs shadow-sm">
                     <span class="text-outline font-semibold px-2">Statut :</span>
-                    <a href="/admin/commandes" class="px-3 py-1.5 rounded-xl <?= empty($current_status) ? 'bg-primary text-on-primary font-semibold' : 'text-outline hover:text-on-surface bg-surface-container-low' ?>">
+                    <a href="/admin/commandes" class="px-3 py-1.5 rounded-xl <?= empty($current_status) ? 'bg-primary text-white font-semibold' : 'text-outline hover:text-on-surface bg-surface-container-low' ?>">
                         Tous (<?= (int)($status_counts['total'] ?? 0) ?>)
                     </a>
                     <a href="/admin/commandes?status=pending" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'pending') ? 'bg-amber-600 text-white font-semibold' : 'text-amber-800 bg-amber-50 hover:bg-amber-100' ?>">
@@ -135,7 +136,7 @@ $active_tab = 'orders';
                         <input type="date" name="date_from" value="<?= htmlspecialchars($current_date_from ?? '') ?>" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
                     </div>
                     <div class="flex items-end gap-2">
-                        <button type="submit" class="flex-1 bg-primary text-on-primary py-2 rounded-xl font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                        <button type="submit" class="flex-1 bg-primary text-white py-2 rounded-xl font-semibold hover:opacity-90 transition-all">
                             Filtrer
                         </button>
                         <a href="/admin/commandes" class="px-3 py-2 border border-border rounded-xl hover:bg-surface-container-low font-semibold text-center" title="Réinitialiser">
@@ -204,7 +205,7 @@ $active_tab = 'orders';
                                             </span>
                                         </td>
                                         <td class="py-3 px-4 text-right">
-                                            <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="inline-flex items-center gap-1 bg-primary text-on-primary px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                                            <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="inline-flex items-center gap-1 bg-primary text-white px-3 py-1.5 rounded-xl text-xs font-semibold hover:opacity-90 transition-all">
                                                 Détails &rarr;
                                             </a>
                                         </td>
@@ -220,7 +221,7 @@ $active_tab = 'orders';
                             <span>Page <?= (int)($current_page ?? 1) ?> sur <?= (int)$total_pages ?></span>
                             <div class="flex items-center gap-1">
                                 <?php for ($p = 1; $p <= $total_pages; $p++): ?>
-                                    <a href="?page=<?= $p ?>&status=<?= urlencode((string)($current_status ?? '')) ?>&search=<?= urlencode((string)($current_search ?? '')) ?>" class="px-2.5 py-1 rounded-lg border border-border <?= ($p === ($current_page ?? 1)) ? 'bg-primary text-on-primary font-bold' : 'hover:bg-surface-container-low' ?>">
+                                    <a href="?page=<?= $p ?>&status=<?= urlencode((string)($current_status ?? '')) ?>&search=<?= urlencode((string)($current_search ?? '')) ?>" class="px-2.5 py-1 rounded-lg border border-border <?= ($p === ($current_page ?? 1)) ? 'bg-primary text-white font-bold' : 'hover:bg-surface-container-low' ?>">
                                         <?= $p ?>
                                     </a>
                                 <?php endfor; ?>

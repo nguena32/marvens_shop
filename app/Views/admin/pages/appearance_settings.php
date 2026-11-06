@@ -42,6 +42,7 @@ $themes = $all_themes ?? [];
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -397,7 +398,7 @@ $themes = $all_themes ?? [];
 
                         <!-- Boutons d'Action & Soumission -->
                         <div class="flex items-center justify-between pt-2">
-                            <button type="submit" class="px-6 py-3 rounded-xl bg-primary text-on-primary font-bold text-sm hover:bg-surface-container-high hover:text-on-surface transition shadow-md flex items-center gap-2">
+                            <button type="submit" class="px-6 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:opacity-90 transition shadow-md flex items-center gap-2">
                                 <span class="material-symbols-outlined text-[18px]">save</span>
                                 Enregistrer les modifications
                             </button>

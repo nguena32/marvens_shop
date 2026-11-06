@@ -25,6 +25,7 @@ $active_tab = 'products';
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -76,7 +77,7 @@ $active_tab = 'products';
                         <a href="/admin/import" class="border border-border text-on-surface px-4 py-2 rounded-xl text-sm font-medium hover:bg-surface-container-low transition-all flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-[18px]">cloud_download</span> Importer
                         </a>
-                        <a href="/admin/produits/nouveau" class="bg-primary text-on-primary px-4 py-2 rounded-xl text-sm font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all flex items-center gap-1.5 shadow-sm">
+                        <a href="/admin/produits/nouveau" class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-all flex items-center gap-1.5 shadow-sm">
                             <span class="material-symbols-outlined text-[18px]">add</span> Nouveau Produit
                         </a>
                     </div>

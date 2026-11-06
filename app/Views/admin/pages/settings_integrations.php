@@ -22,6 +22,7 @@
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -170,7 +171,7 @@
             </div>
 
             <div class="flex justify-end pt-4">
-                <button type="submit" class="px-6 py-3 bg-primary hover:bg-surface-container-high hover:text-on-surface text-on-primary font-bold rounded-xl shadow transition-all">
+                <button type="submit" class="px-6 py-3 bg-primary hover:opacity-90 text-white font-bold rounded-xl shadow transition-all">
                     Enregistrer les intégrations
                 </button>
             </div>

@@ -151,8 +151,8 @@
                     <span class="hidden sm:inline">WhatsApp</span>
                 </a>
 
-                <a href="/admin/login" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary hover:opacity-90 transition-opacity" title="Espace Administrateur">
-                    <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+                <a href="/admin/login" class="w-8 h-8 rounded-full bg-surface-container border border-border flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors" title="Espace Administrateur">
+                    <span class="material-symbols-outlined text-[18px]">person</span>
                 </a>
             </div>
         </div>

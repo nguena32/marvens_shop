@@ -25,6 +25,7 @@ $active_tab = 'import';
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -175,7 +176,7 @@ $active_tab = 'import';
                                             <form method="POST" action="/admin/import/meta/sync">
                                                 <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
                                                 <input type="hidden" name="catalog_id" value="<?= htmlspecialchars($cat['id']) ?>">
-                                                <button type="submit" class="bg-primary text-on-primary px-3.5 py-1.5 rounded-lg text-xs font-semibold hover:bg-surface-container-high transition-all shadow-xs">
+                                                <button type="submit" class="bg-primary text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold hover:bg-surface-container-high transition-all shadow-xs">
                                                     Importer ce catalogue
                                                 </button>
                                             </form>

@@ -26,6 +26,7 @@ $isEdit = !empty($category['id']);
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -123,7 +124,7 @@ $isEdit = !empty($category['id']);
 
                         <div class="pt-4 border-t border-border flex justify-end gap-2">
                             <a href="/admin/categories" class="px-4 py-2 border border-border rounded-xl text-sm font-medium hover:bg-surface-container-low transition-all">Annuler</a>
-                            <button type="submit" class="bg-primary text-on-primary px-6 py-2 rounded-xl font-semibold text-sm hover:bg-surface-container-high hover:text-on-surface transition-all shadow-sm">
+                            <button type="submit" class="bg-primary text-white px-6 py-2 rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-sm">
                                 <?= $isEdit ? 'Mettre à jour' : 'Enregistrer' ?>
                             </button>
                         </div>

@@ -25,6 +25,7 @@ $active_tab = 'categories';
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -69,7 +70,7 @@ $active_tab = 'categories';
                         <p class="text-sm text-outline">Organisez les rayons, l'ordre d'affichage et la visibilité des articles de votre boutique</p>
                     </div>
 
-                    <a href="/admin/categories/nouvelle" class="bg-primary text-on-primary px-4 py-2 rounded-xl text-sm font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all flex items-center gap-1.5 shadow-sm">
+                    <a href="/admin/categories/nouvelle" class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-all flex items-center gap-1.5 shadow-sm">
                         <span class="material-symbols-outlined text-[18px]">add</span> Nouvelle Catégorie
                     </a>
                 </div>

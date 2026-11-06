@@ -25,6 +25,7 @@ $active_tab = 'customers';
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -162,7 +163,7 @@ $active_tab = 'customers';
                                             </span>
                                         </td>
                                         <td class="p-4 text-right">
-                                            <a href="/admin/commandes/<?= (int)$ord['id'] ?>" class="inline-flex items-center gap-1 bg-primary text-on-primary px-3 py-1 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                                            <a href="/admin/commandes/<?= (int)$ord['id'] ?>" class="inline-flex items-center gap-1 bg-primary text-white px-3 py-1 rounded-xl text-xs font-semibold hover:opacity-90 transition-all">
                                                 Ouvrir &rarr;
                                             </a>
                                         </td>

@@ -29,6 +29,7 @@ $previousThemeId = $previous_theme ?? null;
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -85,7 +86,7 @@ $previousThemeId = $previous_theme ?? null;
 
                     <!-- Actions globales : Rollback & Reset & Personnalisation -->
                     <div class="flex flex-wrap items-center gap-2">
-                        <a href="/admin/parametres/apparence?theme=<?= htmlspecialchars($activeThemeId) ?>" class="px-3 py-2 rounded-xl bg-primary text-on-primary text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface flex items-center gap-1.5 transition shadow-sm">
+                        <a href="/admin/parametres/apparence?theme=<?= htmlspecialchars($activeThemeId) ?>" class="px-3 py-2 rounded-xl bg-primary text-white text-xs font-semibold hover:opacity-90 flex items-center gap-1.5 transition shadow-sm">
                             <span class="material-symbols-outlined text-[16px]">format_paint</span>
                             Personnaliser les Couleurs
                         </a>
@@ -225,7 +226,7 @@ $previousThemeId = $previous_theme ?? null;
                                     <form method="POST" action="/admin/themes/activer" class="w-full" onsubmit="return confirm('Confirmez-vous le passage au <?= htmlspecialchars($theme->getName()) ?> ?');">
                                         <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
                                         <input type="hidden" name="theme" value="<?= htmlspecialchars($theme->getId()) ?>">
-                                        <button type="submit" class="w-full bg-primary text-on-primary py-2 px-3 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all flex items-center justify-center gap-1 shadow-sm">
+                                        <button type="submit" class="w-full bg-primary text-white py-2 px-3 rounded-xl text-xs font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-1 shadow-sm">
                                             <span class="material-symbols-outlined text-[16px]">check</span>
                                             Activer ce thème
                                         </button>

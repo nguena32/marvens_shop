@@ -25,6 +25,7 @@ $active_tab = 'customers';
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -77,7 +78,7 @@ $active_tab = 'customers';
                         <span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
                         <input type="text" name="search" value="<?= htmlspecialchars($current_search ?? '') ?>" placeholder="Rechercher par nom complet ou numéro WhatsApp (ex: 699112233)..." class="w-full bg-surface-container-low border border-border rounded-xl pl-9 pr-3 py-2 text-sm text-on-surface">
                     </div>
-                    <button type="submit" class="bg-primary text-on-primary px-5 py-2 rounded-xl font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                    <button type="submit" class="bg-primary text-white px-5 py-2 rounded-xl font-semibold hover:opacity-90 transition-all">
                         Rechercher
                     </button>
                     <?php if (!empty($current_search)): ?>
@@ -160,7 +161,7 @@ $active_tab = 'customers';
                             <span>Page <?= (int)($current_page ?? 1) ?> sur <?= (int)$total_pages ?></span>
                             <div class="flex items-center gap-1">
                                 <?php for ($p = 1; $p <= $total_pages; $p++): ?>
-                                    <a href="?page=<?= $p ?>&search=<?= urlencode((string)($current_search ?? '')) ?>" class="px-2.5 py-1 rounded-lg border border-border <?= ($p === ($current_page ?? 1)) ? 'bg-primary text-on-primary font-bold' : 'hover:bg-surface-container-low' ?>">
+                                    <a href="?page=<?= $p ?>&search=<?= urlencode((string)($current_search ?? '')) ?>" class="px-2.5 py-1 rounded-lg border border-border <?= ($p === ($current_page ?? 1)) ? 'bg-primary text-white font-bold' : 'hover:bg-surface-container-low' ?>">
                                         <?= $p ?>
                                     </a>
                                 <?php endfor; ?>

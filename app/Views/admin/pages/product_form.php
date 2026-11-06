@@ -26,6 +26,7 @@ $isEdit = !empty($product['id']);
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -223,7 +224,7 @@ $isEdit = !empty($product['id']);
 
                         <div class="pt-4 border-t border-border flex justify-end gap-3">
                             <a href="/admin/produits" class="px-5 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-surface-container-low transition-all">Annuler</a>
-                            <button type="submit" class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-surface-container-high hover:text-on-surface transition-all shadow-sm">
+                            <button type="submit" class="bg-primary text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-sm">
                                 <?= $isEdit ? 'Enregistrer les modifications' : 'Enregistrer et Publier' ?>
                             </button>
                         </div>

@@ -75,7 +75,7 @@ $active_tab = 'dashboard';
 
                     <!-- 8.1 Raccourcis d'accès rapide -->
                     <div class="flex flex-wrap items-center gap-2">
-                        <a href="/admin/commandes" class="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all shadow-sm">
+                        <a href="/admin/commandes" class="inline-flex items-center gap-1.5 bg-primary text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-all shadow-sm">
                             <span class="material-symbols-outlined text-[16px]">shopping_bag</span> Commandes (<?= (int)$total_orders ?>)
                         </a>
                         <a href="/admin/produits" class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border">

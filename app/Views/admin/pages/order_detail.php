@@ -25,6 +25,7 @@ $active_tab = 'orders';
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -118,7 +119,7 @@ $active_tab = 'orders';
                                 <input type="text" name="comment" placeholder="Ex: Paiement reçu, colis préparé..." class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm text-on-surface">
                             </div>
 
-                            <button type="submit" class="w-full bg-primary text-on-primary py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all">
+                            <button type="submit" class="w-full bg-primary text-white py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-all">
                                 Valider la transition de statut
                             </button>
                         </form>

@@ -45,6 +45,7 @@ $themes = $all_themes ?? [];
                         "tertiary": "#000000",
                         "surface-container-low": "#f6f3f5",
                         "primary": "#000000",
+                        "on-primary": "#ffffff",
                         "outline": "#76777d",
                         "surface-container": "#f0edef",
                         "on-surface": "#1b1b1d",
@@ -296,7 +297,7 @@ $themes = $all_themes ?? [];
 
                             <!-- Boutons d'Action : Enregistrer & Réinitialiser -->
                             <div class="flex items-center justify-between bg-surface p-4 rounded-2xl border border-border shadow-sm">
-                                <button type="submit" class="px-6 py-2.5 bg-primary text-on-primary rounded-xl text-xs font-bold hover:bg-slate-800 transition flex items-center gap-2 shadow-sm">
+                                <button type="submit" class="px-6 py-2.5 bg-primary text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition flex items-center gap-2 shadow-sm">
                                     <span class="material-symbols-outlined text-[18px]">save</span>
                                     <span>Enregistrer les préférences typographiques</span>
                                 </button>
@@ -341,7 +342,7 @@ $themes = $all_themes ?? [];
                                     <!-- En-tête de navigation du mini-site -->
                                     <div class="flex items-center justify-between pb-3 border-b border-border">
                                         <div class="flex items-center gap-2">
-                                            <div class="w-7 h-7 rounded bg-primary text-on-primary flex items-center justify-center font-bold text-xs">M</div>
+                                            <div class="w-7 h-7 rounded bg-primary text-white flex items-center justify-center font-bold text-xs">M</div>
                                             <span id="previewShopName" class="font-bold text-sm tracking-tight text-on-surface">Marvens Shop</span>
                                         </div>
                                         <div id="previewNavLinks" class="flex items-center gap-3 text-xs font-medium text-outline">
