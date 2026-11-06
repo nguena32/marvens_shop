@@ -49,13 +49,20 @@ class CartController extends Controller
         $dynamicCss = $this->themeService->generateCssVariables($customization, $typography);
         $googleFontsUrl = $this->themeService->getGoogleFontsUrl($typography);
 
+        $settingsService = new \App\Application\Services\SettingsService();
+        $shopInfo = $settingsService->getShopInfo();
+        $analytics = $settingsService->getAnalyticsSettings();
+
+        $data['csrf_token'] = Session::getCsrfToken();
         $data['theme'] = $theme;
         $data['theme_customization'] = $customization;
         $data['theme_typography'] = $typography;
         $data['dynamic_css'] = $dynamicCss;
         $data['google_fonts_url'] = $googleFontsUrl;
         $data['cart_count'] = $cartCalc['count'];
-        $data['shop_name'] = Config::get('app.name', 'Marvens Shop');
+        $data['shop_name'] = $shopInfo['shop_name'] ?? Config::get('app.name', 'Marvens Shop');
+        $data['shop_info'] = $shopInfo;
+        $data['analytics'] = $analytics;
 
         $content = View::render($pageView, $data);
         $data['content'] = $content;

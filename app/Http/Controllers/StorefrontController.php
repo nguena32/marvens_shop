@@ -7,6 +7,7 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Core\Database;
 use App\Core\View;
+use App\Core\Session;
 use App\Repositories\ProductRepository;
 use App\Repositories\CategoryRepository;
 use App\Application\Services\CartService;
@@ -54,6 +55,7 @@ class StorefrontController extends Controller
         $shopInfo = $settingsService->getShopInfo();
         $analytics = $settingsService->getAnalyticsSettings();
 
+        $data['csrf_token'] = Session::getCsrfToken();
         $data['theme'] = $theme;
         $data['theme_customization'] = $customization;
         $data['theme_typography'] = $typography;
