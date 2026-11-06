@@ -139,6 +139,11 @@ class SettingsModuleTestSuite
             INSERT INTO users (username, email, password_hash, role, name, is_active)
             VALUES ('admin_test', 'admin@marvens-shop.cm', '" . password_hash('Secret1234', PASSWORD_BCRYPT) . "', 'merchant_admin', 'Directeur Général', 1);
         ");
+
+        Session::start();
+        Session::set('admin_user_id', 1);
+        Session::set('admin_user_name', 'Directeur Général');
+        Session::set('admin_user_role', 'merchant_admin');
     }
 
     private function assert(bool $condition, string $message): void

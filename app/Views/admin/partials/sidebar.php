@@ -51,7 +51,7 @@
         <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_integrations' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/integrations">
             <span class="material-symbols-outlined mr-space-md text-[20px]">hub</span>Applications & API
         </a>
-        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_securite' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/securite">
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_security' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/securite">
             <span class="material-symbols-outlined mr-space-md text-[20px]">shield</span>Sécurité & Audit
         </a>
         <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_analytics' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/analytics">

@@ -8,6 +8,7 @@ use App\Core\Response;
 use App\Core\Session;
 use App\Core\View;
 use App\Application\Services\SettingsService;
+use App\Http\Middleware\AuthMiddleware;
 
 class SettingsController
 {
@@ -20,10 +21,7 @@ class SettingsController
 
     private function requireAuth(): ?Response
     {
-        if (!Session::has('user_id')) {
-            return Response::redirect('/admin/login', 302);
-        }
-        return null;
+        return AuthMiddleware::check();
     }
 
     private function validateCsrf(Request $request): bool
@@ -65,8 +63,8 @@ class SettingsController
         $res = $this->settingsService->updateShopInfo($request->all());
         if ($res['success']) {
             $this->settingsService->logActivity(
-                (int)Session::get('user_id'),
-                (string)Session::get('user_email'),
+                (int)Session::get('admin_user_id'),
+                (string)Session::get('admin_user_name'),
                 'settings_shop_update',
                 null,
                 null,
@@ -113,8 +111,8 @@ class SettingsController
 
         $this->settingsService->updateDeliverySettings($request->all());
         $this->settingsService->logActivity(
-            (int)Session::get('user_id'),
-            (string)Session::get('user_email'),
+            (int)Session::get('admin_user_id'),
+            (string)Session::get('admin_user_name'),
             'settings_delivery_update',
             null,
             null,
@@ -145,8 +143,8 @@ class SettingsController
 
         $this->settingsService->addDeliveryZone($city, $district, $fee, $time);
         $this->settingsService->logActivity(
-            (int)Session::get('user_id'),
-            (string)Session::get('user_email'),
+            (int)Session::get('admin_user_id'),
+            (string)Session::get('admin_user_name'),
             'delivery_zone_add',
             null,
             null,
@@ -215,8 +213,8 @@ class SettingsController
         $res = $this->settingsService->addUser($username, $email, $password, $role, $name);
         if ($res['success']) {
             $this->settingsService->logActivity(
-                (int)Session::get('user_id'),
-                (string)Session::get('user_email'),
+                (int)Session::get('admin_user_id'),
+                (string)Session::get('admin_user_name'),
                 'user_create',
                 null,
                 null,
@@ -242,7 +240,7 @@ class SettingsController
         $status = (bool)$request->input('active');
 
         // Interdiction de se désactiver soi-même
-        if ($id === (int)Session::get('user_id') && !$status) {
+        if ($id === (int)Session::get('admin_user_id') && !$status) {
             Session::flash('error', 'Vous ne pouvez pas désactiver votre propre compte administrateur.');
             return Response::redirect('/admin/parametres/utilisateurs');
         }
@@ -297,8 +295,8 @@ class SettingsController
 
         $this->settingsService->updateNotificationSettings($settings);
         $this->settingsService->logActivity(
-            (int)Session::get('user_id'),
-            (string)Session::get('user_email'),
+            (int)Session::get('admin_user_id'),
+            (string)Session::get('admin_user_name'),
             'settings_notifications_update',
             null,
             null,
@@ -339,8 +337,8 @@ class SettingsController
 
         $this->settingsService->updateIntegrationsSettings($request->all());
         $this->settingsService->logActivity(
-            (int)Session::get('user_id'),
-            (string)Session::get('user_email'),
+            (int)Session::get('admin_user_id'),
+            (string)Session::get('admin_user_name'),
             'settings_integrations_update',
             null,
             null,
@@ -389,13 +387,13 @@ class SettingsController
             return Response::redirect('/admin/parametres/securite');
         }
 
-        $userId = (int)Session::get('user_id');
+        $userId = (int)Session::get('admin_user_id');
         $res = $this->settingsService->updateUserPassword($userId, $newPassword);
 
         if ($res['success']) {
             $this->settingsService->logActivity(
                 $userId,
-                (string)Session::get('user_email'),
+                (string)Session::get('admin_user_name'),
                 'password_change',
                 null,
                 null,
@@ -439,8 +437,8 @@ class SettingsController
 
         $this->settingsService->updateAnalyticsSettings($request->all());
         $this->settingsService->logActivity(
-            (int)Session::get('user_id'),
-            (string)Session::get('user_email'),
+            (int)Session::get('admin_user_id'),
+            (string)Session::get('admin_user_name'),
             'settings_analytics_update',
             null,
             null,

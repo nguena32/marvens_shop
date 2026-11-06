@@ -58,10 +58,38 @@ class Session
         return $_SESSION[$key] ?? $default;
     }
 
+    public static function has(string $key): bool
+    {
+        self::start();
+        return isset($_SESSION[$key]);
+    }
+
     public static function set(string $key, mixed $value): void
     {
         self::start();
         $_SESSION[$key] = $value;
+    }
+
+    public static function flash(string $key, mixed $value): void
+    {
+        self::start();
+        $_SESSION['_flash'][$key] = $value;
+    }
+
+    public static function getFlash(string $key, mixed $default = null): mixed
+    {
+        self::start();
+        if (isset($_SESSION['_flash'][$key])) {
+            $val = $_SESSION['_flash'][$key];
+            unset($_SESSION['_flash'][$key]);
+            return $val;
+        }
+        return $default;
+    }
+
+    public static function csrfToken(): string
+    {
+        return self::getCsrfToken();
     }
 
     public static function remove(string $key): void
