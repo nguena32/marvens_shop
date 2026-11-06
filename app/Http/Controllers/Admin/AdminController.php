@@ -15,6 +15,7 @@ use App\Http\Middleware\AuthMiddleware;
 use App\Infrastructure\Storage\FileStorageService;
 use App\Infrastructure\MetaCatalogConnector;
 use App\Application\Services\CsvImportService;
+use App\Application\Services\Theme\ThemeService;
 use App\Core\Validator;
 use App\Core\Session;
 use PDO;
@@ -30,6 +31,7 @@ class AdminController extends Controller
     private FileStorageService $storage;
     private CsvImportService $csvImport;
     private MetaCatalogConnector $metaConnector;
+    private ThemeService $themeService;
 
     public function __construct()
     {
@@ -40,6 +42,7 @@ class AdminController extends Controller
         $this->storage = new FileStorageService(dirname(__DIR__, 3) . '/storage');
         $this->csvImport = new CsvImportService($this->productRepo, $this->categoryRepo);
         $this->metaConnector = new MetaCatalogConnector();
+        $this->themeService = new ThemeService($pdo);
     }
 
     private function requireAuth(): ?Response
@@ -200,15 +203,18 @@ class AdminController extends Controller
     {
         if ($res = $this->requireAuth()) return $res;
 
-        $pdo = Database::getConnection();
-        $currTheme = 'fashion';
-        $stmt = $pdo->query("SELECT setting_value FROM shop_settings WHERE setting_key = 'active_theme' LIMIT 1");
-        if ($stmt && $val = $stmt->fetchColumn()) {
-            $currTheme = $val;
-        }
+        $availableThemes = $this->themeService->getAvailableThemes();
+        $activeThemeId = $this->themeService->getActiveThemeId();
+        $previousThemeId = $this->themeService->getPreviousThemeId();
+
+        $feedback = Session::get('theme_feedback');
+        Session::remove('theme_feedback');
 
         return $this->render('admin.pages.themes_gallery', [
-            'active_theme' => $currTheme,
+            'themes' => $availableThemes,
+            'active_theme' => $activeThemeId,
+            'previous_theme' => $previousThemeId,
+            'feedback' => $feedback,
         ]);
     }
 
@@ -217,18 +223,61 @@ class AdminController extends Controller
         if ($res = $this->requireAuth()) return $res;
         $this->validateCsrf($request);
 
-        $theme = (string) $request->input('theme');
-        $allowed = ['fashion', 'bello', 'luxe', 'naya', 'shop'];
+        $themeId = (string) $request->input('theme');
 
-        if (in_array($theme, $allowed, true)) {
-            $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("INSERT INTO shop_settings (setting_key, setting_value) VALUES ('active_theme', :t)
-                                    ON DUPLICATE KEY UPDATE setting_value = :t");
-            try {
-                $stmt->execute(['t' => $theme]);
-            } catch (\Exception $e) {
-                $pdo->exec("REPLACE INTO shop_settings (setting_key, setting_value) VALUES ('active_theme', '{$theme}')");
-            }
+        try {
+            $this->themeService->activateTheme($themeId);
+            Session::set('theme_feedback', [
+                'type' => 'success',
+                'message' => "Le thème a été activé avec succès. Toutes vos données commerciales sont intactes."
+            ]);
+        } catch (\Exception $e) {
+            Session::set('theme_feedback', [
+                'type' => 'error',
+                'message' => "Erreur lors du changement de thème : " . $e->getMessage()
+            ]);
+        }
+
+        return $this->redirect('/admin/themes');
+    }
+
+    public function rollbackTheme(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        try {
+            $this->themeService->rollbackToPreviousTheme();
+            Session::set('theme_feedback', [
+                'type' => 'success',
+                'message' => "Retour au thème précédent effectué avec succès."
+            ]);
+        } catch (\Exception $e) {
+            Session::set('theme_feedback', [
+                'type' => 'error',
+                'message' => "Impossible de revenir au thème précédent : " . $e->getMessage()
+            ]);
+        }
+
+        return $this->redirect('/admin/themes');
+    }
+
+    public function resetTheme(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        try {
+            $this->themeService->resetToDefaultTheme();
+            Session::set('theme_feedback', [
+                'type' => 'success',
+                'message' => "Le thème par défaut (Fashion) a été rétabli avec succès."
+            ]);
+        } catch (\Exception $e) {
+            Session::set('theme_feedback', [
+                'type' => 'error',
+                'message' => "Erreur lors de la réinitialisation : " . $e->getMessage()
+            ]);
         }
 
         return $this->redirect('/admin/themes');

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-tint": "#904d00",
+          "on-error": "#ffffff",
+          "outline-variant": "#dbc2b0",
+          "secondary-container": "#dae2fd",
+          "surface": "#fff8f5",
+          "surface-container-highest": "#f2dfd3",
+          "border": "#E2E8F0",
+          "secondary-fixed": "#dae2fd",
+          "on-primary-container": "#fffbff",
+          "background": "#F8FAFC",
+          "inverse-surface": "#392e26",
+          "primary-container": "#b15f00",
+          "surface-dim": "#e9d7cb",
+          "primary": "#8d4b00",
+          "on-primary": "#ffffff",
+          "surface-variant": "#f2dfd3",
+          "tertiary-container": "#007abd",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed": "#001d32",
+          "on-primary-fixed-variant": "#6e3900",
+          "on-secondary-container": "#5c647a",
+          "on-surface-variant": "#554336",
+          "primary-fixed": "#ffdcc3",
+          "outline": "#887364",
+          "text": "#0F172A",
+          "surface-container-low": "#fff1e9",
+          "error-container": "#ffdad6",
+          "surface-bright": "#fff8f5",
+          "on-tertiary-container": "#fdfcff",
+          "on-primary-fixed": "#2f1500",
+          "surface-container-high": "#f7e5d9",
+          "secondary": "#565e74",
+          "primary-fixed-dim": "#ffb77d",
+          "on-secondary-fixed": "#131b2e",
+          "on-background": "#231a13",
+          "tertiary-fixed-dim": "#96ccff",
+          "on-secondary-fixed-variant": "#3f465c",
+          "tertiary-fixed": "#cee5ff",
+          "tertiary": "#006096",
+          "on-error-container": "#93000a",
+          "inverse-primary": "#ffb77d",
+          "surface-container": "#fdeade",
+          "error": "#ba1a1a",
+          "on-tertiary-fixed-variant": "#004a75",
+          "on-surface": "#231a13",
+          "secondary-fixed-dim": "#bec6e0",
+          "inverse-on-surface": "#ffede3",
+          "surface-container-lowest": "#ffffff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-xl": "3rem",
+          "margin": "2rem",
+          "space-xs": "0.25rem",
+          "space-sm": "0.5rem",
+          "gutter": "1.5rem",
+          "space-md": "1rem",
+          "space-lg": "1.5rem"
+        },
+        "fontFamily": {
+          "headline-sm": [
+            "Space Grotesk"
+          ],
+          "label-md": [
+            "Inter"
+          ],
+          "body-sm": [
+            "Inter"
+          ],
+          "headline-lg": [
+            "Space Grotesk"
+          ],
+          "headline-md": [
+            "Space Grotesk"
+          ],
+          "label-sm": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Space Grotesk"
+          ],
+          "body-lg": [
+            "Inter"
+          ],
+          "body-md": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "500"
+            }
+          ],
+          "body-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-xl": [
+            "48px",
+            {
+              "lineHeight": "56px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-text"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-7xl mx-auto px-gutter flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md"><img alt="Marvens Shop Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnDJ7xMjke_DlB1-B585au_so6c8agA1jH3ovg_VzB9hynKKku4Ijz9fjUFGXZuh0nnrwkm2wtAHVcBAq9PFmdLNWUpqGHYy_9xqiyo2z7HPFP753fwi0yct00jXVr9TZjTGukrwD7_PLbsjY2bKvl2zUsqKhRKle5FXX_Kyt37GwhaxpL0rzYzhwia1gKLT3n18oDpSmyBaPOFqj-iXHNh8jKehylLXD8w7mVmEm3"/><span class="text-headline-sm font-headline-sm text-text">Marvens Shop</span></div><nav class="hidden md:flex items-center gap-space-lg" data-active-classes="bg-primary-container text-on-primary-container font-bold rounded-lg"><a class="text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="catalog" href="#">Catalog</a><a class="text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="categories" href="#">Categories</a><a class="text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="lunora-mode" href="#">Lunora Mode</a><a class="text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="about" href="#">About</a></nav><div class="flex items-center gap-space-md"><div class="hidden lg:flex items-center bg-surface-container px-space-md py-space-xs rounded-xl border border-border"><span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-2">search</span><input class="bg-transparent text-label-md text-text outline-none w-48" placeholder="Search products..." type="text"/></div><a class="relative p-space-sm rounded-xl hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant transition-colors" data-path="cart" href="#"><span class="material-symbols-outlined">shopping_bag</span><span class="absolute top-0 right-0 bg-primary text-on-primary text-label-sm w-4 h-4 rounded-full flex items-center justify-center">2</span></a><a class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-space-md py-space-sm rounded-xl text-label-md transition-colors" data-path="whatsapp-chat" href="#"><span class="material-symbols-outlined text-[18px]">chat</span><span class="hidden sm:inline">WhatsApp</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background"><div class="flex flex-col w-full bg-background text-text">
+<!-- Hero Section -->
+<section class="relative w-full min-h-[580px] bg-surface-container flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-20 bg-gradient-to-r from-primary/30 via-transparent to-primary/10"></div>
+<div class="max-w-7xl mx-auto px-gutter py-space-xl grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center relative z-10 w-full">
+<div class="lg:col-span-7 flex flex-col items-start gap-space-md">
+<span class="text-label-md uppercase tracking-wider text-primary font-headline-sm">Collection Afropolitaine — Élégance &amp; Authenticité</span>
+<h1 class="text-headline-xl text-on-surface font-headline-xl">Style Contemporain. Âme Africaine.</h1>
+<p class="text-body-lg text-on-surface-variant max-w-xl">Des pièces intemporelles mêlant le chic urbain moderne et des touches de wax raffinées. Conçu pour sublimer la femme camerounaise active et élégante.</p>
+<div class="flex flex-wrap gap-space-md mt-space-sm">
+<a class="bg-primary hover:bg-primary-container text-on-primary px-space-lg py-space-md rounded-xl text-label-md transition-colors flex items-center gap-space-sm font-headline-sm" href="#catalog">
+<span>Découvrir la Collection</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<a class="bg-surface hover:bg-surface-container-high text-on-surface border border-outline-variant px-space-lg py-space-md rounded-xl text-label-md transition-colors flex items-center gap-space-sm" href="#whatsapp">
+<span class="material-symbols-outlined text-[18px] text-emerald-600">chat</span>
+<span>Commander sur WhatsApp</span>
+</a>
+</div>
+</div>
+<div class="lg:col-span-5 relative">
+<div class="relative w-full h-[420px] rounded-2xl overflow-hidden shadow-2xl">
+<div class="bg-cover bg-center w-full h-full" data-alt="Une élégante femme africaine posant fièrement dans un studio baigné de lumière naturelle aux tons sable et terracotta, vêtue d'un tailleur pantalon chic moderne agrémenté de subtils détails en wax. Expression confiante, regard perçant, coiffure tressée soignée." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUmGBX42DZGTa6D_Yy0EyAmewmVmphznU6flVjap1jR-aJAGElgXdNc68OIAUdiqqqQWDeJb1Pmvj0jU1TVEyCFq4xS9eTgpbzmB0hOT8OUwR1xw5MqZqZCH7uv16RflpWlzxDkX_DyyJKF9zwHJAYvow-DmeJ9eO8SnAqP9XW_2i-knlylESN5ebq8P6QfdmM4SmCDa2cIUVGF1NMyEyXR6-C6sgEIpVlv30EgZIy')"></div>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-surface/90 backdrop-blur-md p-space-md rounded-xl border border-outline-variant shadow-lg hidden sm:flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div>
+<p class="text-label-md font-headline-sm text-on-surface">Livraison Express</p>
+<p class="text-body-sm text-on-surface-variant">Yaoundé &amp; Douala en 24h</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories Section -->
+<section class="max-w-7xl mx-auto px-gutter py-space-xl w-full">
+<div class="text-center mb-space-xl">
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Boutiques &amp; Catégories</h2>
+<p class="text-body-md text-on-surface-variant mt-space-xs">Explorez nos univers de mode féminine raffinée</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-lg">
+<a class="group flex flex-col items-center gap-space-md text-center" href="#">
+<div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors shadow-sm">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Une femme souriante portant une robe longue élégante aux motifs wax modernes dans un décor urbain ensoleillé." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDurDDNVntK6V8B04HhbJAA2J3UXdFBRSe2tzRkglVuefJQCm45nSgxLbZo_PNI6yU7VaHVzKbeBLCXJCH1ZiIVL0PthuzOebjnaW0YTJYJqJt-zAmhTeAtpEdGJZ_v5zxamvyxjiZYKR9_uFT-KneHwhc21wvQvJMdHYZdasHZK3SXK7c3_OuELmWgnJobcsYg3zjYB1FN_ICd-U-8Phzgu4kMHwV7g_JW6AEdSS9U')"></div>
+</div>
+<span class="text-label-md font-headline-sm text-on-surface group-hover:text-primary transition-colors">Robes Wax Chic</span>
+</a>
+<a class="group flex flex-col items-center gap-space-md text-center" href="#">
+<div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors shadow-sm">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Ensemble tailleur féminin chic de couleur sable porté par une femme d'affaires moderne." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1m9JU3fdqyXoC975jj23MOVqQ0R--dbKJFcNXb9PBQA74C6ajbmcvajyMbLpyHX0QvZNU1na7dnhtb47xhN8nRvDyTn5yHr-_81pY9JbpopIzHC86942X5gXF-qs9wEXXzn70P78LIQhWV1U9a9jkFhnYJsSeqwV6r0MkA_HobF2IsEUc7LR9GeF7fBkqt41OG16ZFkEZuHpgS8kzYjEPly3LVDUm2_l2PRqc5_eL')"></div>
+</div>
+<span class="text-label-md font-headline-sm text-on-surface group-hover:text-primary transition-colors">Ensembles Tailleurs</span>
+</a>
+<a class="group flex flex-col items-center gap-space-md text-center" href="#">
+<div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors shadow-sm">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Boubou moderne revisité avec des broderies dorées raffinées sur un tissu noble." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9BVU1NUcDMSTHp6CQkDsWEVej3wZTC_lAQMrij0Fc5-cAGK2yb-JIsBH2zyP4ZYSO6CLHW60rPXbQTllXNFGmpsWRt2sPu0unMFHYBHv7fO5YPFNuUh0f18rge33xPyW7F0U__tPsOaAc4DZq0xRx6ad7Xp1HItIhKD3v_SKusiZA5y3JoAU4V4zAtsehQOXPzS1a4x4LTQ8pqTDWwza0OAzkeV2oTpBIakvAOJCL')"></div>
+</div>
+<span class="text-label-md font-headline-sm text-on-surface group-hover:text-primary transition-colors">Boubous Modernes</span>
+</a>
+<a class="group flex flex-col items-center gap-space-md text-center" href="#">
+<div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors shadow-sm">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Assortiment d'accessoires de mode dorés et boucles d'oreilles artisanales." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzPMystTFA9--bOB8KAnvdy0AshBj1_HJVOo668J7mqtyT6mWbHDFxPdmy8CUvFlg5GX5uicNBrPSYc3Bp3-lcZlaNNki5lZD-F-zshn7JsZdjYqtwpZdXJwmbOvPGs8usl6bK-dLsyOVNervmEp7biKeh2JRcwCjH4NOQEd6jyFK5ONdHx19xMi_gzZU3vZ2Yu-SvNbNHC5EmRaCUTutW0B3YKqDoG5lXQJFo3Y2Q')"></div>
+</div>
+<span class="text-label-md font-headline-sm text-on-surface group-hover:text-primary transition-colors">Accessoires</span>
+</a>
+<a class="group flex flex-col items-center gap-space-md text-center" href="#">
+<div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors shadow-sm">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Sac à main en cuir artisanal de fabrication locale avec finitions soignées." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDHL9eIGeXcRx6ztlKXq810irwnTm3fjGDlYFTzOjxIS8uKSOruaTz8dOZTJAKryJd5eRaqauLL-9o5Ah0r0Wq619lhacOKyHHXF8leiAFa6XskgLdkSSfTbHyhSQYtpXkUt3NDJHriR5GJ1pNXOXDWIdkIMo_UP2ZU7SpdD5HyI0n5UvbxxF2t95EYzpNpxV5EjzuIZJ2HH5Y3m2HSXbXpQxTTSnrn_OZUFSKUyXcY')"></div>
+</div>
+<span class="text-label-md font-headline-sm text-on-surface group-hover:text-primary transition-colors">Sacs en Cuir</span>
+</a>
+<a class="group flex flex-col items-center gap-space-md text-center" href="#">
+<div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors shadow-sm">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Paire de chaussures escarpins élégantes posées sur un fond neutre." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCa0268JQC9dkV664pfmItLgwoOqaC0nJGFMv-rGPutq5cY924lFVxSQ66D7nsLNHsVdwHf8hYIJe1000e35DRb99iMMf2qe5XNk04Nool18GNvwxFOFoh-juPjftrK-S4-x95o6RU-NtMwiiKn72W0kWyj-r9EVfT5W1if-MeXUqdl-09HDLuKfPB4iXsu3icav-7lhi8BFtU7S4GbxZWNr0UQN23ccKXbx9MzGISu')"></div>
+</div>
+<span class="text-label-md font-headline-sm text-on-surface group-hover:text-primary transition-colors">Chaussures</span>
+</a>
+</div>
+</section>
+<!-- Products Section -->
+<section class="max-w-7xl mx-auto px-gutter py-space-xl w-full" id="catalog">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-space-xl gap-space-md">
+<div>
+<span class="text-label-md text-primary font-headline-sm uppercase tracking-wider">Nouveautés &amp; Best-Sellers</span>
+<h2 class="text-headline-lg font-headline-lg text-on-surface mt-1">Sélection de la Semaine</h2>
+</div>
+<div class="flex gap-space-sm overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0">
+<button class="px-space-md py-space-xs rounded-xl bg-primary text-on-primary text-label-md font-headline-sm whitespace-nowrap">Tout</button>
+<button class="px-space-md py-space-xs rounded-xl bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md whitespace-nowrap">Robes Wax</button>
+<button class="px-space-md py-space-xs rounded-xl bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md whitespace-nowrap">Ensembles</button>
+<button class="px-space-md py-space-xs rounded-xl bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md whitespace-nowrap">Prêt-à-porter</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-lg">
+<!-- Product 1 -->
+<div class="group bg-surface rounded-2xl overflow-hidden border border-border flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+<div class="relative w-full h-80 bg-surface-container overflow-hidden">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-500" data-alt="Mannequin portant une robe midi chic en mélange de lin et touches de wax sur le bustier, tons beige et terracotta." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2Y1WrhZ-aaZX_6KTFItNeJ0W4dL0tOOex1oXGiItXbC8WerMd89eL3cSyRip67Pjq70FJ808w_jVh2Dgrc9RtZrtLLUuUHdhBKkwL9YxTkANCLa7RREHA1f-6C4Ix8BIWPrWH0jActYaI90hSy6gs67OM-2coVze7L2YQYnkJmo4OtveuYPOYoumpsr5ZcSI4EkCSxCtL7ZwgFYvwwy6TqemeHgrB9AeMgQKhAVOg')"></div>
+<span class="absolute top-3 left-3 bg-primary text-on-primary text-label-sm px-space-sm py-1 rounded-lg font-headline-sm">Nouveau</span>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-surface/80 backdrop-blur-md text-on-surface hover:bg-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="text-body-sm text-on-surface-variant">Robe Wax Chic</span>
+<div class="flex items-center text-amber-600 text-body-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1 text-on-surface font-headline-sm">4.9</span>
+</div>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface line-clamp-1">Robe Midi NAYA d'Ébène</h3>
+<p class="text-body-lg font-headline-sm text-primary">35 000 XAF</p>
+<div class="flex gap-space-sm mt-space-sm">
+<button class="flex-1 bg-surface-container hover:bg-surface-container-high text-on-surface py-2 rounded-xl text-label-sm font-headline-sm transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+<span>Ajouter</span>
+</button>
+<a class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-label-sm font-headline-sm transition-colors flex items-center justify-center gap-1" href="#whatsapp">
+<span class="material-symbols-outlined text-[16px]">chat</span>
+<span>Commander</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group bg-surface rounded-2xl overflow-hidden border border-border flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+<div class="relative w-full h-80 bg-surface-container overflow-hidden">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-500" data-alt="Ensemble tailleur pantalon élégant en tissu léger couleur sable, coupé sur mesure pour femme." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCuT2f-3KZj7nHHvEf_odExlvR6h3SXludha0EIh1VjF9qKPUgL6xpM3umR1F0wvIWzLIpt-crcXXuoR-ma9hVcYaWbd-5oLH-WqDaSMksKtmwxLajyA3EYrrKDOBYuW2zevwH-p5e-MnQY6iakz1eihD2GsAsc6HfB_Kzz9g-QJ1lbMvS4zpSaJtEVQ_y-T1pw3-ilEsE-Q4aSIHevyfa2MoOe-glYyQJeck0XZBXe')"></div>
+<span class="absolute top-3 left-3 bg-secondary text-on-secondary text-label-sm px-space-sm py-1 rounded-lg font-headline-sm">Populaire</span>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-surface/80 backdrop-blur-md text-on-surface hover:bg-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="text-body-sm text-on-surface-variant">Ensemble Tailleur</span>
+<div class="flex items-center text-amber-600 text-body-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1 text-on-surface font-headline-sm">4.8</span>
+</div>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface line-clamp-1">Tailleur Urbain Douala</h3>
+<p class="text-body-lg font-headline-sm text-primary">45 000 XAF</p>
+<div class="flex gap-space-sm mt-space-sm">
+<button class="flex-1 bg-surface-container hover:bg-surface-container-high text-on-surface py-2 rounded-xl text-label-sm font-headline-sm transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+<span>Ajouter</span>
+</button>
+<a class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-label-sm font-headline-sm transition-colors flex items-center justify-center gap-1" href="#whatsapp">
+<span class="material-symbols-outlined text-[16px]">chat</span>
+<span>Commander</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group bg-surface rounded-2xl overflow-hidden border border-border flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+<div class="relative w-full h-80 bg-surface-container overflow-hidden">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-500" data-alt="Boubou moderne et fluide en mousseline avec motifs géométriques discrets et encolure brodée." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBHuaN7d8KGVFnKAQTo5GGs8hYH1j3aJCce6wZWT8wdaEJ66VVoHZHDwUdICMthPLT-jI-g9ZLnuBo49tfhB1EUPigK4WhVPAlYXMByw3Jpoe8of-XJ9n_pzvm36CTLTX9f9kLWL5XvqKLJ4YMswbdGfLzqtCo73sT158RwC2cWjaVOsLG-Yz__H1_YooaRO8aXrHCylK8VK85i4ZxNTlRIY2A5QpNL8-41WC20OF04')"></div>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-surface/80 backdrop-blur-md text-on-surface hover:bg-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="text-body-sm text-on-surface-variant">Boubou Moderne</span>
+<div class="flex items-center text-amber-600 text-body-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1 text-on-surface font-headline-sm">5.0</span>
+</div>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface line-clamp-1">Kaftan Royal Akwaba</h3>
+<p class="text-body-lg font-headline-sm text-primary">28 000 XAF</p>
+<div class="flex gap-space-sm mt-space-sm">
+<button class="flex-1 bg-surface-container hover:bg-surface-container-high text-on-surface py-2 rounded-xl text-label-sm font-headline-sm transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+<span>Ajouter</span>
+</button>
+<a class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-label-sm font-headline-sm transition-colors flex items-center justify-center gap-1" href="#whatsapp">
+<span class="material-symbols-outlined text-[16px]">chat</span>
+<span>Commander</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="group bg-surface rounded-2xl overflow-hidden border border-border flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+<div class="relative w-full h-80 bg-surface-container overflow-hidden">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-500" data-alt="Top élégant à col asymétrique en tissu wax fusionné avec du coton uni noir." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6UZvidSTtEknzrXhUrZaYRxmi5LIcU_A_es6tba5fg4_MZXc_mW4AY6vmNkp0G_dTaTWlnvsUjJXjTFiyGIAOruvwfFbnodU5__nizIMx-jRK9_fskKbReZUGIeY3D5YOyTGd3GhBcSSYWJdmtOqBY4EmgT_r_unqPaqZBI26_hhRljOatDlzW1ZLVo1bbry5JhOWt8GIpr0B7lLaqEGUazJyEHeV4Ni_6mDAYpOR')"></div>
+<span class="absolute top-3 left-3 bg-primary-container text-on-primary-container text-label-sm px-space-sm py-1 rounded-lg font-headline-sm">-15%</span>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-surface/80 backdrop-blur-md text-on-surface hover:bg-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="text-body-sm text-on-surface-variant">Prêt-à-porter</span>
+<div class="flex items-center text-amber-600 text-body-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1 text-on-surface font-headline-sm">4.7</span>
+</div>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface line-clamp-1">Top Asymétrique Kribi</h3>
+<p class="text-body-lg font-headline-sm text-primary">18 500 XAF <span class="text-body-sm text-on-surface-variant line-through ml-2">22 000 XAF</span></p>
+<div class="flex gap-space-sm mt-space-sm">
+<button class="flex-1 bg-surface-container hover:bg-surface-container-high text-on-surface py-2 rounded-xl text-label-sm font-headline-sm transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+<span>Ajouter</span>
+</button>
+<a class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-label-sm font-headline-sm transition-colors flex items-center justify-center gap-1" href="#whatsapp">
+<span class="material-symbols-outlined text-[16px]">chat</span>
+<span>Commander</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Promo Banner Section -->
+<section class="max-w-7xl mx-auto px-gutter py-space-xl w-full">
+<div class="relative rounded-3xl overflow-hidden bg-surface-container min-h-[400px] flex items-center">
+<div class="absolute inset-0 z-0">
+<div class="bg-cover bg-center w-full h-full opacity-30" data-alt="Campagne publicitaire estivale Naya Style Cameroun, mannequin élégant en tenue légère posant sur une terrasse ensoleillée à Yaoundé." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD-KuR30ypKKMfrQyCRqZxGiRpfiMp8jjcZR4gyvNe0sKRvhOqfl94KBxEJ--ALiSmm9ovsDWkb-pJmw9GZK_9Y9O8TswFTmkXAdl1H8oT2FcECTvUJxNQ24qX7WlgjAuD5AnYBLyXKUP4N1RYL6Zvf93L9OOz3t-uMNR7PfJOM_XzKZYXCG5IrE9Ot-RcEURYxvzY2_XNdu1-WDDunitRISdvpZlC8osfHTHrm473W')"></div>
+</div>
+<div class="relative z-10 p-space-xl lg:p-16 max-w-xl flex flex-col gap-space-md">
+<span class="text-label-md uppercase tracking-wider text-primary font-headline-sm">Édition Limitée</span>
+<h2 class="text-headline-xl font-headline-xl text-on-surface">Summer Refresh — Collection Solaire</h2>
+<p class="text-body-lg text-on-surface-variant">Profitez de réductions exceptionnelles jusqu'à -30% sur notre sélection de tenues légères pour la saison chaude.</p>
+<div>
+<a class="inline-flex items-center gap-space-sm bg-primary hover:bg-primary-container text-on-primary px-space-lg py-space-md rounded-xl text-label-md transition-colors font-headline-sm" href="#catalog">
+<span>Découvrir l'Offre</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Reassurance Section -->
+<section class="max-w-7xl mx-auto px-gutter py-space-xl w-full border-t border-border">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-lg">
+<div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface border border-border">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Livraison 24h</h4>
+<p class="text-body-sm text-on-surface-variant">Yaoundé &amp; Douala express</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface border border-border">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">phone_iphone</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Mobile Money</h4>
+<p class="text-body-sm text-on-surface-variant">Orange Money &amp; MTN MoMo</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface border border-border">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">chat</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Support WhatsApp</h4>
+<p class="text-body-sm text-on-surface-variant">Assistance personnalisée 7j/7</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface border border-border">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Qualité Premium</h4>
+<p class="text-body-sm text-on-surface-variant">Tissus soigneusement sélectionnés</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter Section -->
+<section class="max-w-7xl mx-auto px-gutter py-space-xl w-full" id="whatsapp">
+<div class="bg-surface-container rounded-3xl p-space-xl text-center flex flex-col items-center gap-space-md border border-border">
+<span class="material-symbols-outlined text-[48px] text-primary">mail</span>
+<h2 class="text-headline-md font-headline-md text-on-surface">Restez informée des nouveautés</h2>
+<p class="text-body-md text-on-surface-variant max-w-md">Inscrivez-vous pour recevoir nos offres exclusives, nos ventes privées et les avant-premières de nos collections.</p>
+<div class="flex flex-col sm:flex-row gap-space-sm w-full max-w-md mt-space-sm">
+<input class="bg-surface text-text px-space-md py-space-md rounded-xl border border-border outline-none flex-1 text-label-md" placeholder="Votre adresse email..." type="email"/>
+<button class="bg-primary hover:bg-primary-container text-on-primary px-space-lg py-space-md rounded-xl text-label-md font-headline-sm transition-colors">S'inscrire</button>
+</div>
+</div>
+</section>
+</div></main><footer class="w-full bg-surface-container-low py-space-xl border-t border-border"><div class="max-w-7xl mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-space-md text-on-surface-variant text-body-sm"><div>© 2024 Marvens Shop. All rights reserved.</div><div class="flex gap-space-lg"><a class="hover:text-on-surface transition-colors" href="#">Privacy Policy</a><a class="hover:text-on-surface transition-colors" href="#">Terms of Service</a><a class="hover:text-on-surface transition-colors" href="#">Contact</a></div></div></footer></body></html>

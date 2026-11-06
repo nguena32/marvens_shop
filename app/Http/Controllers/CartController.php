@@ -7,15 +7,19 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Core\Database;
 use App\Core\Validator;
+use App\Core\View;
+use App\Core\Config;
 use App\Repositories\ProductRepository;
 use App\Repositories\OrderRepository;
 use App\Application\Services\CartService;
 use App\Application\Services\CheckoutService;
+use App\Application\Services\Theme\ThemeService;
 use App\Core\Session;
 use Exception;
 
 /**
  * Contrôleur du Panier, de la validation de commande et de la confirmation
+ * Intègre le système de thèmes actif
  */
 class CartController extends Controller
 {
@@ -23,6 +27,7 @@ class CartController extends Controller
     private OrderRepository $orderRepo;
     private CartService $cartService;
     private CheckoutService $checkoutService;
+    private ThemeService $themeService;
 
     public function __construct()
     {
@@ -31,12 +36,29 @@ class CartController extends Controller
         $this->orderRepo = new OrderRepository($pdo);
         $this->cartService = new CartService($this->productRepo);
         $this->checkoutService = new CheckoutService($this->orderRepo, $this->cartService);
+        $this->themeService = new ThemeService($pdo);
+    }
+
+    private function renderStorefront(string $pageView, array $data): Response
+    {
+        $theme = $this->themeService->getActiveTheme();
+        $cartCalc = $this->cartService->getCartCalculation();
+        $data['theme'] = $theme;
+        $data['cart_count'] = $cartCalc['count'];
+        $data['shop_name'] = Config::get('app.name', 'Marvens Shop');
+
+        $content = View::render($pageView, $data);
+        $data['content'] = $content;
+
+        $html = View::render('storefront.partials.layout', $data);
+        return Response::html($html);
     }
 
     public function index(Request $request): Response
     {
         $calc = $this->cartService->getCartCalculation();
-        return $this->render('themes.fashion.pages.cart', [
+        return $this->renderStorefront('storefront.pages.cart', [
+            'title' => 'Panier d\'achats',
             'cart' => $calc,
         ]);
     }
@@ -88,7 +110,8 @@ class CartController extends Controller
         $errors = Session::get('checkout_errors', []);
         Session::remove('checkout_errors');
 
-        return $this->render('themes.fashion.pages.checkout', [
+        return $this->renderStorefront('storefront.pages.checkout', [
+            'title' => 'Validation de commande',
             'cart' => $calc,
             'errors' => $errors,
         ]);
@@ -131,7 +154,8 @@ class CartController extends Controller
         $items = $order['items'] ?? [];
         $whatsappUrl = $this->checkoutService->generateWhatsAppLink($order, $items);
 
-        return $this->render('themes.fashion.pages.order_confirmation', [
+        return $this->renderStorefront('storefront.pages.order_confirmation', [
+            'title' => 'Confirmation de commande',
             'order' => $order,
             'items' => $items,
             'whatsapp_url' => $whatsappUrl,

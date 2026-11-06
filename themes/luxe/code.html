@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {"darkMode":"class","theme":{"extend":{"colors":{"inverse-surface":"#1a1a1a","background":"#f5f0e8","on-secondary-container":"#1a1a1a","primary-container":"#ffcc00","on-primary-fixed":"#1a1a1a","on-tertiary-fixed-variant":"#1a1a1a","secondary-container":"#ffdad6","surface-variant":"#e8e3da","surface-container":"#eee9e0","inverse-primary":"#f5f0e8","tertiary-fixed":"#d6e3ff","on-background":"#1a1a1a","on-tertiary-fixed":"#1a1a1a","on-secondary":"#1a1a1a","surface-container-low":"#f2ede5","on-tertiary-container":"#1a1a1a","tertiary-fixed-dim":"#a8c6ff","primary":"#1a1a1a","on-secondary-fixed":"#1a1a1a","tertiary":"#0055ff","surface-bright":"#faf7f2","primary-fixed":"#ffcc00","tertiary-container":"#d6e3ff","error-container":"#ffdad6","surface-container-lowest":"#ffffff","secondary":"#e63b2e","surface-dim":"#d6d1c9","outline-variant":"#d0cbc3","error":"#cc0000","on-surface":"#1a1a1a","on-primary-fixed-variant":"#1a1a1a","on-error-container":"#93000a","surface-container-highest":"#e2ddd4","surface":"#f5f0e8","primary-fixed-dim":"#e6b800","on-surface-variant":"#4a4a4a","secondary-fixed-dim":"#ffb3ab","inverse-on-surface":"#f5f0e8","secondary-fixed":"#ffdad6","on-tertiary":"#ffffff","outline":"#1a1a1a","on-primary":"#ffffff","surface-container-high":"#e8e3da","on-secondary-fixed-variant":"#1a1a1a","on-error":"#ffffff","surface-tint":"#1a1a1a","on-primary-container":"#1a1a1a"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"fontFamily":{"headline":["Space Grotesk"],"display":["Space Grotesk"],"body":["Inter"],"label":["Space Grotesk"]}}}};</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-surface font-body text-on-surface"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b-2 border-primary"><div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-6"><div class="flex items-center gap-8"><a class="text-2xl font-headline font-bold tracking-tighter uppercase text-primary" data-path="accueil" href="#">Marvens Shop</a><nav class="hidden md:flex items-center gap-6" data-active-classes="bg-primary text-on-primary font-bold"><a class="text-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-colors font-label" data-path="accueil" href="#">Accueil</a><a aria-current="page" class="uppercase tracking-wider transition-colors bg-primary text-on-primary font-bold" data-path="catalogue" href="#">Catalogue</a><a class="text-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface transition-colors font-label" data-path="apropos" href="#">À propos</a></nav></div><div class="flex-1 max-w-md hidden lg:block"><div class="relative flex items-center border-2 border-primary bg-surface-container-lowest"><span class="material-symbols-outlined px-3 text-on-surface-variant">search</span><input class="w-full py-2 bg-transparent text-sm text-on-surface focus:outline-none pr-3" placeholder="Rechercher un produit..." type="text"/></div></div><div class="flex items-center gap-4"><a class="relative p-2 border-2 border-primary bg-surface-container-lowest hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center" data-path="panier" href="#"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="absolute -top-2 -right-2 bg-secondary text-on-secondary text-xs font-bold w-5 h-5 flex items-center justify-center border border-primary">2</span></a><a class="hidden sm:flex items-center gap-2 px-4 py-2 bg-primary-fixed text-on-primary-fixed font-headline text-sm uppercase tracking-wider border-2 border-primary shadow-[4px_4px_0px_#1a1a1a] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_#1a1a1a] transition-all" href="https://wa.me/" target="_blank"><span class="material-symbols-outlined text-[18px]">chat</span>WhatsApp</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-primary"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full bg-surface text-on-surface">
+<!-- Hero Section Bauhaus style -->
+<section class="relative bg-primary text-on-primary border-b-4 border-primary overflow-hidden">
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffcc00_1px,transparent_1px)] [background-size:16px_16px]"></div>
+<div class="max-w-7xl mx-auto px-6 lg:px-12 py-20 lg:py-28 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="inline-flex items-center gap-2 bg-primary-fixed text-on-primary-fixed px-3 py-1 font-headline text-xs font-bold uppercase tracking-widest border-2 border-primary w-max shadow-[3px_3px_0px_#ffffff]">
+<span class="material-symbols-outlined text-[16px]">storefront</span> Yaoundé & Douala • Livraison Express
+        </div>
+<h1 class="text-5xl sm:text-7xl lg:text-8xl font-headline font-black uppercase tracking-tighter leading-none">
+          Maison <span class="text-primary-fixed">Fotso</span>
+</h1>
+<p class="text-lg sm:text-xl text-surface-dim font-body max-w-2xl font-medium leading-relaxed">
+          Boutique officielle & concept store urbain. Sélection rigoureuse de mode contemporaine, équipements high-tech et art de vivre inspiré par le Cameroun.
+        </p>
+<div class="flex flex-wrap items-center gap-4 pt-4">
+<a class="px-8 py-4 bg-primary-fixed text-on-primary-fixed font-headline font-bold text-sm uppercase tracking-wider border-2 border-primary shadow-[4px_4px_0px_#ffffff] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#ffffff] transition-all flex items-center gap-3" href="#catalogue-section">
+<span class="material-symbols-outlined">grid_view</span> Explorer le Catalogue
+          </a>
+<a class="px-8 py-4 bg-secondary text-on-secondary font-headline font-bold text-sm uppercase tracking-wider border-2 border-primary shadow-[4px_4px_0px_#ffffff] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#ffffff] transition-all flex items-center gap-3" href="https://wa.me/237600000000?text=Bonjour%20Maison%20Fotso,%20je%20souhaite%20commander..." target="_blank">
+<span class="material-symbols-outlined">chat</span> WhatsApp Direct
+          </a>
+</div>
+</div>
+<div class="lg:col-span-4 flex flex-col gap-4">
+<div class="border-4 border-primary bg-surface-container-lowest p-6 text-primary shadow-[6px_6px_0px_#ffcc00]">
+<div class="font-headline font-bold text-xl uppercase mb-3 flex items-center justify-between">
+<span>Infos Express</span>
+<span class="w-3 h-3 bg-secondary border border-primary animate-ping"></span>
+</div>
+<ul class="space-y-3 text-sm font-body">
+<li class="flex items-center gap-3 pb-2 border-b-2 border-surface">
+<span class="material-symbols-outlined text-secondary">local_shipping</span>
+<span>Yaoundé: Livraison 24h (Paiement à la livraison)</span>
+</li>
+<li class="flex items-center gap-3 pb-2 border-b-2 border-surface">
+<span class="material-symbols-outlined text-secondary">local_shipping</span>
+<span>Douala: Expédition via Agence (48h max)</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed-dim">verified</span>
+<span>100% Authentique & Garanti</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories & Filter Bar -->
+<section class="sticky top-20 z-40 bg-surface border-b-4 border-primary px-6 lg:px-12 py-4" id="catalogue-section">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+<button class="category-btn active px-5 py-2.5 font-headline font-bold text-sm uppercase border-2 border-primary bg-primary text-on-primary shadow-[3px_3px_0px_#1a1a1a] transition-all whitespace-nowrap" onclick="filterProducts('all')">
+          Tous
+        </button>
+<button class="category-btn px-5 py-2.5 font-headline font-bold text-sm uppercase border-2 border-primary bg-surface-container-lowest text-on-surface hover:bg-primary-fixed transition-all whitespace-nowrap" onclick="filterProducts('mode')">
+          Mode
+        </button>
+<button class="category-btn px-5 py-2.5 font-headline font-bold text-sm uppercase border-2 border-primary bg-surface-container-lowest text-on-surface hover:bg-primary-fixed transition-all whitespace-nowrap" onclick="filterProducts('electronique')">
+          Électronique
+        </button>
+<button class="category-btn px-5 py-2.5 font-headline font-bold text-sm uppercase border-2 border-primary bg-surface-container-lowest text-on-surface hover:bg-primary-fixed transition-all whitespace-nowrap" onclick="filterProducts('soin')">
+          Soin
+        </button>
+<button class="category-btn px-5 py-2.5 font-headline font-bold text-sm uppercase border-2 border-primary bg-surface-container-lowest text-on-surface hover:bg-primary-fixed transition-all whitespace-nowrap" onclick="filterProducts('maison')">
+          Maison
+        </button>
+</div>
+<div class="text-xs font-headline uppercase tracking-wider text-on-surface-variant self-end md:self-center">
+        Affichage de <span class="font-bold text-primary" id="product-count">6</span> produits
+      </div>
+</div>
+</section>
+<!-- Product Grid -->
+<section class="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="products-grid">
+<!-- Product Card 1 -->
+<div class="product-card group bg-surface-container-lowest border-4 border-primary shadow-[6px_6px_0px_#1a1a1a] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#1a1a1a] transition-all flex flex-col justify-between" data-category="mode">
+<div>
+<div class="relative overflow-hidden border-b-4 border-primary bg-surface-variant aspect-[4/3]">
+<div class="absolute top-3 left-3 z-10 bg-secondary text-on-secondary px-3 py-1 font-headline font-bold text-xs uppercase border-2 border-primary shadow-[2px_2px_0px_#1a1a1a]">
+              Tendance
+            </div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A high-contrast editorial studio photograph of a modern African streetwear bomber jacket with geometric Bauhaus patterns, styled on a minimalist mannequin in Yaoundé, dramatic warm studio lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCcD2L9s9UQEb2jHmsR6aXHWYKSg-43q6MHPnwSm8GUxaiZI7pwrSYwP3I4toDh9RnEUh5fdAPDwmHBP82CGquCjYk3x9LyUDb65_xXuldTYYZCQL6aI37iOYj1P0Iio5b3rVtH1bC9XHyPhEZp0HBxNscosL2RC88oInA9MQ7T5cvfQOMeaKVW9w-MQpCQZPUUecq2M-KdmbnpuZVALwwB-CI_trPjlv91thS4nisW')"></div>
+</div>
+<div class="p-6">
+<div class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">Mode • Confection</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2 uppercase tracking-tight">Bomber Urban Bauhaus</h3>
+<p class="text-sm font-body text-on-surface-variant line-clamp-2 mb-4">Veste bomber sur-mesure aux motifs géométriques inspirés de l'art contemporain et du tissu local.</p>
+<div class="text-2xl font-headline font-bold text-primary mb-4">45 000 XAF</div>
+</div>
+</div>
+<div class="p-6 pt-0 flex items-center gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary font-headline font-bold text-xs uppercase tracking-wider border-2 border-primary hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors flex items-center justify-center gap-2" onclick="openModal('Bomber Urban Bauhaus', '45 000 XAF', 'Veste bomber sur-mesure aux motifs géométriques inspirés de l\'art contemporain et du tissu local.')">
+<span class="material-symbols-outlined text-[16px]">visibility</span> Détails
+          </button>
+<a class="p-3 bg-primary-fixed text-on-primary-fixed border-2 border-primary hover:bg-secondary hover:text-on-secondary transition-colors" href="https://wa.me/237600000000?text=Bonjour,%20je%20souhaite%20commander%20le%20produit:%20Bomber%20Urban%20Bauhaus%20au%20prix%20de%2045%20000%20XAF" target="_blank" title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="product-card group bg-surface-container-lowest border-4 border-primary shadow-[6px_6px_0px_#1a1a1a] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#1a1a1a] transition-all flex flex-col justify-between" data-category="electronique">
+<div>
+<div class="relative overflow-hidden border-b-4 border-primary bg-surface-variant aspect-[4/3]">
+<div class="absolute top-3 left-3 z-10 bg-primary-fixed text-on-primary-fixed px-3 py-1 font-headline font-bold text-xs uppercase border-2 border-primary shadow-[2px_2px_0px_#1a1a1a]">
+              Best-Seller
+            </div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Minimalist product shot of a sleek black wireless bluetooth speaker with yellow Bauhaus accent details, sitting on a raw concrete block in a Douala loft." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0Yflx7beF2epHq6EZRszEwDgod5_sKrlCAg9rE__rZWSAZj5kk9qtn1R9EGXn0UjJvZPCDxJrhytM8lVxHScgxGM6PvWcIqbbLrepVoORoEmE1A290Wa_rSNxFEG946R8z0SXIR573NyKloXB-mihaONyx7orVLKsmn2AqKAu-46xQgWqrg__D0pHcmDmGgExTZIO9XusG09nlTAmvNBiYCTN-x4RpvwXfDfMJXZD')"></div>
+</div>
+<div class="p-6">
+<div class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">Électronique • Audio</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2 uppercase tracking-tight">Enceinte Solo K-Sound</h3>
+<p class="text-sm font-body text-on-surface-variant line-clamp-2 mb-4">Son haute fidélité, autonomie 24h, design brutaliste robuste adapté aux climats tropicaux.</p>
+<div class="text-2xl font-headline font-bold text-primary mb-4">30 000 XAF</div>
+</div>
+</div>
+<div class="p-6 pt-0 flex items-center gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary font-headline font-bold text-xs uppercase tracking-wider border-2 border-primary hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors flex items-center justify-center gap-2" onclick="openModal('Enceinte Solo K-Sound', '30 000 XAF', 'Son haute fidélité, autonomie 24h, design brutaliste robuste adapté aux climats tropicaux.')">
+<span class="material-symbols-outlined text-[16px]">visibility</span> Détails
+          </button>
+<a class="p-3 bg-primary-fixed text-on-primary-fixed border-2 border-primary hover:bg-secondary hover:text-on-secondary transition-colors" href="https://wa.me/237600000000?text=Bonjour,%20je%20souhaite%20commander%20le%20produit:%20Enceinte%20Solo%20K-Sound%20au%20prix%20de%2030%20000%20XAF" target="_blank" title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="product-card group bg-surface-container-lowest border-4 border-primary shadow-[6px_6px_0px_#1a1a1a] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#1a1a1a] transition-all flex flex-col justify-between" data-category="soin">
+<div>
+<div class="relative overflow-hidden border-b-4 border-primary bg-surface-variant aspect-[4/3]">
+<div class="absolute top-3 left-3 z-10 bg-tertiary text-on-tertiary px-3 py-1 font-headline font-bold text-xs uppercase border-2 border-primary shadow-[2px_2px_0px_#1a1a1a]">
+              Bio & Naturel
+            </div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A glass cosmetic bottle of organic shea butter body oil with minimalist typography label, surrounded by raw shea nuts and fresh green leaves on a warm sandy surface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4qYX4WXm-Yru30YYlU4v6lE7R4OUsuUeRBh3cJTMKJgEyG1IyslTXBwS1qus3WHthZoeqndPvCQf9Imq0lP3iJMaOrhdBqkn5ZwY-5qDdWM0O7BKYNgNEjez7HVLjnU5d0Nq-0Ke1REB1eRHanRl-PZ3Bgb7qfYNPoLD7SVz54jwWK8ALUASUBOEO1Vkx6SE0bBHLbuCAVX1R3OsqShui8-FCSuQO5Y4VFn88CwTf')"></div>
+</div>
+<div class="p-6">
+<div class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">Soin • Beauté</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2 uppercase tracking-tight">Huile de Karité Pure</h3>
+<p class="text-sm font-body text-on-surface-variant line-clamp-2 mb-4">Soin nourrissant intense pour le corps et les cheveux, pressé à froid au Cameroun. Flacon 250ml.</p>
+<div class="text-2xl font-headline font-bold text-primary mb-4">12 500 XAF</div>
+</div>
+</div>
+<div class="p-6 pt-0 flex items-center gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary font-headline font-bold text-xs uppercase tracking-wider border-2 border-primary hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors flex items-center justify-center gap-2" onclick="openModal('Huile de Karité Pure', '12 500 XAF', 'Soin nourrissant intense pour le corps et les cheveux, pressé à froid au Cameroun. Flacon 250ml.')">
+<span class="material-symbols-outlined text-[16px]">visibility</span> Détails
+          </button>
+<a class="p-3 bg-primary-fixed text-on-primary-fixed border-2 border-primary hover:bg-secondary hover:text-on-secondary transition-colors" href="https://wa.me/237600000000?text=Bonjour,%20je%20souhaite%20commander%20le%20produit:%20Huile%20de%20Karit%C3%A9%20Pure%20au%20prix%20de%2012%20500%20XAF" target="_blank" title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="product-card group bg-surface-container-lowest border-4 border-primary shadow-[6px_6px_0px_#1a1a1a] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#1a1a1a] transition-all flex flex-col justify-between" data-category="maison">
+<div>
+<div class="relative overflow-hidden border-b-4 border-primary bg-surface-variant aspect-[4/3]">
+<div class="absolute top-3 left-3 z-10 bg-secondary text-on-secondary px-3 py-1 font-headline font-bold text-xs uppercase border-2 border-primary shadow-[2px_2px_0px_#1a1a1a]">
+              Artisanal
+            </div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A handmade ceramic vase with bold black geometric stripes on an off-white clay body, positioned on a brutalist wooden table in a sunlit room in Douala." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCMn5lx9wLMHqFZGfrRhT5163y4r-LAGMCcLybPY9InFSskXvPoaGS00EQHF-AMyM_iaBd1Q0K0wAsnoLt03j42513li5OSsw9apdMiDfx2foiea4W1CpjfqxCA-FTVWhlqVBXSinfd-r-sPyaJsbV-zK53KnkVd7THrsO1FNaoePuwiJ0XRN_rt-GrkQ5mmwpYbt9kbG-rgDzXScsKbkksVsyMsahUkS77SPzmEk-_')"></div>
+</div>
+<div class="p-6">
+<div class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">Maison • Déco</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2 uppercase tracking-tight">Vase Céramique Ngoma</h3>
+<p class="text-sm font-body text-on-surface-variant line-clamp-2 mb-4">Pièce unique façonnée à la main par des artisans locaux, émaillage mat résistant.</p>
+<div class="text-2xl font-headline font-bold text-primary mb-4">25 000 XAF</div>
+</div>
+</div>
+<div class="p-6 pt-0 flex items-center gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary font-headline font-bold text-xs uppercase tracking-wider border-2 border-primary hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors flex items-center justify-center gap-2" onclick="openModal('Vase Céramique Ngoma', '25 000 XAF', 'Pièce unique façonnée à la main par des artisans locaux, émaillage mat résistant.')">
+<span class="material-symbols-outlined text-[16px]">visibility</span> Détails
+          </button>
+<a class="p-3 bg-primary-fixed text-on-primary-fixed border-2 border-primary hover:bg-secondary hover:text-on-secondary transition-colors" href="https://wa.me/237600000000?text=Bonjour,%20je%20souhaite%20commander%20le%20produit:%20Vase%20C%C3%A9ramique%20Ngoma%20au%20prix%20de%2025%20000%20XAF" target="_blank" title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="product-card group bg-surface-container-lowest border-4 border-primary shadow-[6px_6px_0px_#1a1a1a] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#1a1a1a] transition-all flex flex-col justify-between" data-category="mode">
+<div>
+<div class="relative overflow-hidden border-b-4 border-primary bg-surface-variant aspect-[4/3]">
+<div class="absolute top-3 left-3 z-10 bg-primary-fixed text-on-primary-fixed px-3 py-1 font-headline font-bold text-xs uppercase border-2 border-primary shadow-[2px_2px_0px_#1a1a1a]">
+              Édition Limitée
+            </div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A pair of stylish geometric sunglasses with thick black frames and yellow tinted lenses, displayed on a textured architectural concrete slab." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6HtKnzsQ_5NjGuiCTL8CLISZDxSltmvYaG6NwrHXmwdAjU6lEz5MwWH-henJxrXsl90cZnlkNe-4o9Hf22vgppP4cV6g3wfLDNjukTOAjtbVS0FwqoO76mz-cqebEDoBQoRyU0Kmvnz8rLHYuAKkWmWVhdTyUW1DnhdBs0E6VSIglP07ZWMbGnkNt9V9P6EtRL9-GT1m7r5AbSDXeesH7m9vaj682ATo-7OSy-24T')"></div>
+</div>
+<div class="p-6">
+<div class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">Mode • Accessoire</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2 uppercase tracking-tight">Lunettes Ouest-Africa</h3>
+<p class="text-sm font-body text-on-surface-variant line-clamp-2 mb-4">Monture acétate haute densité, verres polarisés anti-UV protection maximale.</p>
+<div class="text-2xl font-headline font-bold text-primary mb-4">18 000 XAF</div>
+</div>
+</div>
+<div class="p-6 pt-0 flex items-center gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary font-headline font-bold text-xs uppercase tracking-wider border-2 border-primary hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors flex items-center justify-center gap-2" onclick="openModal('Lunettes Ouest-Africa', '18 000 XAF', 'Monture acétate haute densité, verres polarisés anti-UV protection maximale.')">
+<span class="material-symbols-outlined text-[16px]">visibility</span> Détails
+          </button>
+<a class="p-3 bg-primary-fixed text-on-primary-fixed border-2 border-primary hover:bg-secondary hover:text-on-secondary transition-colors" href="https://wa.me/237600000000?text=Bonjour,%20je%20souhaite%20commander%20le%20produit:%20Lunettes%20Ouest-Africa%20au%20prix%20de%2018%20000%20XAF" target="_blank" title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="product-card group bg-surface-container-lowest border-4 border-primary shadow-[6px_6px_0px_#1a1a1a] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#1a1a1a] transition-all flex flex-col justify-between" data-category="electronique">
+<div>
+<div class="relative overflow-hidden border-b-4 border-primary bg-surface-variant aspect-[4/3]">
+<div class="absolute top-3 left-3 z-10 bg-secondary text-on-secondary px-3 py-1 font-headline font-bold text-xs uppercase border-2 border-primary shadow-[2px_2px_0px_#1a1a1a]">
+              Pro High-Tech
+            </div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A metallic power bank with fast charging ports, placed on a working desk in Yaoundé alongside a notebook and pen." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_Jm0Xrnvo-luWhfkhP89GsAtHHRMrZbAsKpncVaoD3JhxYzHdBM0uPu_tLWGmDmHq2izkVTIuCNBnlZAnnmhIM310acy6_fBmjS-cSKrnaipSKgQ8xCyc15Mzxa3eR9eWZNRUg-kHhd0gpUfaa26X6UjCDW3RWAsJ0EKoz2lWU0kOznm0chgzGWQNjRuI3L054cJwuToZ6KfkJ28OgIi8CiawAnhRdMKjuhCjG5Rd')"></div>
+</div>
+<div class="p-6">
+<div class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-wider mb-1">Électronique • Énergie</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2 uppercase tracking-tight">Powerbank Turbo 20000mAh</h3>
+<p class="text-sm font-body text-on-surface-variant line-clamp-2 mb-4">Charge ultra-rapide PD 65W, idéal pour ordinateurs portables et smartphones. Finition anti-chocs.</p>
+<div class="text-2xl font-headline font-bold text-primary mb-4">22 000 XAF</div>
+</div>
+</div>
+<div class="p-6 pt-0 flex items-center gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary font-headline font-bold text-xs uppercase tracking-wider border-2 border-primary hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors flex items-center justify-center gap-2" onclick="openModal('Powerbank Turbo 20000mAh', '22 000 XAF', 'Charge ultra-rapide PD 65W, idéal pour ordinateurs portables et smartphones. Finition anti-chocs.')">
+<span class="material-symbols-outlined text-[16px]">visibility</span> Détails
+          </button>
+<a class="p-3 bg-primary-fixed text-on-primary-fixed border-2 border-primary hover:bg-secondary hover:text-on-secondary transition-colors" href="https://wa.me/237600000000?text=Bonjour,%20je%20souhaite%20commander%20le%20produit:%20Powerbank%20Turbo%2020000mAh%20au%20prix%20de%2022%20000%20XAF" target="_blank" title="Commander sur WhatsApp">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Réassurance Logistique Locale (Yaoundé & Douala) -->
+<section class="bg-surface-container border-t-4 border-b-4 border-primary py-20 px-6 lg:px-12">
+<div class="max-w-7xl mx-auto">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<span class="inline-block bg-primary text-on-primary px-3 py-1 font-headline font-bold text-xs uppercase tracking-widest border-2 border-primary mb-3 shadow-[3px_3px_0px_#ffcc00]">Logistique & Confiance</span>
+<h2 class="text-4xl sm:text-5xl font-headline font-black uppercase tracking-tight text-primary">Service & Livraison au Cameroun</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-surface-container-lowest border-4 border-primary p-8 shadow-[6px_6px_0px_#1a1a1a] flex flex-col gap-4">
+<div class="w-16 h-16 bg-primary-fixed border-2 border-primary flex items-center justify-center text-on-primary-fixed font-headline font-bold text-2xl shadow-[3px_3px_0px_#1a1a1a]">
+<span class="material-symbols-outlined text-[32px]">location_city</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary uppercase">Yaoundé Express</h3>
+<p class="text-sm font-body text-on-surface-variant leading-relaxed">
+            Livraison à domicile ou au bureau en 24h chrono. Paiement à la réception en espèces ou Mobile Money (Orange / MTN).
+          </p>
+</div>
+<div class="bg-surface-container-lowest border-4 border-primary p-8 shadow-[6px_6px_0px_#1a1a1a] flex flex-col gap-4">
+<div class="w-16 h-16 bg-secondary text-on-secondary border-2 border-primary flex items-center justify-center font-headline font-bold text-2xl shadow-[3px_3px_0px_#1a1a1a]">
+<span class="material-symbols-outlined text-[32px]">local_shipping</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary uppercase">Douala & Autres Villes</h3>
+<p class="text-sm font-body text-on-surface-variant leading-relaxed">
+            Expédition rapide et sécurisée via agence de voyage agréée (General Express, Garanti, etc.) sous 48h maximum.
+          </p>
+</div>
+<div class="bg-surface-container-lowest border-4 border-primary p-8 shadow-[6px_6px_0px_#1a1a1a] flex flex-col gap-4">
+<div class="w-16 h-16 bg-tertiary text-on-tertiary border-2 border-primary flex items-center justify-center font-headline font-bold text-2xl shadow-[3px_3px_0px_#1a1a1a]">
+<span class="material-symbols-outlined text-[32px]">verified_user</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary uppercase">Garantie & Support</h3>
+<p class="text-sm font-body text-on-surface-variant leading-relaxed">
+            Service client réactif joignable directement par WhatsApp 7j/7 pour le suivi de vos commandes et SAV.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Detail Modal -->
+<div class="fixed inset-0 z-50 bg-primary/80 backdrop-blur-sm hidden items-center justify-center p-4" id="product-modal">
+<div class="bg-surface-container-lowest border-4 border-primary max-w-xl w-full p-8 shadow-[12px_12px_0px_#ffcc00] relative animate-in fade-in zoom-in duration-200">
+<button class="absolute top-4 right-4 w-10 h-10 bg-secondary text-on-secondary border-2 border-primary font-bold flex items-center justify-center shadow-[2px_2px_0px_#1a1a1a] hover:translate-x-0.5 hover:translate-y-0.5 transition-all" onclick="closeModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex flex-col gap-4">
+<div class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-wider">Maison Fotso • Fiche Produit</div>
+<h3 class="text-3xl font-headline font-black text-primary uppercase" id="modal-title">Nom du Produit</h3>
+<div class="text-3xl font-headline font-bold text-secondary" id="modal-price">00 000 XAF</div>
+<p class="text-sm font-body text-on-surface-variant leading-relaxed" id="modal-desc">Description détaillée du produit...</p>
+<div class="border-t-2 border-primary pt-4 mt-2">
+<div class="text-xs font-headline font-bold uppercase text-primary mb-2">Options de Livraison</div>
+<div class="grid grid-cols-2 gap-3 text-xs font-body text-on-surface-variant">
+<div class="p-2 border-2 border-primary bg-surface-container flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]">check</span> Yaoundé (24h)
+            </div>
+<div class="p-2 border-2 border-primary bg-surface-container flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]">check</span> Douala (48h)
+            </div>
+</div>
+</div>
+<div class="flex items-center gap-4 mt-4">
+<a class="flex-1 py-4 bg-primary-fixed text-on-primary-fixed font-headline font-bold text-sm uppercase tracking-wider border-2 border-primary shadow-[4px_4px_0px_#1a1a1a] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_#1a1a1a] transition-all flex items-center justify-center gap-3" href="#" id="modal-whatsapp-btn" target="_blank">
+<span class="material-symbols-outlined">chat</span> Commander sur WhatsApp
+          </a>
+</div>
+</div>
+</div>
+</div>
+<!-- Script for Filtering and Modal Interaction -->
+<script>
+    function filterProducts(category) {
+      const cards = document.querySelectorAll('.product-card');
+      const buttons = document.querySelectorAll('.category-btn');
+      let visibleCount = 0;
+
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-on-primary', 'shadow-[3px_3px_0px_#1a1a1a]');
+        btn.classList.add('bg-surface-container-lowest', 'text-on-surface');
+      });
+      event.currentTarget.classList.remove('bg-surface-container-lowest', 'text-on-surface');
+      event.currentTarget.classList.add('bg-primary', 'text-on-primary', 'shadow-[3px_3px_0px_#1a1a1a]');
+
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('product-count').textContent = visibleCount;
+    }
+
+    function openModal(title, price, desc) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-price').textContent = price;
+      document.getElementById('modal-desc').textContent = desc;
+      const waText = encodeURIComponent(`Bonjour Maison Fotso, je souhaite commander le produit: ${title} au prix de ${price}. Merci de m'indiquer les modalités de livraison.`);
+      document.getElementById('modal-whatsapp-btn').href = `https://wa.me/237600000000?text=${waText}`;
+      document.getElementById('product-modal').classList.remove('hidden');
+      document.getElementById('product-modal').classList.add('flex');
+    }
+
+    function closeModal() {
+      document.getElementById('product-modal').classList.remove('flex');
+      document.getElementById('product-modal').classList.add('hidden');
+    }
+
+    document.getElementById('product-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'product-modal') {
+        closeModal();
+      }
+    });
+  </script>
+</div></main><footer class="w-full bg-inverse-surface text-inverse-on-surface py-12 border-t-2 border-primary"><div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-6"><div class="font-headline text-xl font-bold uppercase tracking-wider">Marvens Shop</div><p class="text-sm text-surface-dim font-body">© 2024 Marvens Shop. Tous droits réservés. Design Bauhaus.</p><div class="flex gap-4"><a class="text-sm text-surface-dim hover:text-primary-fixed transition-colors" href="#">Mentions légales</a><a class="text-sm text-surface-dim hover:text-primary-fixed transition-colors" href="#">Contact</a></div></div></footer></body></html>

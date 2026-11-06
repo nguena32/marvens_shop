@@ -21,6 +21,7 @@ $router->get('/health', [HealthController::class, 'check'], 'health.check');
 $router->get('/', [StorefrontController::class, 'home'], 'storefront.home');
 $router->get('/catalogue', [StorefrontController::class, 'catalog'], 'storefront.catalog');
 $router->get('/produit/{slug}', [StorefrontController::class, 'product'], 'storefront.product');
+$router->get('/theme/preview/{theme}', [StorefrontController::class, 'previewTheme'], 'theme.preview');
 
 // 3. Panier & Checkout
 $router->get('/panier', [CartController::class, 'index'], 'cart.index');
@@ -48,9 +49,11 @@ $router->get('/admin/produits', [AdminController::class, 'products'], 'admin.pro
 $router->get('/admin/produits/nouveau', [AdminController::class, 'createProduct'], 'admin.product.create');
 $router->post('/admin/produits/nouveau', [AdminController::class, 'createProduct'], 'admin.product.store');
 
-// 7. Thèmes & Personnalisation
+// 7. Thèmes & Personnalisation (Exigence Module 2)
 $router->get('/admin/themes', [AdminController::class, 'themes'], 'admin.themes');
 $router->post('/admin/themes/activer', [AdminController::class, 'switchTheme'], 'admin.themes.switch');
+$router->post('/admin/themes/rollback', [AdminController::class, 'rollbackTheme'], 'admin.themes.rollback');
+$router->post('/admin/themes/reinitialiser', [AdminController::class, 'resetTheme'], 'admin.themes.reset');
 
 // 8. Importation Catalogue (CSV / Meta)
 $router->get('/admin/import', [AdminController::class, 'showImport'], 'admin.import');
