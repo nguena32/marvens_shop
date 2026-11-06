@@ -30,9 +30,15 @@ class CheckoutService
             throw new RuntimeException("Votre panier est vide. Impossible de valider la commande.");
         }
 
-        // Calcul des frais de livraison forfaitaires
+        // Calcul des frais de livraison selon la configuration dynamique (Section 5.3)
         $deliveryMode = $customerData['delivery_mode'] ?? 'delivery';
-        $deliveryCost = ($deliveryMode === 'delivery') ? 1500 : 0; // 1500 FCFA forfaitaire par défaut pour le MVP
+        $settingsService = new \App\Application\Services\SettingsService();
+        if ($deliveryMode === 'pickup') {
+            $deliveryCost = 0;
+        } else {
+            $district = $customerData['delivery_district'] ?? null;
+            $deliveryCost = $settingsService->calculateDeliveryFee($district, $calc['subtotal']);
+        }
         $totalAmount = $calc['subtotal'] + $deliveryCost;
 
         // Génération d'une référence unique immuable : #CMD-YYYYMMDD-XXXX
@@ -85,7 +91,9 @@ class CheckoutService
 
     public function generateWhatsAppLink(array $orderData, array $items): string
     {
-        $shopPhone = Config::get('app.whatsapp_number', '237699000000');
+        $settingsService = new \App\Application\Services\SettingsService();
+        $shopInfo = $settingsService->getShopInfo();
+        $shopPhone = !empty($shopInfo['whatsapp_number']) ? $shopInfo['whatsapp_number'] : Config::get('app.whatsapp_number', '237699000000');
         // Nettoyage du numéro de téléphone (uniquement chiffres)
         $cleanPhone = preg_replace('/[^0-9]/', '', (string)$shopPhone);
 
@@ -95,7 +103,32 @@ class CheckoutService
         $lines[] = "📋 Référence : *" . $orderData['order_number'] . "*";
         $lines[] = "👤 Client : " . $orderData['customer_name'];
         $lines[] = "📱 WhatsApp : " . $orderData['customer_whatsapp'];
-        $lines[] = "🚚 Réception : " . ($orderData['delivery_mode'] === 'pickup' ? 'Retrait en boutique' : 'Livraison à domicile (' . ($orderData['delivery_district'] ?? 'Quartier non précisé') . ')');
+        
+        $deliveryDetails = ($orderData['delivery_mode'] === 'pickup') 
+            ? 'Retrait en boutique' 
+            : 'Livraison à domicile';
+        if (!empty($orderData['delivery_city']) || !empty($orderData['delivery_district'])) {
+            $locationParts = array_filter([$orderData['delivery_district'] ?? null, $orderData['delivery_city'] ?? null]);
+            $deliveryDetails .= ' (' . implode(', ', $locationParts) . ')';
+        }
+        $lines[] = "🚚 Réception : " . $deliveryDetails;
+
+        if (!empty($orderData['delivery_address']) && $orderData['delivery_mode'] !== 'pickup') {
+            $lines[] = "📍 Adresse/Repère : " . $orderData['delivery_address'];
+        }
+        if (!empty($orderData['payment_mode'])) {
+            $paymentModeLabel = match($orderData['payment_mode']) {
+                'cash_on_delivery' => 'Paiement à la livraison',
+                'orange_money' => 'Orange Money',
+                'mtn_momo' => 'MTN Mobile Money',
+                default => $orderData['payment_mode']
+            };
+            $lines[] = "💳 Mode de règlement : " . $paymentModeLabel;
+        }
+        if (!empty($orderData['customer_notes'])) {
+            $lines[] = "📝 Instructions : " . $orderData['customer_notes'];
+        }
+
         $lines[] = "";
         $lines[] = "🛒 Articles commandés :";
 

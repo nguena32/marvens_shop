@@ -23,14 +23,36 @@
         <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'import' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/import">
             <span class="material-symbols-outlined mr-space-md">cloud_download</span>Importations
         </a>
-        <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'themes' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/themes">
-            <span class="material-symbols-outlined mr-space-md">palette</span>Thèmes & Modèles
+        <div class="pt-2 pb-1 px-space-md text-[11px] font-semibold tracking-wider text-outline uppercase">Paramètres Boutique</div>
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_shop' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/boutique">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">store</span>Informations Boutique
         </a>
-        <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'appearance' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/parametres/apparence">
-            <span class="material-symbols-outlined mr-space-md">format_paint</span>Couleurs & Apparence
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'themes' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/themes">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">palette</span>Thèmes & Modèles
         </a>
-        <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'typography' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/parametres/typographie">
-            <span class="material-symbols-outlined mr-space-md">match_case</span>Polices d'écriture
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'appearance' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/apparence">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">format_paint</span>Couleurs & Style
+        </a>
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'typography' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/typographie">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">match_case</span>Polices d'écriture
+        </a>
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_delivery' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/livraison">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">local_shipping</span>Livraison & Retrait
+        </a>
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_users' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/utilisateurs">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">group</span>Utilisateurs & Rôles
+        </a>
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_notifications' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/notifications">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">notifications</span>Notifications
+        </a>
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_integrations' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/integrations">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">hub</span>Applications & API
+        </a>
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_securite' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/securite">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">shield</span>Sécurité & Audit
+        </a>
+        <a class="flex items-center px-space-md py-space-xs rounded-xl <?= ($active_tab ?? '') === 'settings_analytics' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all text-sm" href="/admin/parametres/analytics">
+            <span class="material-symbols-outlined mr-space-md text-[20px]">query_stats</span>Analytics & Pixel
         </a>
     </nav>
     

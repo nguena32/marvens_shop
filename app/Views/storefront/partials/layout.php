@@ -135,6 +135,34 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link href="<?= htmlspecialchars($google_fonts_url ?? 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap') ?>" rel="stylesheet"/>
+    <?php if (!empty($shop_info['favicon_url'])): ?>
+        <link rel="icon" type="image/x-icon" href="<?= htmlspecialchars($shop_info['favicon_url']) ?>">
+    <?php endif; ?>
+    <?php if (!empty($analytics['ga_id'])): ?>
+        <!-- Google Analytics 4 (Module 5.8) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($analytics['ga_id']) ?>"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '<?= htmlspecialchars($analytics['ga_id']) ?>');
+        </script>
+    <?php endif; ?>
+    <?php if (!empty($analytics['pixel_id'])): ?>
+        <!-- Meta Pixel (Module 5.8) -->
+        <script>
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '<?= htmlspecialchars($analytics['pixel_id']) ?>');
+            fbq('track', 'PageView');
+        </script>
+    <?php endif; ?>
 </head>
 <body class="bg-background font-body text-on-surface antialiased flex flex-col min-h-screen">
 

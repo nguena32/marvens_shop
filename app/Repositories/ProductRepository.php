@@ -69,6 +69,46 @@ class ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function findAllAdmin(?int $categoryId = null, ?string $search = null, ?string $status = null): array
+    {
+        $sql = "SELECT p.*, c.name as category_name,
+                       (SELECT COUNT(*) FROM product_variants pv WHERE pv.product_id = p.id) as variants_count,
+                       (SELECT COALESCE(SUM(pv.stock_quantity), 0) FROM product_variants pv WHERE pv.product_id = p.id) as total_stock
+                FROM products p 
+                LEFT JOIN categories c ON p.category_id = c.id 
+                WHERE 1=1";
+        $params = [];
+
+        if ($categoryId !== null && $categoryId > 0) {
+            $sql .= " AND p.category_id = :cat_id";
+            $params['cat_id'] = $categoryId;
+        }
+
+        if ($search !== null && trim($search) !== '') {
+            $sql .= " AND (p.name LIKE :search OR p.description LIKE :search OR p.sku LIKE :search)";
+            $params['search'] = '%' . trim($search) . '%';
+        }
+
+        if ($status === 'active') {
+            $sql .= " AND p.is_active = 1";
+        } elseif ($status === 'inactive') {
+            $sql .= " AND p.is_active = 0";
+        } elseif ($status === 'promo') {
+            $sql .= " AND p.promotional_price IS NOT NULL AND p.promotional_price > 0";
+        } elseif ($status === 'featured') {
+            $sql .= " AND p.is_featured = 1";
+        }
+
+        $sql .= " ORDER BY p.created_at DESC, p.id DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($params as $paramKey => $paramVal) {
+            $stmt->bindValue(':' . $paramKey, $paramVal, is_int($paramVal) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function findSimilar(int $productId, ?int $categoryId, int $limit = 4): array
     {
         $sql = "SELECT p.*, c.name as category_name 
@@ -115,10 +155,21 @@ class ProductRepository
 
     public function findById(int $id): ?array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :id LIMIT 1");
+        $stmt = $this->pdo->prepare("SELECT p.*, c.name as category_name 
+                                      FROM products p 
+                                      LEFT JOIN categories c ON p.category_id = c.id 
+                                      WHERE p.id = :id LIMIT 1");
         $stmt->execute(['id' => $id]);
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $product ?: null;
+        if (!$product) {
+            return null;
+        }
+
+        $vStmt = $this->pdo->prepare("SELECT * FROM product_variants WHERE product_id = :p_id ORDER BY id ASC");
+        $vStmt->execute(['p_id' => $id]);
+        $product['variants'] = $vStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $product;
     }
 
     public function create(array $data): int
@@ -128,7 +179,7 @@ class ProductRepository
         
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
-            'category_id' => $data['category_id'] ?? null,
+            'category_id' => !empty($data['category_id']) ? (int) $data['category_id'] : null,
             'name' => $data['name'],
             'slug' => $data['slug'],
             'sku' => $data['sku'] ?? null,
@@ -141,7 +192,13 @@ class ProductRepository
             'meta_product_id' => $data['meta_product_id'] ?? null,
         ]);
 
-        return (int) $this->pdo->lastInsertId();
+        $productId = (int) $this->pdo->lastInsertId();
+
+        if (!empty($data['variants']) && is_array($data['variants'])) {
+            $this->syncVariants($productId, $data['variants']);
+        }
+
+        return $productId;
     }
 
     public function update(int $id, array $data): bool
@@ -160,9 +217,9 @@ class ProductRepository
                 WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([
+        $success = $stmt->execute([
             'id' => $id,
-            'category_id' => $data['category_id'] ?? null,
+            'category_id' => !empty($data['category_id']) ? (int) $data['category_id'] : null,
             'name' => $data['name'],
             'slug' => $data['slug'],
             'sku' => $data['sku'] ?? null,
@@ -173,11 +230,60 @@ class ProductRepository
             'is_active' => isset($data['is_active']) ? (int) $data['is_active'] : 1,
             'is_featured' => isset($data['is_featured']) ? (int) $data['is_featured'] : 0,
         ]);
+
+        if (isset($data['variants']) && is_array($data['variants'])) {
+            $this->syncVariants($id, $data['variants']);
+        }
+
+        return $success;
+    }
+
+    public function toggleActive(int $id): bool
+    {
+        $stmt = $this->pdo->prepare("UPDATE products SET is_active = CASE WHEN is_active = 1 THEN 0 ELSE 1 END WHERE id = :id");
+        return $stmt->execute(['id' => $id]);
+    }
+
+    public function toggleFeatured(int $id): bool
+    {
+        $stmt = $this->pdo->prepare("UPDATE products SET is_featured = CASE WHEN is_featured = 1 THEN 0 ELSE 1 END WHERE id = :id");
+        return $stmt->execute(['id' => $id]);
     }
 
     public function delete(int $id): bool
     {
+        // Supprimer d'abord les variantes
+        $vStmt = $this->pdo->prepare("DELETE FROM product_variants WHERE product_id = :id");
+        $vStmt->execute(['id' => $id]);
+
         $stmt = $this->pdo->prepare("DELETE FROM products WHERE id = :id");
         return $stmt->execute(['id' => $id]);
+    }
+
+    public function syncVariants(int $productId, array $variants): void
+    {
+        // Supprimer les anciennes variantes pour reconstruire
+        $delStmt = $this->pdo->prepare("DELETE FROM product_variants WHERE product_id = :pid");
+        $delStmt->execute(['pid' => $productId]);
+
+        $insStmt = $this->pdo->prepare("INSERT INTO product_variants 
+            (product_id, variant_name, size, color, price_override, stock_quantity, is_available)
+            VALUES (:pid, :name, :size, :color, :price, :stock, :available)");
+
+        foreach ($variants as $v) {
+            $name = trim((string)($v['variant_name'] ?? ''));
+            if ($name === '') {
+                continue;
+            }
+            $insStmt->execute([
+                'pid' => $productId,
+                'name' => $name,
+                'size' => !empty($v['size']) ? trim((string)$v['size']) : null,
+                'color' => !empty($v['color']) ? trim((string)$v['color']) : null,
+                'price' => !empty($v['price_override']) ? (int)$v['price_override'] : null,
+                'stock' => isset($v['stock_quantity']) ? (int)$v['stock_quantity'] : 0,
+                'available' => isset($v['is_available']) ? (int)$v['is_available'] : 1,
+            ]);
+        }
     }
 }

@@ -117,6 +117,9 @@ class CartService
                 'price' => $unitPrice,
                 'line_total' => $lineTotal,
                 'total' => $lineTotal,
+                'subtotal' => $lineTotal,
+                'product_name' => $product['name'],
+                'variant_name' => $item['variant_info'] ?? null,
                 'name' => $product['name'],
                 'image' => $item['main_image_url'] ?? $product['main_image_url'],
             ]);

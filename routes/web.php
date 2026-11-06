@@ -11,6 +11,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StorefrontController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\SettingsController;
 
 /** @var Router $router */
 
@@ -74,3 +75,35 @@ $router->post('/admin/parametres/typographie/reinitialiser', [AdminController::c
 // 8. Importation Catalogue (CSV / Meta)
 $router->get('/admin/import', [AdminController::class, 'showImport'], 'admin.import');
 $router->post('/admin/import/csv', [AdminController::class, 'processCsvImport'], 'admin.import.csv');
+
+// 9. Menu Paramètres — Configuration Complète (Sections 5.1 à 5.8)
+// 5.1 Informations Boutique
+$router->get('/admin/parametres/boutique', [SettingsController::class, 'shopInfo'], 'admin.settings.shop');
+$router->post('/admin/parametres/boutique', [SettingsController::class, 'saveShopInfo'], 'admin.settings.shop.save');
+
+// 5.3 Livraison et Retrait
+$router->get('/admin/parametres/livraison', [SettingsController::class, 'delivery'], 'admin.settings.delivery');
+$router->post('/admin/parametres/livraison', [SettingsController::class, 'saveDeliverySettings'], 'admin.settings.delivery.save');
+$router->post('/admin/parametres/livraison/zones/ajouter', [SettingsController::class, 'addDeliveryZone'], 'admin.settings.delivery.zone.add');
+$router->post('/admin/parametres/livraison/zones/{id}/supprimer', [SettingsController::class, 'deleteDeliveryZone'], 'admin.settings.delivery.zone.delete');
+
+// 5.4 Utilisateurs et Permissions
+$router->get('/admin/parametres/utilisateurs', [SettingsController::class, 'users'], 'admin.settings.users');
+$router->post('/admin/parametres/utilisateurs/ajouter', [SettingsController::class, 'createUser'], 'admin.settings.users.create');
+$router->post('/admin/parametres/utilisateurs/{id}/statut', [SettingsController::class, 'toggleUser'], 'admin.settings.users.toggle');
+
+// 5.5 Notifications
+$router->get('/admin/parametres/notifications', [SettingsController::class, 'notifications'], 'admin.settings.notifications');
+$router->post('/admin/parametres/notifications', [SettingsController::class, 'saveNotifications'], 'admin.settings.notifications.save');
+
+// 5.6 Applications et Intégrations
+$router->get('/admin/parametres/integrations', [SettingsController::class, 'integrations'], 'admin.settings.integrations');
+$router->post('/admin/parametres/integrations', [SettingsController::class, 'saveIntegrations'], 'admin.settings.integrations.save');
+
+// 5.7 Sécurité & Audit
+$router->get('/admin/parametres/securite', [SettingsController::class, 'security'], 'admin.settings.security');
+$router->post('/admin/parametres/securite/mot-de-passe', [SettingsController::class, 'updatePassword'], 'admin.settings.security.password');
+
+// 5.8 Analytics & Suivi
+$router->get('/admin/parametres/analytics', [SettingsController::class, 'analytics'], 'admin.settings.analytics');
+$router->post('/admin/parametres/analytics', [SettingsController::class, 'saveAnalytics'], 'admin.settings.analytics.save');
