@@ -154,10 +154,25 @@ class AdminController extends Controller
     public function products(Request $request): Response
     {
         if ($res = $this->requireAuth()) return $res;
-        $products = $this->productRepo->findAllActive();
+
+        $categoryId = $request->query('category_id') ? (int)$request->query('category_id') : null;
+        $search = $request->query('search') ? (string)$request->query('search') : null;
+        $status = $request->query('status') ? (string)$request->query('status') : null;
+
+        $products = $this->productRepo->findAllAdmin($categoryId, $search, $status);
+        $categories = $this->categoryRepo->findAll();
+
+        $feedback = Session::get('product_feedback');
+        Session::remove('product_feedback');
 
         return $this->render('admin.pages.products_list', [
             'products' => $products,
+            'categories' => $categories,
+            'current_category' => $categoryId,
+            'current_search' => $search,
+            'current_status' => $status,
+            'feedback' => $feedback,
+            'csrf_token' => Session::getCsrfToken(),
         ]);
     }
 
@@ -165,6 +180,7 @@ class AdminController extends Controller
     {
         if ($res = $this->requireAuth()) return $res;
 
+        $errors = [];
         if ($request->isMethod('POST')) {
             $this->validateCsrf($request);
             $data = $request->all();
@@ -189,14 +205,319 @@ class AdminController extends Controller
                 $data['main_image_url'] = $imageUrl;
                 $this->productRepo->create($data);
 
+                Session::set('product_feedback', [
+                    'type' => 'success',
+                    'message' => "Le produit '{$data['name']}' a été créé avec succès."
+                ]);
+
                 return $this->redirect('/admin/produits');
+            } else {
+                $errors = $validator->errors();
             }
         }
 
         $categories = $this->categoryRepo->findAllActive();
         return $this->render('admin.pages.product_form', [
             'categories' => $categories,
+            'product' => [],
+            'errors' => $errors,
+            'csrf_token' => Session::getCsrfToken(),
         ]);
+    }
+
+    public function editProduct(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $id = (int)($params['id'] ?? 0);
+        $product = $this->productRepo->findById($id);
+        if (!$product) {
+            return Response::html("<h1>404 — Produit introuvable</h1>", 404);
+        }
+
+        $categories = $this->categoryRepo->findAllActive();
+        return $this->render('admin.pages.product_form', [
+            'product' => $product,
+            'categories' => $categories,
+            'errors' => [],
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
+    }
+
+    public function updateProduct(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int)($params['id'] ?? 0);
+        $product = $this->productRepo->findById($id);
+        if (!$product) {
+            return Response::html("<h1>404 — Produit introuvable</h1>", 404);
+        }
+
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'name' => 'required|min:2',
+            'price' => 'required|numeric',
+        ]);
+
+        if (!$validator->validate()) {
+            $categories = $this->categoryRepo->findAllActive();
+            return $this->render('admin.pages.product_form', [
+                'product' => array_merge($product, $data),
+                'categories' => $categories,
+                'errors' => $validator->errors(),
+                'csrf_token' => Session::getCsrfToken(),
+            ]);
+        }
+
+        $imageFile = $request->file('image');
+        $imageUrl = $product['main_image_url'];
+        if ($imageFile && !empty($imageFile['tmp_name'])) {
+            try {
+                $imageUrl = $this->storage->storePublicUpload($imageFile, 'products');
+            } catch (\Exception $e) {
+                // Tolérance
+            }
+        }
+
+        $slug = !empty($data['slug']) ? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $data['slug']), '-')) : $product['slug'];
+        if ($slug === '') {
+            $slug = $product['slug'];
+        }
+
+        $data['slug'] = $slug;
+        $data['main_image_url'] = $imageUrl;
+        $data['is_active'] = isset($data['is_active']) ? 1 : 0;
+        $data['is_featured'] = isset($data['is_featured']) ? 1 : 0;
+
+        $this->productRepo->update($id, $data);
+
+        Session::set('product_feedback', [
+            'type' => 'success',
+            'message' => "Le produit '{$data['name']}' a été mis à jour avec succès."
+        ]);
+
+        return $this->redirect('/admin/produits');
+    }
+
+    public function toggleProductStatus(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int)($params['id'] ?? 0);
+        $this->productRepo->toggleActive($id);
+
+        Session::set('product_feedback', [
+            'type' => 'success',
+            'message' => "Statut de publication mis à jour avec succès."
+        ]);
+
+        return $this->redirect('/admin/produits');
+    }
+
+    public function toggleProductFeatured(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int)($params['id'] ?? 0);
+        $this->productRepo->toggleFeatured($id);
+
+        return $this->redirect('/admin/produits');
+    }
+
+    public function deleteProduct(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int)($params['id'] ?? 0);
+        $this->productRepo->delete($id);
+
+        Session::set('product_feedback', [
+            'type' => 'success',
+            'message' => "Le produit a été supprimé du catalogue."
+        ]);
+
+        return $this->redirect('/admin/produits');
+    }
+
+    // ==========================================
+    // 6.2 GESTION DES CATÉGORIES
+    // ==========================================
+
+    public function categories(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $categories = $this->categoryRepo->findAll();
+        $feedback = Session::get('category_feedback');
+        Session::remove('category_feedback');
+
+        return $this->render('admin.pages.categories_list', [
+            'categories' => $categories,
+            'feedback' => $feedback,
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
+    }
+
+    public function createCategory(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $errors = [];
+        if ($request->isMethod('POST')) {
+            $this->validateCsrf($request);
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'name' => 'required|min:2',
+            ]);
+
+            if ($validator->validate()) {
+                $imageFile = $request->file('image');
+                $imageUrl = null;
+                if ($imageFile && !empty($imageFile['tmp_name'])) {
+                    try {
+                        $imageUrl = $this->storage->storePublicUpload($imageFile, 'categories');
+                    } catch (\Exception $e) {
+                        // Tolérance
+                    }
+                }
+
+                $slug = !empty($data['slug']) ? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $data['slug']), '-')) : '';
+                if ($slug === '') {
+                    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $data['name']), '-')) . '-' . random_int(100, 999);
+                }
+
+                $data['slug'] = $slug;
+                $data['image_url'] = $imageUrl;
+                $data['is_active'] = isset($data['is_active']) ? 1 : 0;
+                $data['sort_order'] = (int)($data['sort_order'] ?? 0);
+
+                $this->categoryRepo->create($data);
+
+                Session::set('category_feedback', [
+                    'type' => 'success',
+                    'message' => "La catégorie '{$data['name']}' a été créée avec succès."
+                ]);
+
+                return $this->redirect('/admin/categories');
+            } else {
+                $errors = $validator->errors();
+            }
+        }
+
+        return $this->render('admin.pages.category_form', [
+            'category' => [],
+            'errors' => $errors,
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
+    }
+
+    public function editCategory(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $id = (int)($params['id'] ?? 0);
+        $category = $this->categoryRepo->findById($id);
+        if (!$category) {
+            return Response::html("<h1>404 — Catégorie introuvable</h1>", 404);
+        }
+
+        return $this->render('admin.pages.category_form', [
+            'category' => $category,
+            'errors' => [],
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
+    }
+
+    public function updateCategory(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int)($params['id'] ?? 0);
+        $category = $this->categoryRepo->findById($id);
+        if (!$category) {
+            return Response::html("<h1>404 — Catégorie introuvable</h1>", 404);
+        }
+
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'name' => 'required|min:2',
+        ]);
+
+        if (!$validator->validate()) {
+            return $this->render('admin.pages.category_form', [
+                'category' => array_merge($category, $data),
+                'errors' => $validator->errors(),
+                'csrf_token' => Session::getCsrfToken(),
+            ]);
+        }
+
+        $imageFile = $request->file('image');
+        $imageUrl = $category['image_url'];
+        if ($imageFile && !empty($imageFile['tmp_name'])) {
+            try {
+                $imageUrl = $this->storage->storePublicUpload($imageFile, 'categories');
+            } catch (\Exception $e) {
+                // Tolérance
+            }
+        }
+
+        $slug = !empty($data['slug']) ? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $data['slug']), '-')) : $category['slug'];
+        if ($slug === '') {
+            $slug = $category['slug'];
+        }
+
+        $data['slug'] = $slug;
+        $data['image_url'] = $imageUrl;
+        $data['is_active'] = isset($data['is_active']) ? 1 : 0;
+        $data['sort_order'] = (int)($data['sort_order'] ?? 0);
+
+        $this->categoryRepo->update($id, $data);
+
+        Session::set('category_feedback', [
+            'type' => 'success',
+            'message' => "La catégorie '{$data['name']}' a été mise à jour avec succès."
+        ]);
+
+        return $this->redirect('/admin/categories');
+    }
+
+    public function toggleCategoryStatus(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int)($params['id'] ?? 0);
+        $this->categoryRepo->toggleActive($id);
+
+        Session::set('category_feedback', [
+            'type' => 'success',
+            'message' => "Statut de visibilité de la catégorie mis à jour."
+        ]);
+
+        return $this->redirect('/admin/categories');
+    }
+
+    public function deleteCategory(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int)($params['id'] ?? 0);
+        $this->categoryRepo->delete($id);
+
+        Session::set('category_feedback', [
+            'type' => 'success',
+            'message' => "La catégorie a été supprimée. Les articles liés sont désormais sans catégorie."
+        ]);
+
+        return $this->redirect('/admin/categories');
     }
 
     public function themes(Request $request): Response
@@ -465,10 +786,33 @@ class AdminController extends Controller
         $report = Session::get('import_report');
         Session::remove('import_report');
 
+        $metaCatalogs = [];
+        $metaStatus = $this->metaConnector->getStatus();
+        if (!empty($metaStatus['connected'])) {
+            $metaCatalogs = $this->metaConnector->getCatalogs();
+        }
+
+        $previewProducts = Session::get('meta_preview_products');
+        Session::remove('meta_preview_products');
+
         return $this->render('admin.pages.import', [
             'report' => $report,
-            'meta_status' => $this->metaConnector->getStatus(),
+            'meta_status' => $metaStatus,
+            'meta_catalogs' => $metaCatalogs,
+            'meta_preview_products' => $previewProducts,
+            'csrf_token' => Session::getCsrfToken(),
         ]);
+    }
+
+    public function downloadImportTemplate(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $csv = $this->csvImport->generateTemplateCsv();
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="modele_import_produits_marvens.csv"');
+        echo $csv;
+        exit;
     }
 
     public function processCsvImport(Request $request): Response
@@ -476,9 +820,9 @@ class AdminController extends Controller
         if ($res = $this->requireAuth()) return $res;
         $this->validateCsrf($request);
 
-        $file = $request->file('csv_file');
+        $file = $request->file('import_file') ?: $request->file('csv_file');
         if (!$file || empty($file['tmp_name'])) {
-            Session::set('import_report', ['errors' => ['Veuillez sélectionner un fichier CSV valide.']]);
+            Session::set('import_report', ['errors' => ['Veuillez sélectionner un fichier CSV ou Excel (.xlsx) valide.']]);
             return $this->redirect('/admin/import');
         }
 
@@ -488,6 +832,171 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             Session::set('import_report', ['errors' => [$e->getMessage()]]);
         }
+
+        return $this->redirect('/admin/import');
+    }
+
+    // ==========================================
+    // 6.4 IMPORT & SYNCHRONISATION META CATALOG
+    // ==========================================
+
+    public function metaConnect(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        if (!$this->metaConnector->isConfigured()) {
+            // Mode simulation avec token local pour tester le parcours même sans app Meta validée
+            Session::set('meta_access_token', 'EAAB_MOCK_TOKEN_' . bin2hex(random_bytes(8)));
+            Session::set('import_report', [
+                'created' => 0,
+                'updated' => 0,
+                'errors' => ["Connexion de démonstration activée avec succès pour le test du catalogue Meta."]
+            ]);
+            return $this->redirect('/admin/import');
+        }
+
+        try {
+            $authUrl = $this->metaConnector->getAuthorizationUrl();
+            return Response::redirect($authUrl);
+        } catch (\Exception $e) {
+            Session::set('import_report', ['errors' => [$e->getMessage()]]);
+            return $this->redirect('/admin/import');
+        }
+    }
+
+    public function metaCallback(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $code = (string)$request->query('code');
+        $state = (string)$request->query('state');
+
+        try {
+            $this->metaConnector->handleOAuthCallback($code, $state);
+            Session::set('import_report', [
+                'created' => 0,
+                'updated' => 0,
+                'errors' => ["Authentification Meta réussie. Vos catalogues sont désormais accessibles."]
+            ]);
+        } catch (\Exception $e) {
+            Session::set('import_report', ['errors' => ["Erreur OAuth Meta : " . $e->getMessage()]]);
+        }
+
+        return $this->redirect('/admin/import');
+    }
+
+    public function metaPreview(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $catalogId = (string)$request->query('catalog_id');
+        $products = $this->metaConnector->fetchCatalogProducts($catalogId);
+        Session::set('meta_preview_products', $products);
+
+        return $this->redirect('/admin/import');
+    }
+
+    public function metaSync(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $catalogId = (string)$request->input('catalog_id');
+        $products = $this->metaConnector->fetchCatalogProducts($catalogId);
+
+        $created = 0;
+        $updated = 0;
+        $errors = [];
+
+        // Cache des catégories
+        $categories = $this->categoryRepo->findAll();
+        $catMap = [];
+        foreach ($categories as $cat) {
+            $catMap[strtolower($cat['name'])] = (int)$cat['id'];
+        }
+
+        foreach ($products as $mp) {
+            $name = trim((string)$mp['name']);
+            $retailerId = trim((string)($mp['retailer_id'] ?? ''));
+            $price = (int)$mp['price'];
+            $promoPrice = !empty($mp['sale_price']) ? (int)$mp['sale_price'] : null;
+
+            // Catégorie
+            $catId = null;
+            if (!empty($mp['category'])) {
+                $cLower = strtolower($mp['category']);
+                if (isset($catMap[$cLower])) {
+                    $catId = $catMap[$cLower];
+                } else {
+                    $catId = $this->categoryRepo->create([
+                        'name' => $mp['category'],
+                        'slug' => strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $mp['category']), '-')),
+                        'sort_order' => 10,
+                        'is_active' => 1,
+                    ]);
+                    $catMap[$cLower] = $catId;
+                }
+            }
+
+            // Recherche par meta_product_id ou SKU
+            $pdo = Database::getConnection();
+            $stmt = $pdo->prepare("SELECT * FROM products WHERE meta_product_id = :mid OR sku = :sku LIMIT 1");
+            $stmt->execute(['mid' => $retailerId, 'sku' => $retailerId]);
+            $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($existing) {
+                $this->productRepo->update((int)$existing['id'], [
+                    'category_id' => $catId ?: $existing['category_id'],
+                    'name' => $name,
+                    'slug' => $existing['slug'],
+                    'sku' => $retailerId ?: $existing['sku'],
+                    'description' => $mp['description'] ?? $existing['description'],
+                    'price' => $price,
+                    'promotional_price' => $promoPrice,
+                    'main_image_url' => $mp['image_url'] ?? $existing['main_image_url'],
+                    'is_active' => $existing['is_active'],
+                    'is_featured' => $existing['is_featured'],
+                ]);
+                $updated++;
+            } else {
+                $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-')) . '-' . random_int(100, 999);
+                $this->productRepo->create([
+                    'category_id' => $catId,
+                    'name' => $name,
+                    'slug' => $slug,
+                    'sku' => $retailerId,
+                    'description' => $mp['description'] ?? null,
+                    'price' => $price,
+                    'promotional_price' => $promoPrice,
+                    'main_image_url' => $mp['image_url'] ?? null,
+                    'is_active' => 1,
+                    'is_featured' => 0,
+                    'meta_product_id' => $retailerId,
+                ]);
+                $created++;
+            }
+        }
+
+        Session::set('import_report', [
+            'created' => $created,
+            'updated' => $updated,
+            'errors' => $errors,
+        ]);
+
+        return $this->redirect('/admin/import');
+    }
+
+    public function metaDisconnect(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $this->metaConnector->disconnect();
+        Session::set('import_report', [
+            'created' => 0,
+            'updated' => 0,
+            'errors' => ["Compte Meta déconnecté avec succès."]
+        ]);
 
         return $this->redirect('/admin/import');
     }

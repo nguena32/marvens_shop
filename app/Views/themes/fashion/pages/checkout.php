@@ -68,17 +68,29 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="delivery_district">Quartier ou Ville</label>
-                        <input type="text" id="delivery_district" name="delivery_district" placeholder="Ex: Douala - Akwa, Bonapriso, Bastos...">
+                        <label for="delivery_city">Ville *</label>
+                        <input type="text" id="delivery_city" name="delivery_city" required value="Douala" placeholder="Ex: Douala, Yaoundé...">
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery_district">Quartier</label>
+                        <input type="text" id="delivery_district" name="delivery_district" placeholder="Ex: Akwa, Bonapriso, Bastos...">
                     </div>
                     <div class="form-group">
                         <label for="delivery_address">Repère ou adresse précise</label>
                         <input type="text" id="delivery_address" name="delivery_address" placeholder="Ex: Face Boulangerie, Immeuble Blanc, 2ème étage">
                     </div>
 
-                    <h2 class="section-subtitle" style="margin-top: 1.5rem;">3. Instructions & Notes</h2>
+                    <h2 class="section-subtitle" style="margin-top: 1.5rem;">3. Mode de règlement & Instructions</h2>
                     <div class="form-group">
-                        <label for="customer_notes">Commentaire éventuel</label>
+                        <label for="payment_mode">Mode de règlement *</label>
+                        <select id="payment_mode" name="payment_mode">
+                            <option value="cash_on_delivery">Paiement à la livraison / à réception (Espèces)</option>
+                            <option value="orange_money">Orange Money (Après validation WhatsApp)</option>
+                            <option value="mtn_momo">MTN Mobile Money (Après validation WhatsApp)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_notes">Commentaire ou instructions éventuelles</label>
                         <textarea id="customer_notes" name="customer_notes" rows="2" placeholder="Précisions sur la taille, horaires souhaités..."></textarea>
                     </div>
                 </div>

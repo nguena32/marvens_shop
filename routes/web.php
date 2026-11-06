@@ -51,10 +51,24 @@ $router->get('/admin/commandes', [AdminController::class, 'orders'], 'admin.orde
 $router->get('/admin/commandes/{id}', [AdminController::class, 'orderDetail'], 'admin.order.detail');
 $router->post('/admin/commandes/{id}/statut', [AdminController::class, 'updateOrderStatus'], 'admin.order.status');
 
-// 6. Catalogue Admin
+// 6. Catalogue Admin & Produits
 $router->get('/admin/produits', [AdminController::class, 'products'], 'admin.products');
 $router->get('/admin/produits/nouveau', [AdminController::class, 'createProduct'], 'admin.product.create');
 $router->post('/admin/produits/nouveau', [AdminController::class, 'createProduct'], 'admin.product.store');
+$router->get('/admin/produits/{id}/modifier', [AdminController::class, 'editProduct'], 'admin.product.edit');
+$router->post('/admin/produits/{id}/modifier', [AdminController::class, 'updateProduct'], 'admin.product.update');
+$router->post('/admin/produits/{id}/statut', [AdminController::class, 'toggleProductStatus'], 'admin.product.status');
+$router->post('/admin/produits/{id}/featured', [AdminController::class, 'toggleProductFeatured'], 'admin.product.featured');
+$router->post('/admin/produits/{id}/supprimer', [AdminController::class, 'deleteProduct'], 'admin.product.delete');
+
+// 6.2 Catégories Admin
+$router->get('/admin/categories', [AdminController::class, 'categories'], 'admin.categories');
+$router->get('/admin/categories/nouvelle', [AdminController::class, 'createCategory'], 'admin.category.create');
+$router->post('/admin/categories/nouvelle', [AdminController::class, 'createCategory'], 'admin.category.store');
+$router->get('/admin/categories/{id}/modifier', [AdminController::class, 'editCategory'], 'admin.category.edit');
+$router->post('/admin/categories/{id}/modifier', [AdminController::class, 'updateCategory'], 'admin.category.update');
+$router->post('/admin/categories/{id}/statut', [AdminController::class, 'toggleCategoryStatus'], 'admin.category.status');
+$router->post('/admin/categories/{id}/supprimer', [AdminController::class, 'deleteCategory'], 'admin.category.delete');
 
 // 7. Thèmes & Personnalisation (Exigences Modules 2 & 3)
 $router->get('/admin/themes', [AdminController::class, 'themes'], 'admin.themes');
@@ -72,9 +86,17 @@ $router->get('/admin/parametres/typographie', [AdminController::class, 'typograp
 $router->post('/admin/parametres/typographie', [AdminController::class, 'saveTypographySettings'], 'admin.settings.typography.save');
 $router->post('/admin/parametres/typographie/reinitialiser', [AdminController::class, 'resetTypographySettings'], 'admin.settings.typography.reset');
 
-// 8. Importation Catalogue (CSV / Meta)
+// 8. Importation Catalogue (CSV / Excel / Meta)
 $router->get('/admin/import', [AdminController::class, 'showImport'], 'admin.import');
+$router->get('/admin/import/modele', [AdminController::class, 'downloadImportTemplate'], 'admin.import.template');
 $router->post('/admin/import/csv', [AdminController::class, 'processCsvImport'], 'admin.import.csv');
+
+// 8.1 Synchronisation Meta OAuth
+$router->get('/admin/import/meta/connect', [AdminController::class, 'metaConnect'], 'admin.import.meta.connect');
+$router->get('/admin/import/meta/callback', [AdminController::class, 'metaCallback'], 'admin.import.meta.callback');
+$router->get('/admin/import/meta/preview', [AdminController::class, 'metaPreview'], 'admin.import.meta.preview');
+$router->post('/admin/import/meta/sync', [AdminController::class, 'metaSync'], 'admin.import.meta.sync');
+$router->post('/admin/import/meta/disconnect', [AdminController::class, 'metaDisconnect'], 'admin.import.meta.disconnect');
 
 // 9. Menu Paramètres — Configuration Complète (Sections 5.1 à 5.8)
 // 5.1 Informations Boutique

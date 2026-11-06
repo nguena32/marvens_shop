@@ -14,6 +14,9 @@
         <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'products' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/produits">
             <span class="material-symbols-outlined mr-space-md">inventory_2</span>Catalogue
         </a>
+        <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'categories' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/categories">
+            <span class="material-symbols-outlined mr-space-md">folder</span>Catégories
+        </a>
         <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'orders' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/commandes">
             <span class="material-symbols-outlined mr-space-md">shopping_bag</span>Commandes
             <?php if (($pending_orders ?? 0) > 0): ?>

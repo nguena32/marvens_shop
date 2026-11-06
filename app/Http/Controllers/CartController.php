@@ -118,12 +118,19 @@ class CartController extends Controller
         }
 
         $errors = Session::get('checkout_errors', []);
+        $oldInput = Session::get('checkout_old', []);
         Session::remove('checkout_errors');
+        Session::remove('checkout_old');
+
+        $settingsService = new \App\Application\Services\SettingsService();
+        $deliverySettings = $settingsService->getDeliverySettings();
 
         return $this->renderStorefront('storefront.pages.checkout', [
             'title' => 'Validation de commande',
             'cart' => $calc,
             'errors' => $errors,
+            'old' => $oldInput,
+            'delivery_settings' => $deliverySettings,
         ]);
     }
 
@@ -136,10 +143,12 @@ class CartController extends Controller
             'customer_name' => 'required|min:2',
             'customer_whatsapp' => 'required|min:8',
             'delivery_mode' => 'required|in:delivery,pickup',
+            'delivery_city' => 'required|min:2',
         ]);
 
         if ($validator->fails()) {
             Session::set('checkout_errors', $validator->getErrors());
+            Session::set('checkout_old', $data);
             return $this->redirect('/checkout');
         }
 
@@ -148,6 +157,7 @@ class CartController extends Controller
             return $this->redirect('/commande/confirmation/' . $result['order_number']);
         } catch (Exception $e) {
             Session::set('checkout_errors', ['global' => [$e->getMessage()]]);
+            Session::set('checkout_old', $data);
             return $this->redirect('/checkout');
         }
     }

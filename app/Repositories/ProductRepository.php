@@ -165,9 +165,14 @@ class ProductRepository
             return null;
         }
 
-        $vStmt = $this->pdo->prepare("SELECT * FROM product_variants WHERE product_id = :p_id ORDER BY id ASC");
-        $vStmt->execute(['p_id' => $id]);
-        $product['variants'] = $vStmt->fetchAll(PDO::FETCH_ASSOC);
+        $product['variants'] = [];
+        try {
+            $vStmt = $this->pdo->prepare("SELECT * FROM product_variants WHERE product_id = :p_id ORDER BY id ASC");
+            $vStmt->execute(['p_id' => $id]);
+            $product['variants'] = $vStmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            // Tolérance si la table product_variants n'est pas encore initialisée
+        }
 
         return $product;
     }

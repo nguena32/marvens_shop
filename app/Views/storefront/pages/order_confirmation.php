@@ -32,14 +32,58 @@ $themeId = $theme ? $theme->getId() : 'fashion';
                 <span class="font-semibold text-on-surface"><?= htmlspecialchars($order['customer_whatsapp'] ?? '') ?></span>
             </div>
             <div class="flex justify-between">
+                <span class="text-outline">Mode de réception :</span>
+                <span class="font-semibold text-on-surface">
+                    <?= ($order['delivery_mode'] ?? '') === 'pickup' ? 'Retrait en boutique (Gratuit)' : 'Livraison à domicile (' . htmlspecialchars($order['delivery_city'] ?? 'Douala') . (!empty($order['delivery_district']) ? ', ' . htmlspecialchars($order['delivery_district']) : '') . ')' ?>
+                </span>
+            </div>
+            <?php if (!empty($order['delivery_address']) && ($order['delivery_mode'] ?? '') !== 'pickup'): ?>
+                <div class="flex justify-between">
+                    <span class="text-outline">Adresse / Repère :</span>
+                    <span class="text-on-surface font-medium"><?= htmlspecialchars($order['delivery_address']) ?></span>
+                </div>
+            <?php endif; ?>
+            <div class="flex justify-between">
+                <span class="text-outline">Frais de livraison :</span>
+                <span class="font-medium text-on-surface"><?= number_format((float)($order['delivery_cost'] ?? 0), 0, ',', ' ') ?> FCFA</span>
+            </div>
+            <div class="flex justify-between">
                 <span class="text-outline">Montant total :</span>
                 <span class="font-bold text-primary"><?= number_format((float)($order['total_amount'] ?? 0), 0, ',', ' ') ?> FCFA</span>
             </div>
             <div class="flex justify-between">
                 <span class="text-outline">Mode de paiement :</span>
-                <span class="text-on-surface font-medium">Paiement à la livraison</span>
+                <span class="text-on-surface font-medium">
+                    <?php
+                        $pm = $order['payment_mode'] ?? 'cash_on_delivery';
+                        echo match($pm) {
+                            'cash_on_delivery' => 'Paiement à la livraison (Espèces)',
+                            'orange_money' => 'Orange Money',
+                            'mtn_momo' => 'MTN Mobile Money',
+                            default => htmlspecialchars($pm)
+                        };
+                    ?>
+                </span>
             </div>
         </div>
+
+        <?php if (!empty($items)): ?>
+            <div class="p-4 rounded-xl bg-surface border border-border text-left text-xs space-y-2">
+                <h4 class="font-headline font-bold text-on-surface border-b border-border pb-2">Articles commandés</h4>
+                <?php foreach ($items as $it): ?>
+                    <div class="flex justify-between items-center py-1">
+                        <div>
+                            <span class="font-bold"><?= (int)$it['quantity'] ?>x</span>
+                            <span><?= htmlspecialchars($it['product_name']) ?></span>
+                            <?php if (!empty($it['variant_info'])): ?>
+                                <span class="text-[10px] text-outline block">(<?= htmlspecialchars($it['variant_info']) ?>)</span>
+                            <?php endif; ?>
+                        </div>
+                        <span class="font-bold"><?= number_format((float)$it['subtotal'], 0, ',', ' ') ?> FCFA</span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
         <?php if (!empty($whatsapp_url)): ?>
             <div class="space-y-3 pt-2">

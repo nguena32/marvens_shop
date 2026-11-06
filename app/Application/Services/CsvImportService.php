@@ -119,11 +119,11 @@ class CsvImportService
         $firstLine = array_shift($lines);
         $delimiter = str_contains($firstLine, ';') ? ';' : (str_contains($firstLine, "\t") ? "\t" : ',');
 
-        $header = str_getcsv($firstLine, $delimiter);
+        $header = str_getcsv($firstLine, $delimiter, '"', '\\');
         $rows = [$header];
         foreach ($lines as $line) {
             if (trim($line) === '') continue;
-            $rows[] = str_getcsv($line, $delimiter);
+            $rows[] = str_getcsv($line, $delimiter, '"', '\\');
         }
 
         return $this->processStructuredRows($rows);
@@ -265,7 +265,7 @@ class CsvImportService
 
         $output = fopen('php://temp', 'r+');
         foreach ($rows as $row) {
-            fputcsv($output, $row, ';');
+            fputcsv($output, $row, ';', '"', '\\');
         }
         rewind($output);
         $csv = stream_get_contents($output);
