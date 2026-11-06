@@ -26,11 +26,11 @@ class OrderRepository
         try {
             $sql = "INSERT INTO orders (
                         order_number, customer_name, customer_whatsapp, delivery_mode, 
-                        delivery_city, delivery_district, delivery_address, delivery_cost, 
+                        delivery_city, delivery_district, delivery_address, delivery_date, delivery_cost, 
                         total_amount, order_status, payment_status, payment_mode, customer_notes
                     ) VALUES (
                         :order_number, :customer_name, :customer_whatsapp, :delivery_mode, 
-                        :delivery_city, :delivery_district, :delivery_address, :delivery_cost, 
+                        :delivery_city, :delivery_district, :delivery_address, :delivery_date, :delivery_cost, 
                         :total_amount, :order_status, :payment_status, :payment_mode, :customer_notes
                     )";
 
@@ -43,6 +43,7 @@ class OrderRepository
                 'delivery_city' => $orderData['delivery_city'] ?? null,
                 'delivery_district' => $orderData['delivery_district'] ?? null,
                 'delivery_address' => $orderData['delivery_address'] ?? null,
+                'delivery_date' => !empty($orderData['delivery_date']) ? $orderData['delivery_date'] : null,
                 'delivery_cost' => (int) ($orderData['delivery_cost'] ?? 0),
                 'total_amount' => (int) $orderData['total_amount'],
                 'order_status' => $orderData['order_status'] ?? Order::STATUS_PENDING,

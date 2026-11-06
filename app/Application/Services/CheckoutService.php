@@ -52,6 +52,7 @@ class CheckoutService
             'delivery_city' => $customerData['delivery_city'] ?? 'Douala',
             'delivery_district' => $customerData['delivery_district'] ?? null,
             'delivery_address' => $customerData['delivery_address'] ?? null,
+            'delivery_date' => !empty($customerData['delivery_date']) ? trim($customerData['delivery_date']) : null,
             'delivery_cost' => $deliveryCost,
             'total_amount' => $totalAmount,
             'order_status' => 'pending',
@@ -123,6 +124,11 @@ class CheckoutService
 
         if (!empty($orderData['delivery_address']) && $orderData['delivery_mode'] !== 'pickup') {
             $lines[] = "📍 Adresse/Repère : " . $orderData['delivery_address'];
+        }
+        if (!empty($orderData['delivery_date'])) {
+            $formattedDate = date('d/m/Y', strtotime($orderData['delivery_date']));
+            $labelDate = ($orderData['delivery_mode'] === 'pickup') ? "📅 Date de retrait souhaitée : " : "📅 Date de livraison souhaitée : ";
+            $lines[] = $labelDate . "*" . $formattedDate . "*";
         }
         if (!empty($orderData['payment_mode'])) {
             $paymentModeLabel = match($orderData['payment_mode']) {

@@ -43,6 +43,14 @@ $themeId = $theme ? $theme->getId() : 'fashion';
                     <span class="text-on-surface font-medium"><?= htmlspecialchars($order['delivery_address']) ?></span>
                 </div>
             <?php endif; ?>
+            <?php if (!empty($order['delivery_date'])): ?>
+                <div class="flex justify-between">
+                    <span class="text-outline">Date souhaitée :</span>
+                    <span class="text-on-surface font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">
+                        <?= date('d/m/Y', strtotime($order['delivery_date'])) ?>
+                    </span>
+                </div>
+            <?php endif; ?>
             <div class="flex justify-between">
                 <span class="text-outline">Frais de livraison :</span>
                 <span class="font-medium text-on-surface"><?= number_format((float)($order['delivery_cost'] ?? 0), 0, ',', ' ') ?> FCFA</span>

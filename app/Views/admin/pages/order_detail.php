@@ -194,6 +194,9 @@ $active_tab = 'orders';
                                 <div class="flex justify-between"><span class="text-outline">Ville & Quartier :</span> <span class="font-semibold"><?= htmlspecialchars($order['delivery_city'] ?? '') ?> (<?= htmlspecialchars($order['delivery_district'] ?? 'N/A') ?>)</span></div>
                                 <div class="flex justify-between"><span class="text-outline">Adresse / Repère :</span> <span class="text-right max-w-xs"><?= htmlspecialchars($order['delivery_address'] ?? 'Non précisé') ?></span></div>
                             <?php endif; ?>
+                            <?php if (!empty($order['delivery_date'])): ?>
+                                <div class="flex justify-between items-center"><span class="text-outline">Date souhaitée :</span> <span class="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded text-xs"><?= date('d/m/Y', strtotime($order['delivery_date'])) ?></span></div>
+                            <?php endif; ?>
                             <?php if (!empty($order['customer_notes'])): ?>
                                 <div class="p-3 bg-amber-50 text-amber-900 border border-amber-200 rounded-xl text-xs mt-3">
                                     <strong>Instructions du client :</strong><br>

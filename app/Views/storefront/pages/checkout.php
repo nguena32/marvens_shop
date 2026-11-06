@@ -131,6 +131,15 @@ $old = $old ?? [];
                     <label class="block text-xs font-semibold text-on-surface mb-1" for="delivery_address">Adresse / Repère précis</label>
                     <textarea id="delivery_address" name="delivery_address" rows="2" placeholder="Ex: Face Boulangerie de la Paix, Immeuble vitré, 2ème étage..." class="w-full px-3 py-2 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"><?= htmlspecialchars($old['delivery_address'] ?? '') ?></textarea>
                 </div>
+
+                <!-- Date de livraison souhaitée -->
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface mb-1" for="delivery_date">
+                        Date souhaitée pour la livraison / réception (facultatif)
+                    </label>
+                    <input type="date" id="delivery_date" name="delivery_date" min="<?= date('Y-m-d') ?>" value="<?= htmlspecialchars($old['delivery_date'] ?? '') ?>" class="w-full px-3 py-2.5 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                    <p class="text-[11px] text-outline mt-1">Indiquez le jour où vous désirez recevoir ou récupérer vos articles.</p>
+                </div>
             </div>
 
             <!-- Mode de paiement -->
