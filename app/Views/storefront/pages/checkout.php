@@ -18,12 +18,32 @@ $old = $old ?? [];
     </div>
 
     <?php if (!empty($errors)): ?>
-        <div class="mb-6 p-4 rounded-xl bg-error/10 border border-error/20 text-error text-xs space-y-1">
-            <strong>Veuillez corriger les erreurs suivantes :</strong>
-            <ul class="list-disc list-inside">
-                <?php foreach ($errors as $field => $errs): ?>
-                    <?php foreach ((array)$errs as $err): ?>
-                        <li><?= htmlspecialchars($err) ?></li>
+        <div class="mb-6 p-5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-900 shadow-md animate-pulse space-y-2">
+            <div class="flex items-center gap-2 font-bold text-sm text-rose-800">
+                <span class="material-symbols-outlined text-rose-600 text-[22px]">error</span>
+                <span>Veuillez compléter ou corriger les champs obligatoires suivants :</span>
+            </div>
+            <ul class="list-disc list-inside space-y-1 pl-6 text-xs text-rose-800 font-medium">
+                <?php 
+                $labels = [
+                    'customer_name' => 'Nom et Prénom',
+                    'customer_whatsapp' => 'Numéro WhatsApp',
+                    'delivery_mode' => 'Mode de réception',
+                    'delivery_city' => 'Ville de livraison',
+                    'delivery_address' => 'Adresse de livraison',
+                ];
+                foreach ($errors as $field => $errs): 
+                    $fieldLabel = $labels[$field] ?? $field;
+                ?>
+                    <?php foreach ((array)$errs as $err): 
+                        // Nettoyer les noms techniques pour un message client limpide
+                        $cleanMsg = str_replace(
+                            ['customer_whatsapp', 'customer_name', 'delivery_city', 'delivery_mode'],
+                            ['Votre numéro WhatsApp', 'Votre nom et prénom', 'La ville de livraison', 'Le mode de réception'],
+                            $err
+                        );
+                    ?>
+                        <li><strong class="font-bold"><?= htmlspecialchars($fieldLabel) ?> :</strong> <?= htmlspecialchars($cleanMsg) ?></li>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             </ul>
@@ -44,12 +64,22 @@ $old = $old ?? [];
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-on-surface mb-1" for="customer_name">Nom et Prénom *</label>
-                    <input type="text" id="customer_name" name="customer_name" required value="<?= htmlspecialchars($old['customer_name'] ?? '') ?>" placeholder="Ex: Jean Dupont" class="w-full px-3 py-2.5 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                    <input type="text" id="customer_name" name="customer_name" required value="<?= htmlspecialchars($old['customer_name'] ?? '') ?>" placeholder="Ex: Jean Dupont" class="w-full px-3 py-2.5 rounded-xl border <?= !empty($errors['customer_name']) ? 'border-rose-500 ring-2 ring-rose-200 bg-rose-50/30' : 'border-border' ?> bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                    <?php if (!empty($errors['customer_name'])): ?>
+                        <p class="text-[11px] text-rose-600 mt-1 font-semibold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">info</span> <?= htmlspecialchars(reset($errors['customer_name'])) ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-on-surface mb-1" for="customer_whatsapp">Numéro WhatsApp (avec indicatif) *</label>
-                    <input type="text" id="customer_whatsapp" name="customer_whatsapp" required value="<?= htmlspecialchars($old['customer_whatsapp'] ?? '') ?>" placeholder="Ex: +237 690 00 00 00" class="w-full px-3 py-2.5 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                    <input type="text" id="customer_whatsapp" name="customer_whatsapp" required value="<?= htmlspecialchars($old['customer_whatsapp'] ?? '') ?>" placeholder="Ex: +237 690 00 00 00" class="w-full px-3 py-2.5 rounded-xl border <?= !empty($errors['customer_whatsapp']) ? 'border-rose-500 ring-2 ring-rose-200 bg-rose-50/30' : 'border-border' ?> bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                    <?php if (!empty($errors['customer_whatsapp'])): ?>
+                        <p class="text-[11px] text-rose-600 mt-1 font-semibold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">info</span> <?= htmlspecialchars(reset($errors['customer_whatsapp'])) ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -72,7 +102,12 @@ $old = $old ?? [];
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-on-surface mb-1" for="delivery_city">Ville *</label>
-                        <input type="text" id="delivery_city" name="delivery_city" required value="<?= htmlspecialchars($old['delivery_city'] ?? 'Douala') ?>" placeholder="Ex: Douala, Yaoundé..." class="w-full px-3 py-2.5 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                        <input type="text" id="delivery_city" name="delivery_city" required value="<?= htmlspecialchars($old['delivery_city'] ?? 'Douala') ?>" placeholder="Ex: Douala, Yaoundé..." class="w-full px-3 py-2.5 rounded-xl border <?= !empty($errors['delivery_city']) ? 'border-rose-500 ring-2 ring-rose-200 bg-rose-50/30' : 'border-border' ?> bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                        <?php if (!empty($errors['delivery_city'])): ?>
+                            <p class="text-[11px] text-rose-600 mt-1 font-semibold flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[13px]">info</span> <?= htmlspecialchars(reset($errors['delivery_city'])) ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
 
                     <div>
