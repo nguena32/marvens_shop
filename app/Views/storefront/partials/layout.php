@@ -262,61 +262,87 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
     </main>
 
     <!-- Footer Commercial Universel -->
+    <!-- Footer -->
     <footer class="bg-surface border-t border-border mt-auto pt-12 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- 1. Identité & Réassurance -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded bg-primary text-on-primary flex items-center justify-center font-bold text-xs">
+                    <div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-xs">
                         <?= strtoupper(substr($shop_name ?? 'M', 0, 1)) ?>
                     </div>
-                    <span class="font-headline font-bold text-base"><?= htmlspecialchars($shop_name ?? 'Marvens Shop') ?></span>
+                    <span class="font-headline font-bold text-base text-on-surface"><?= htmlspecialchars($shop_name ?? 'Marvens Shop') ?></span>
                 </div>
                 <p class="text-xs text-outline leading-relaxed">
-                    Votre boutique en ligne avec service de commande WhatsApp direct et paiement à la livraison sécurisé.
+                    <?= htmlspecialchars($shop_info['description'] ?? 'Votre boutique en ligne avec service de commande WhatsApp direct et paiement à la livraison sécurisé.') ?>
                 </p>
-                <div class="flex items-center gap-1 text-xs text-emerald-600 font-medium">
-                    <span class="material-symbols-outlined text-[16px]">verified</span> Boutique vérifiée
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200">
+                    <span class="material-symbols-outlined text-[14px]">verified</span> Boutique officielle vérifiée
                 </div>
             </div>
 
+            <!-- 2. Navigation Rapide -->
             <div>
                 <h4 class="font-headline font-semibold text-xs uppercase tracking-wider mb-3 text-on-surface">Navigation</h4>
-                <ul class="space-y-2 text-xs text-outline">
-                    <li><a href="/" class="hover:text-primary transition">Accueil</a></li>
-                    <li><a href="/catalogue" class="hover:text-primary transition">Tous les produits</a></li>
-                    <li><a href="/catalogue?filter=promotions" class="hover:text-primary transition">Offres & Promotions</a></li>
-                    <li><a href="/panier" class="hover:text-primary transition">Mon panier d'achats</a></li>
+                <ul class="space-y-2.5 text-xs text-outline">
+                    <li><a href="/" class="hover:text-primary transition flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">chevron_right</span> Accueil</a></li>
+                    <li><a href="/catalogue" class="hover:text-primary transition flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">chevron_right</span> Tous les produits</a></li>
+                    <li><a href="/catalogue?filter=populaires" class="hover:text-primary transition flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">chevron_right</span> Produits populaires</a></li>
+                    <li><a href="/panier" class="hover:text-primary transition flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">chevron_right</span> Mon panier d'achats</a></li>
                 </ul>
             </div>
 
+            <!-- 3. Informations & Engagements -->
             <div>
-                <h4 class="font-headline font-semibold text-xs uppercase tracking-wider mb-3 text-on-surface">Informations & Légal</h4>
-                <ul class="space-y-2 text-xs text-outline">
-                    <li><a href="/a-propos" class="hover:text-primary transition">À propos de nous</a></li>
-                    <li><a href="/livraison" class="hover:text-primary transition">Livraison & Retrait</a></li>
-                    <li><a href="/contact" class="hover:text-primary transition">Contact & Support</a></li>
-                    <li><a href="/conditions-vente" class="hover:text-primary transition">Conditions de vente</a></li>
-                    <li><a href="/politique-confidentialite" class="hover:text-primary transition">Confidentialité</a></li>
+                <h4 class="font-headline font-semibold text-xs uppercase tracking-wider mb-3 text-on-surface">Service Client</h4>
+                <ul class="space-y-2.5 text-xs text-outline">
+                    <li><a href="/livraison" class="hover:text-primary transition flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">local_shipping</span> Livraison & Retrait</a></li>
+                    <li><a href="/contact" class="hover:text-primary transition flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">support_agent</span> Contact & Support</a></li>
+                    <li><a href="/a-propos" class="hover:text-primary transition flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">info</span> À propos de nous</a></li>
+                    <li class="pt-1 text-[11px] text-outline/80 flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary">payments</span> Paiement sécurisé à la livraison</li>
                 </ul>
             </div>
 
+            <!-- 4. Contact & WhatsApp Direct -->
             <div>
-                <h4 class="font-headline font-semibold text-xs uppercase tracking-wider mb-3 text-on-surface">Thème Actif</h4>
-                <div class="p-3 rounded-xl border border-border bg-surface-container-low text-xs">
-                    <div class="font-semibold text-on-surface"><?= htmlspecialchars($theme->getName()) ?></div>
-                    <div class="text-[11px] text-outline mt-0.5"><?= htmlspecialchars($theme->getLayoutStyle()) ?></div>
-                    <div class="flex gap-1.5 mt-2">
-                        <?php foreach ($theme->getPrimaryColors() as $c): ?>
-                            <span class="w-3.5 h-3.5 rounded-full border border-black/10" style="background-color: <?= htmlspecialchars($c) ?>"></span>
-                        <?php endforeach; ?>
-                    </div>
+                <h4 class="font-headline font-semibold text-xs uppercase tracking-wider mb-3 text-on-surface">Contact Direct</h4>
+                <div class="space-y-3 text-xs text-outline">
+                    <?php 
+                        $footerWaNum = preg_replace('/[^0-9]/', '', (string)($shop_info['whatsapp_number'] ?? $whatsapp_number ?? '237699000000'));
+                        $footerWaUrl = "https://wa.me/" . $footerWaNum . "?text=" . rawurlencode("Bonjour " . ($shop_name ?? 'Marvens Shop') . ", je souhaite commander.");
+                    ?>
+                    <a href="<?= htmlspecialchars($footerWaUrl) ?>" target="_blank" class="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition font-medium">
+                        <span class="material-symbols-outlined text-emerald-600 text-base">chat</span>
+                        <div>
+                            <div class="text-[10px] uppercase font-bold text-emerald-600">Commander via WhatsApp</div>
+                            <div class="text-xs font-semibold"><?= htmlspecialchars($shop_info['whatsapp_number'] ?? '+237 699 00 00 00') ?></div>
+                        </div>
+                    </a>
+
+                    <?php if (!empty($shop_info['address']) || !empty($shop_info['city'])): ?>
+                        <div class="flex items-start gap-2 pt-1 text-[11px]">
+                            <span class="material-symbols-outlined text-[16px] text-outline shrink-0 mt-0.5">location_on</span>
+                            <span><?= htmlspecialchars(($shop_info['address'] ?? '') . (!empty($shop_info['city']) ? ', ' . $shop_info['city'] : '')) ?></span>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($shop_info['email'])): ?>
+                        <div class="flex items-center gap-2 text-[11px]">
+                            <span class="material-symbols-outlined text-[16px] text-outline shrink-0">mail</span>
+                            <span class="truncate"><?= htmlspecialchars($shop_info['email']) ?></span>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-4 border-t border-border flex flex-col sm:flex-row items-center justify-between text-xs text-outline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-5 border-t border-border flex flex-col sm:flex-row items-center justify-between text-xs text-outline">
             <div>&copy; <?= date('Y') ?> <?= htmlspecialchars($shop_name ?? 'Marvens Shop') ?>. Tous droits réservés.</div>
-            <div class="mt-2 sm:mt-0">Propulsé par <strong class="text-on-surface">Marvens Shop MVP</strong></div>
+            <div class="mt-2 sm:mt-0 flex items-center gap-3">
+                <span>Expédition rapide & Suivi personnalisé</span>
+                <span>•</span>
+                <span>Paiement à réception</span>
+            </div>
         </div>
     </footer>
 
