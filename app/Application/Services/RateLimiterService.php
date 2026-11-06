@@ -31,19 +31,19 @@ class RateLimiterService
     {
         $this->cleanup();
 
-        $stmt = $this->pdo->prepare("
-            SELECT COUNT(*) FROM login_attempts
-            WHERE (ip_address = :ip OR username = :username)
-            AND attempted_at >= datetime('now', '-' || :decay || ' seconds')
-        ");
-
-        // Compatibilité MySQL vs SQLite pour la fonction datetime
         $driver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+
         if ($driver === 'mysql') {
             $stmt = $this->pdo->prepare("
                 SELECT COUNT(*) FROM login_attempts
                 WHERE (ip_address = :ip OR username = :username)
                 AND attempted_at >= DATE_SUB(NOW(), INTERVAL :decay SECOND)
+            ");
+        } else {
+            $stmt = $this->pdo->prepare("
+                SELECT COUNT(*) FROM login_attempts
+                WHERE (ip_address = :ip OR username = :username)
+                AND attempted_at >= datetime('now', '-' || :decay || ' seconds')
             ");
         }
 
