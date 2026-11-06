@@ -35,6 +35,10 @@ abstract class Controller
     {
         $token = $request->input('_csrf_token');
         if (!Session::validateCsrfToken($token)) {
+            \App\Core\Logger::security("Échec de validation du jeton CSRF", [
+                'uri' => $request->getPath(),
+                'method' => $request->getMethod(),
+            ]);
             http_response_code(403);
             throw new \RuntimeException("Session expirée ou jeton CSRF invalide (403 Forbidden).");
         }

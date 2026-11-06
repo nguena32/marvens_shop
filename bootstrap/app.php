@@ -25,8 +25,12 @@ spl_autoload_register(function (string $class) {
 use App\Core\Env;
 use App\Core\Config;
 use App\Core\View;
+use App\Core\ErrorHandler;
 
 $rootDir = dirname(__DIR__);
 Env::load($rootDir . '/.env');
 Config::load($rootDir . '/config');
 View::init($rootDir . '/app/Views');
+
+// Enregistrement des gestionnaires d'erreurs et exceptions système
+ErrorHandler::register();

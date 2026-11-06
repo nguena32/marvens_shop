@@ -1,0 +1,10 @@
+# Protection Apache 2.4+ pour dossiers de stockage privé (cPanel / Apache)
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+
+# Rétrocompatibilité Apache 2.2
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+</IfModule>

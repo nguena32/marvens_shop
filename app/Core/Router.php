@@ -62,6 +62,11 @@ class Router
         }
 
         // 404 Not Found
+        Logger::notice("Route 404 introuvable", [
+            'method' => $requestMethod,
+            'path' => $requestPath,
+        ]);
+
         return Response::html(
             '<h1>404 — Page non trouvée</h1><p>La ressource demandée n\'existe pas.</p>',
             404

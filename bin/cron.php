@@ -47,7 +47,11 @@ try {
     $res = $backupService->backupDatabase(null);
     echo " [OK] Sauvegarde quotidienne de la base créée : {$res['filename']} ({$res['size']} octets).\n";
 
-    Logger::info("Maintenance cron cPanel exécutée avec succès.");
+    // 4. Purge des anciens logs de journalisation selon la durée de rétention
+    $prunedLogs = Logger::pruneOldLogs();
+    echo " [OK] Purge des anciens fichiers de logs ({$prunedLogs} fichiers supprimés).\n";
+
+    Logger::info("Maintenance cron cPanel exécutée avec succès.", ['pruned_logs' => $prunedLogs]);
     echo "Maintenance terminée avec succès.\n";
 } catch (\Exception $e) {
     Logger::error("Erreur critique lors du cron de maintenance", ['error' => $e->getMessage()]);
