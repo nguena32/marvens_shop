@@ -44,7 +44,17 @@ class StorefrontController extends Controller
         }
 
         $cartCalc = $this->cartService->getCartCalculation();
+        $themeId = $theme->getId();
+        $customization = $this->themeService->getThemeCustomization($themeId);
+        $typography = $this->themeService->getThemeTypography($themeId);
+        $dynamicCss = $this->themeService->generateCssVariables($customization, $typography);
+        $googleFontsUrl = $this->themeService->getGoogleFontsUrl($typography);
+
         $data['theme'] = $theme;
+        $data['theme_customization'] = $customization;
+        $data['theme_typography'] = $typography;
+        $data['dynamic_css'] = $dynamicCss;
+        $data['google_fonts_url'] = $googleFontsUrl;
         $data['cart_count'] = $cartCalc['count'];
         $data['shop_name'] = Config::get('app.name', 'Marvens Shop');
         $data['preview_mode'] = $previewMode;
@@ -60,14 +70,25 @@ class StorefrontController extends Controller
 
     public function home(Request $request): Response
     {
-        $products = $this->productRepo->findAllActive();
+        $allProducts = $this->productRepo->findAllActive();
         $categories = $this->categoryRepo->findAllActive();
+
+        // Séparation ciblée pour l'accueil
+        $featuredProducts = array_filter($allProducts, fn($p) => !empty($p['is_featured']));
+        $promotions = array_filter($allProducts, fn($p) => !empty($p['promotional_price']) && (float)$p['promotional_price'] < (float)$p['price']);
+        $newArrivals = array_slice($allProducts, 0, 8); // Derniers arrivages
 
         return $this->renderStorefront('storefront.pages.home', [
             'title' => 'Accueil',
             'active_tab' => 'home',
-            'products' => $products,
+            'products' => $allProducts,
+            'featured_products' => !empty($featuredProducts) ? $featuredProducts : array_slice($allProducts, 0, 4),
+            'promotions' => $promotions,
+            'new_arrivals' => $newArrivals,
             'categories' => $categories,
+            'whatsapp_number' => Config::get('app.whatsapp_number', '+237699000000'),
+            'shop_phone' => Config::get('app.phone', '+237699000000'),
+            'shop_address' => Config::get('app.address', 'Douala, Cameroun'),
         ]);
     }
 
@@ -75,8 +96,11 @@ class StorefrontController extends Controller
     {
         $search = $request->query('q');
         $catId = $request->query('cat') ? (int) $request->query('cat') : null;
+        $minPrice = $request->query('min_price') !== null ? (int) $request->query('min_price') : null;
+        $maxPrice = $request->query('max_price') !== null ? (int) $request->query('max_price') : null;
+        $filter = $request->query('filter'); // 'promotions', 'populaires', 'nouveautes', 'price_asc', 'price_desc'
 
-        $products = $this->productRepo->findAllActive($catId, $search);
+        $products = $this->productRepo->findAllActive($catId, $search, $minPrice, $maxPrice, $filter);
         $categories = $this->categoryRepo->findAllActive();
 
         return $this->renderStorefront('storefront.pages.catalog', [
@@ -86,6 +110,9 @@ class StorefrontController extends Controller
             'categories' => $categories,
             'current_cat' => $catId,
             'search_query' => $search,
+            'min_price' => $minPrice,
+            'max_price' => $maxPrice,
+            'current_filter' => $filter,
         ]);
     }
 
@@ -98,10 +125,61 @@ class StorefrontController extends Controller
             return Response::html("<h1>404 — Produit introuvable</h1>", 404);
         }
 
+        $similarProducts = $this->productRepo->findSimilar((int)$product['id'], !empty($product['category_id']) ? (int)$product['category_id'] : null, 4);
+
         return $this->renderStorefront('storefront.pages.product', [
             'title' => $product['name'],
             'active_tab' => 'product',
             'product' => $product,
+            'similar_products' => $similarProducts,
+            'whatsapp_number' => Config::get('app.whatsapp_number', '+237699000000'),
+        ]);
+    }
+
+    /**
+     * Pages Pratiques et Légales du Mini-Site
+     */
+    public function pageAbout(Request $request): Response
+    {
+        return $this->renderStorefront('storefront.pages.about', [
+            'title' => 'À propos de notre boutique',
+            'active_tab' => 'about',
+        ]);
+    }
+
+    public function pageContact(Request $request): Response
+    {
+        return $this->renderStorefront('storefront.pages.contact', [
+            'title' => 'Contactez-nous & Support',
+            'active_tab' => 'contact',
+            'whatsapp_number' => Config::get('app.whatsapp_number', '+237699000000'),
+            'shop_phone' => Config::get('app.phone', '+237699000000'),
+            'shop_email' => Config::get('app.email', 'contact@marvens-shop.cm'),
+            'shop_address' => Config::get('app.address', 'Douala, Cameroun'),
+        ]);
+    }
+
+    public function pageDelivery(Request $request): Response
+    {
+        return $this->renderStorefront('storefront.pages.delivery', [
+            'title' => 'Livraison & Retrait en boutique',
+            'active_tab' => 'delivery',
+        ]);
+    }
+
+    public function pageTerms(Request $request): Response
+    {
+        return $this->renderStorefront('storefront.pages.terms', [
+            'title' => 'Conditions Générales de Vente & Retours',
+            'active_tab' => 'terms',
+        ]);
+    }
+
+    public function pagePrivacy(Request $request): Response
+    {
+        return $this->renderStorefront('storefront.pages.privacy', [
+            'title' => 'Politique de Confidentialité',
+            'active_tab' => 'privacy',
         ]);
     }
 

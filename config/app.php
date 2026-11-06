@@ -12,4 +12,8 @@ return [
     'timezone' => Env::get('SHOP_TIMEZONE', 'Africa/Douala'),
     'currency' => Env::get('SHOP_CURRENCY', 'FCFA'),
     'theme' => Env::get('SHOP_DEFAULT_THEME', 'fashion'),
+    'whatsapp_number' => Env::get('SHOP_WHATSAPP_NUMBER', '+237699000000'),
+    'phone' => Env::get('SHOP_PHONE', '+237699000000'),
+    'email' => Env::get('SHOP_EMAIL', 'contact@marvens-shop.cm'),
+    'address' => Env::get('SHOP_ADDRESS', 'Douala, Cameroun (Akwa / Bonapriso)'),
 ];

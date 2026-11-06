@@ -1,13 +1,14 @@
 <?php
 /**
  * Page Checkout & Saisie des coordonnées client
+ * Conforme 1.5 : Mobile-first, formulaire épuré, recalcul automatique, réassurance
  */
 $themeId = $theme ? $theme->getId() : 'fashion';
 $items = $cart['items'] ?? [];
 $subtotal = $cart['subtotal'] ?? 0;
 ?>
-<section class="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-    <div class="mb-8 border-b border-border pb-4">
+<section class="py-8 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    <div class="mb-6 border-b border-border pb-4">
         <h1 class="text-2xl sm:text-3xl font-headline font-bold text-on-surface">Validation de Commande</h1>
         <p class="text-xs text-outline mt-1">Renseignez vos coordonnées pour la livraison et la finalisation sur WhatsApp</p>
     </div>
@@ -25,26 +26,26 @@ $subtotal = $cart['subtotal'] ?? 0;
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="/checkout" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <form method="POST" action="/checkout" class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
         <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
 
         <!-- Formulaire client -->
-        <div class="lg:col-span-7 card-theme p-6 bg-surface space-y-4">
-            <h3 class="font-headline font-bold text-base text-on-surface border-b border-border pb-3">Informations de livraison</h3>
+        <div class="lg:col-span-7 card-theme p-5 sm:p-6 bg-surface space-y-4">
+            <h3 class="font-headline font-bold text-sm sm:text-base text-on-surface border-b border-border pb-3">Informations de livraison</h3>
 
             <div>
                 <label class="block text-xs font-semibold text-on-surface mb-1" for="customer_name">Nom et Prénom *</label>
-                <input type="text" id="customer_name" name="customer_name" required placeholder="Ex: Jean Dupont" class="w-full px-3 py-2 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                <input type="text" id="customer_name" name="customer_name" required placeholder="Ex: Jean Dupont" class="w-full px-3 py-2.5 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-on-surface mb-1" for="customer_whatsapp">Numéro WhatsApp (avec indicatif) *</label>
-                <input type="text" id="customer_whatsapp" name="customer_whatsapp" required placeholder="Ex: +237 690 00 00 00" class="w-full px-3 py-2 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
+                <input type="text" id="customer_whatsapp" name="customer_whatsapp" required placeholder="Ex: +237 690 00 00 00" class="w-full px-3 py-2.5 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary"/>
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-on-surface mb-1" for="delivery_mode">Mode de réception *</label>
-                <select id="delivery_mode" name="delivery_mode" class="w-full px-3 py-2 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary">
+                <select id="delivery_mode" name="delivery_mode" class="w-full px-3 py-2.5 rounded-xl border border-border bg-surface text-xs text-on-surface outline-none focus:border-primary">
                     <option value="delivery">Livraison à domicile ou bureau (+1 500 FCFA)</option>
                     <option value="pickup">Retrait direct en boutique (Gratuit)</option>
                 </select>
@@ -62,8 +63,8 @@ $subtotal = $cart['subtotal'] ?? 0;
         </div>
 
         <!-- Récapitulatif et validation -->
-        <div class="lg:col-span-5 card-theme p-6 bg-surface space-y-4">
-            <h3 class="font-headline font-bold text-base text-on-surface border-b border-border pb-3">Votre commande</h3>
+        <div class="lg:col-span-5 card-theme p-5 sm:p-6 bg-surface space-y-4">
+            <h3 class="font-headline font-bold text-sm sm:text-base text-on-surface border-b border-border pb-3">Votre commande</h3>
 
             <div class="space-y-3 max-h-60 overflow-y-auto pr-1">
                 <?php foreach ($items as $item): ?>
@@ -71,8 +72,11 @@ $subtotal = $cart['subtotal'] ?? 0;
                         <div class="truncate max-w-[200px]">
                             <span class="font-bold text-on-surface"><?= (int)$item['quantity'] ?>x</span>
                             <span><?= htmlspecialchars($item['name']) ?></span>
+                            <?php if (!empty($item['variant_info'])): ?>
+                                <span class="text-[10px] text-outline block">(<?= htmlspecialchars($item['variant_info']) ?>)</span>
+                            <?php endif; ?>
                         </div>
-                        <span class="font-bold text-on-surface"><?= number_format((float)$item['total'], 0, ',', ' ') ?> FCFA</span>
+                        <span class="font-bold text-on-surface"><?= number_format((float)($item['line_total'] ?? $item['total']), 0, ',', ' ') ?> FCFA</span>
                     </div>
                 <?php endforeach; ?>
             </div>

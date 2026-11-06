@@ -83,8 +83,13 @@ $previousThemeId = $previous_theme ?? null;
                         </p>
                     </div>
 
-                    <!-- Actions globales : Rollback & Reset -->
+                    <!-- Actions globales : Rollback & Reset & Personnalisation -->
                     <div class="flex flex-wrap items-center gap-2">
+                        <a href="/admin/parametres/apparence?theme=<?= htmlspecialchars($activeThemeId) ?>" class="px-3 py-2 rounded-xl bg-primary text-on-primary text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface flex items-center gap-1.5 transition shadow-sm">
+                            <span class="material-symbols-outlined text-[16px]">format_paint</span>
+                            Personnaliser les Couleurs
+                        </a>
+
                         <?php if (!empty($previousThemeId)): ?>
                             <form method="POST" action="/admin/themes/rollback" onsubmit="return confirm('Voulez-vous restaurer le thème précédent (<?= htmlspecialchars($previousThemeId) ?>) ?');">
                                 <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
@@ -202,26 +207,33 @@ $previousThemeId = $previous_theme ?? null;
                                 </div>
                             </div>
 
-                            <!-- Actions du thème (Prévisualiser / Activer) -->
-                            <div class="mt-6 pt-4 border-t border-border flex items-center gap-2">
-                                <a href="/theme/preview/<?= htmlspecialchars($theme->getId()) ?>" target="_blank" class="flex-1 py-2 px-3 rounded-xl border border-border bg-surface text-center text-xs font-semibold hover:bg-surface-container transition flex items-center justify-center gap-1">
-                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
-                                    Prévisualiser
-                                </a>
+                            <!-- Actions du thème (Prévisualiser / Activer / Personnaliser) -->
+                            <div class="mt-6 pt-4 border-t border-border flex flex-col gap-2">
+                                <div class="flex items-center gap-2">
+                                    <a href="/theme/preview/<?= htmlspecialchars($theme->getId()) ?>" target="_blank" class="flex-1 py-2 px-3 rounded-xl border border-border bg-surface text-center text-xs font-semibold hover:bg-surface-container transition flex items-center justify-center gap-1">
+                                        <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                        Prévisualiser
+                                    </a>
+
+                                    <a href="/admin/parametres/apparence?theme=<?= htmlspecialchars($theme->getId()) ?>" class="flex-1 py-2 px-3 rounded-xl border border-border bg-surface-container-low text-center text-xs font-semibold hover:bg-surface-container transition flex items-center justify-center gap-1" title="Modifier la palette et le style de ce thème">
+                                        <span class="material-symbols-outlined text-[16px]">format_paint</span>
+                                        Couleurs
+                                    </a>
+                                </div>
 
                                 <?php if (!$isCurrent): ?>
-                                    <form method="POST" action="/admin/themes/activer" class="flex-1" onsubmit="return confirm('Confirmez-vous le passage au <?= htmlspecialchars($theme->getName()) ?> ?');">
+                                    <form method="POST" action="/admin/themes/activer" class="w-full" onsubmit="return confirm('Confirmez-vous le passage au <?= htmlspecialchars($theme->getName()) ?> ?');">
                                         <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
                                         <input type="hidden" name="theme" value="<?= htmlspecialchars($theme->getId()) ?>">
                                         <button type="submit" class="w-full bg-primary text-on-primary py-2 px-3 rounded-xl text-xs font-semibold hover:bg-surface-container-high hover:text-on-surface transition-all flex items-center justify-center gap-1 shadow-sm">
                                             <span class="material-symbols-outlined text-[16px]">check</span>
-                                            Activer
+                                            Activer ce thème
                                         </button>
                                     </form>
                                 <?php else: ?>
-                                    <button disabled class="flex-1 bg-emerald-50 text-emerald-700 border border-emerald-200 py-2 px-3 rounded-xl text-xs font-bold cursor-default flex items-center justify-center gap-1">
+                                    <button disabled class="w-full bg-emerald-50 text-emerald-700 border border-emerald-200 py-2 px-3 rounded-xl text-xs font-bold cursor-default flex items-center justify-center gap-1">
                                         <span class="material-symbols-outlined text-[16px]">done_all</span>
-                                        Thème en cours
+                                        Thème actuellement actif
                                     </button>
                                 <?php endif; ?>
                             </div>

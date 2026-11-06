@@ -113,6 +113,9 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
                 background-color: #ffffff !important;
             }
         <?php endif; ?>
+
+        /* Injection dynamique des styles personnalisés (Module 3 : Personnalisation des Couleurs) */
+        <?= $dynamic_css ?? '' ?>
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script id="tailwind-config">
@@ -131,7 +134,7 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
         };
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="<?= htmlspecialchars($google_fonts_url ?? 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap') ?>" rel="stylesheet"/>
 </head>
 <body class="bg-background font-body text-on-surface antialiased flex flex-col min-h-screen">
 
@@ -184,16 +187,26 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
                 <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
                     <a href="/" class="<?= $activeTab === 'home' ? 'text-primary font-bold' : 'text-on-surface/70 hover:text-primary' ?> transition">Accueil</a>
                     <a href="/catalogue" class="<?= $activeTab === 'catalog' ? 'text-primary font-bold' : 'text-on-surface/70 hover:text-primary' ?> transition">Catalogue</a>
+                    <a href="/livraison" class="<?= $activeTab === 'delivery' ? 'text-primary font-bold' : 'text-on-surface/70 hover:text-primary' ?> transition">Livraison</a>
+                    <a href="/contact" class="<?= $activeTab === 'contact' ? 'text-primary font-bold' : 'text-on-surface/70 hover:text-primary' ?> transition">Contact</a>
                 </nav>
             </div>
 
             <!-- Barre de recherche -->
-            <form action="/catalogue" method="GET" class="hidden sm:flex items-center bg-surface-container px-3 py-1.5 rounded-lg border border-border w-64 md:w-80">
+            <form action="/catalogue" method="GET" class="hidden sm:flex items-center bg-surface-container px-3 py-1.5 rounded-lg border border-border w-48 lg:w-72">
                 <span class="material-symbols-outlined text-outline text-[18px] mr-2">search</span>
                 <input type="text" name="q" value="<?= htmlspecialchars($search_query ?? '') ?>" placeholder="Rechercher un produit..." class="bg-transparent border-none outline-none text-xs w-full text-on-surface placeholder:text-outline"/>
             </form>
 
             <div class="flex items-center gap-3">
+                <?php 
+                    $headerWaNum = preg_replace('/[^0-9]/', '', (string)($whatsapp_number ?? '237699000000'));
+                    $headerWaUrl = "https://wa.me/" . $headerWaNum . "?text=" . rawurlencode("Bonjour " . ($shop_name ?? 'Marvens Shop') . ", je souhaite des informations.");
+                ?>
+                <a href="<?= htmlspecialchars($headerWaUrl) ?>" target="_blank" class="hidden sm:flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-xs font-semibold transition shadow-sm" title="Contactez-nous sur WhatsApp">
+                    <span class="material-symbols-outlined text-[16px]">chat</span>
+                    <span>WhatsApp</span>
+                </a>
                 <a href="/panier" class="relative flex items-center gap-2 bg-primary text-on-primary px-3 py-2 btn-theme text-xs font-semibold shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
                     <span class="hidden sm:inline">Panier</span>
@@ -235,16 +248,19 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
                 <ul class="space-y-2 text-xs text-outline">
                     <li><a href="/" class="hover:text-primary transition">Accueil</a></li>
                     <li><a href="/catalogue" class="hover:text-primary transition">Tous les produits</a></li>
+                    <li><a href="/catalogue?filter=promotions" class="hover:text-primary transition">Offres & Promotions</a></li>
                     <li><a href="/panier" class="hover:text-primary transition">Mon panier d'achats</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="font-headline font-semibold text-xs uppercase tracking-wider mb-3 text-on-surface">Engagements</h4>
+                <h4 class="font-headline font-semibold text-xs uppercase tracking-wider mb-3 text-on-surface">Informations & Légal</h4>
                 <ul class="space-y-2 text-xs text-outline">
-                    <li class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">local_shipping</span> Livraison rapide</li>
-                    <li class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">payments</span> Paiement à réception</li>
-                    <li class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">chat</span> Échange WhatsApp humain</li>
+                    <li><a href="/a-propos" class="hover:text-primary transition">À propos de nous</a></li>
+                    <li><a href="/livraison" class="hover:text-primary transition">Livraison & Retrait</a></li>
+                    <li><a href="/contact" class="hover:text-primary transition">Contact & Support</a></li>
+                    <li><a href="/conditions-vente" class="hover:text-primary transition">Conditions de vente</a></li>
+                    <li><a href="/politique-confidentialite" class="hover:text-primary transition">Confidentialité</a></li>
                 </ul>
             </div>
 

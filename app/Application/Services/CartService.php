@@ -49,6 +49,7 @@ class CartService
                 'name' => $product['name'],
                 'slug' => $product['slug'],
                 'main_image_url' => $product['main_image_url'],
+                'image' => $product['main_image_url'],
                 'variant_info' => $variantInfo,
                 'quantity' => $quantity,
             ];
@@ -111,9 +112,13 @@ class CartService
             $subtotal += $lineTotal;
 
             $validatedItems[$key] = array_merge($item, [
+                'key' => (string)$key,
                 'unit_price' => $unitPrice,
+                'price' => $unitPrice,
                 'line_total' => $lineTotal,
+                'total' => $lineTotal,
                 'name' => $product['name'],
+                'image' => $item['main_image_url'] ?? $product['main_image_url'],
             ]);
         }
 

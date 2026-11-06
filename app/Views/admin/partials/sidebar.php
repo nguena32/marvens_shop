@@ -24,7 +24,13 @@
             <span class="material-symbols-outlined mr-space-md">cloud_download</span>Importations
         </a>
         <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'themes' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/themes">
-            <span class="material-symbols-outlined mr-space-md">palette</span>Thèmes & Apparence
+            <span class="material-symbols-outlined mr-space-md">palette</span>Thèmes & Modèles
+        </a>
+        <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'appearance' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/parametres/apparence">
+            <span class="material-symbols-outlined mr-space-md">format_paint</span>Couleurs & Apparence
+        </a>
+        <a class="flex items-center px-space-md py-space-sm rounded-xl <?= ($active_tab ?? '') === 'typography' ? 'bg-secondary-container text-on-secondary-container font-medium' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' ?> transition-all" href="/admin/parametres/typographie">
+            <span class="material-symbols-outlined mr-space-md">match_case</span>Polices d'écriture
         </a>
     </nav>
     

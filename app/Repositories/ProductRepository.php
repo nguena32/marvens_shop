@@ -17,7 +17,7 @@ class ProductRepository
         $this->pdo = $pdo;
     }
 
-    public function findAllActive(?int $categoryId = null, ?string $search = null): array
+    public function findAllActive(?int $categoryId = null, ?string $search = null, ?int $minPrice = null, ?int $maxPrice = null, ?string $filter = null): array
     {
         $sql = "SELECT p.*, c.name as category_name 
                 FROM products p 
@@ -35,10 +35,60 @@ class ProductRepository
             $params['search'] = '%' . trim($search) . '%';
         }
 
-        $sql .= " ORDER BY p.is_featured DESC, p.created_at DESC";
+        if ($minPrice !== null && $minPrice > 0) {
+            $sql .= " AND (CASE WHEN p.promotional_price IS NOT NULL AND p.promotional_price > 0 THEN p.promotional_price ELSE p.price END >= :min_price)";
+            $params['min_price'] = (int)$minPrice;
+        }
+
+        if ($maxPrice !== null && $maxPrice > 0) {
+            $sql .= " AND (CASE WHEN p.promotional_price IS NOT NULL AND p.promotional_price > 0 THEN p.promotional_price ELSE p.price END <= :max_price)";
+            $params['max_price'] = (int)$maxPrice;
+        }
+
+        if ($filter === 'promotions') {
+            $sql .= " AND p.promotional_price IS NOT NULL AND p.promotional_price < p.price";
+        } elseif ($filter === 'populaires' || $filter === 'featured') {
+            $sql .= " AND p.is_featured = 1";
+        }
+
+        if ($filter === 'nouveautes') {
+            $sql .= " ORDER BY p.created_at DESC, p.id DESC";
+        } elseif ($filter === 'price_asc') {
+            $sql .= " ORDER BY (CASE WHEN p.promotional_price IS NOT NULL AND p.promotional_price > 0 THEN p.promotional_price ELSE p.price END) ASC";
+        } elseif ($filter === 'price_desc') {
+            $sql .= " ORDER BY (CASE WHEN p.promotional_price IS NOT NULL AND p.promotional_price > 0 THEN p.promotional_price ELSE p.price END) DESC";
+        } else {
+            $sql .= " ORDER BY p.is_featured DESC, p.created_at DESC";
+        }
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
+        foreach ($params as $paramKey => $paramVal) {
+            $stmt->bindValue(':' . $paramKey, $paramVal, is_int($paramVal) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function findSimilar(int $productId, ?int $categoryId, int $limit = 4): array
+    {
+        $sql = "SELECT p.*, c.name as category_name 
+                FROM products p 
+                LEFT JOIN categories c ON p.category_id = c.id 
+                WHERE p.is_active = 1 AND p.id != :p_id";
+        $params = ['p_id' => $productId];
+
+        if ($categoryId !== null) {
+            $sql .= " AND p.category_id = :cat_id";
+            $params['cat_id'] = $categoryId;
+        }
+
+        $sql .= " ORDER BY p.is_featured DESC, p.created_at DESC LIMIT " . (int)$limit;
+
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($params as $paramKey => $paramVal) {
+            $stmt->bindValue(':' . $paramKey, $paramVal, is_int($paramVal) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

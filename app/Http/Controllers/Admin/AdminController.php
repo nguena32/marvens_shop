@@ -283,6 +283,181 @@ class AdminController extends Controller
         return $this->redirect('/admin/themes');
     }
 
+    /**
+     * Module 3 : Affichage du formulaire Paramètres → Apparence et identité visuelle (Personnalisation des Couleurs)
+     */
+    public function appearanceSettings(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $activeThemeId = $this->themeService->getActiveThemeId();
+        $targetThemeId = $request->query('theme') ? (string) $request->query('theme') : $activeThemeId;
+        if (!in_array($targetThemeId, ThemeService::ALLOWED_THEMES, true)) {
+            $targetThemeId = $activeThemeId;
+        }
+
+        $targetTheme = $this->themeService->getTheme($targetThemeId);
+        $customization = $this->themeService->getThemeCustomization($targetThemeId);
+        $defaultCustomization = $this->themeService->getDefaultCustomization($targetThemeId);
+
+        $feedback = Session::get('appearance_feedback');
+        Session::remove('appearance_feedback');
+
+        return $this->render('admin.pages.appearance_settings', [
+            'active_tab' => 'appearance',
+            'active_theme_id' => $activeThemeId,
+            'target_theme' => $targetTheme,
+            'target_theme_id' => $targetThemeId,
+            'all_themes' => $this->themeService->getAvailableThemes(),
+            'customization' => $customization,
+            'default_customization' => $defaultCustomization,
+            'feedback' => $feedback,
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
+    }
+
+    /**
+     * Module 3 : Enregistrement de la personnalisation des couleurs et composants
+     */
+    public function saveAppearanceSettings(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $themeId = (string) $request->input('theme_id', $this->themeService->getActiveThemeId());
+        $postData = $request->all();
+
+        try {
+            $this->themeService->saveThemeCustomization($themeId, $postData);
+            Session::set('appearance_feedback', [
+                'type' => 'success',
+                'message' => "Les couleurs et le style d'apparence pour le thème '{$themeId}' ont été enregistrés avec succès. Les modifications s'appliquent immédiatement à la boutique."
+            ]);
+        } catch (\Exception $e) {
+            Session::set('appearance_feedback', [
+                'type' => 'error',
+                'message' => "Erreur lors de l'enregistrement de l'apparence : " . $e->getMessage()
+            ]);
+        }
+
+        return $this->redirect('/admin/parametres/apparence?theme=' . urlencode($themeId));
+    }
+
+    /**
+     * Module 3 : Réinitialisation des couleurs d'un thème à sa palette d'origine
+     */
+    public function resetAppearanceSettings(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $themeId = (string) $request->input('theme_id', $this->themeService->getActiveThemeId());
+
+        try {
+            $this->themeService->resetThemeCustomization($themeId);
+            Session::set('appearance_feedback', [
+                'type' => 'success',
+                'message' => "La palette et le style du thème '{$themeId}' ont été réinitialisés aux valeurs par défaut d'origine."
+            ]);
+        } catch (\Exception $e) {
+            Session::set('appearance_feedback', [
+                'type' => 'error',
+                'message' => "Erreur lors de la réinitialisation : " . $e->getMessage()
+            ]);
+        }
+
+        return $this->redirect('/admin/parametres/apparence?theme=' . urlencode($themeId));
+    }
+
+    /**
+     * Module 4 : Affichage de l'interface de personnalisation des polices d'écriture
+     */
+    public function typographySettings(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+
+        $targetThemeId = (string) $request->query('theme', $this->themeService->getActiveThemeId());
+        if (!in_array($targetThemeId, ThemeService::ALLOWED_THEMES, true)) {
+            $targetThemeId = $this->themeService->getActiveThemeId();
+        }
+
+        $activeThemeId = $this->themeService->getActiveThemeId();
+        $targetTheme = $this->themeService->getTheme($targetThemeId);
+
+        $typography = $this->themeService->getThemeTypography($targetThemeId);
+        $defaultTypography = $this->themeService->getDefaultTypography($targetThemeId);
+        $fontLibrary = $this->themeService->getFontLibrary();
+
+        $feedback = Session::get('typography_feedback');
+        Session::remove('typography_feedback');
+
+        return $this->render('admin.pages.typography_settings', [
+            'active_tab' => 'typography',
+            'active_theme_id' => $activeThemeId,
+            'target_theme' => $targetTheme,
+            'target_theme_id' => $targetThemeId,
+            'all_themes' => $this->themeService->getAvailableThemes(),
+            'typography' => $typography,
+            'default_typography' => $defaultTypography,
+            'font_library' => $fontLibrary,
+            'feedback' => $feedback,
+            'csrf_token' => Session::getCsrfToken(),
+        ]);
+    }
+
+    /**
+     * Module 4 : Enregistrement de la personnalisation des polices d'écriture
+     */
+    public function saveTypographySettings(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $themeId = (string) $request->input('theme_id', $this->themeService->getActiveThemeId());
+        $postData = $request->all();
+
+        try {
+            $this->themeService->saveThemeTypography($themeId, $postData);
+            Session::set('typography_feedback', [
+                'type' => 'success',
+                'message' => "Les polices d'écriture et styles typographiques pour le thème '{$themeId}' ont été enregistrés avec succès. Ils s'appliquent immédiatement à la boutique."
+            ]);
+        } catch (\Exception $e) {
+            Session::set('typography_feedback', [
+                'type' => 'error',
+                'message' => "Erreur lors de l'enregistrement de la typographie : " . $e->getMessage()
+            ]);
+        }
+
+        return $this->redirect('/admin/parametres/typographie?theme=' . urlencode($themeId));
+    }
+
+    /**
+     * Module 4 : Réinitialisation des polices d'écriture d'un thème aux valeurs par défaut
+     */
+    public function resetTypographySettings(Request $request): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $themeId = (string) $request->input('theme_id', $this->themeService->getActiveThemeId());
+
+        try {
+            $this->themeService->resetThemeTypography($themeId);
+            Session::set('typography_feedback', [
+                'type' => 'success',
+                'message' => "Les polices et styles typographiques du thème '{$themeId}' ont été réinitialisés aux valeurs par défaut d'origine."
+            ]);
+        } catch (\Exception $e) {
+            Session::set('typography_feedback', [
+                'type' => 'error',
+                'message' => "Erreur lors de la réinitialisation : " . $e->getMessage()
+            ]);
+        }
+
+        return $this->redirect('/admin/parametres/typographie?theme=' . urlencode($themeId));
+    }
+
     public function showImport(Request $request): Response
     {
         if ($res = $this->requireAuth()) return $res;
