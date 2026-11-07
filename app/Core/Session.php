@@ -20,6 +20,12 @@ class Session
             return;
         }
 
+        // Si un dossier sessions local existe et est exploitable, on l'utilise pour éviter les conflits d'environnement (ex: c:/wamp64/tmp en CLI)
+        $customSavePath = dirname(__DIR__, 2) . '/storage/sessions';
+        if (is_dir($customSavePath)) {
+            @session_save_path($customSavePath);
+        }
+
         if (!headers_sent()) {
             $isSecure = (bool) Config::get('app.session_secure_cookie', false);
             $sameSite = (string) Config::get('app.session_same_site', 'Lax');

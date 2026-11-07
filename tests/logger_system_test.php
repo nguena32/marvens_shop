@@ -81,13 +81,13 @@ $content = file_get_contents($appLogFile);
 $suite->assert("3.2 Message correctement inscrit dans app-{$today}.log", str_contains($content, $testMsgApp));
 
 // Vérification de la structure JSON Lines
-$lines = explode(PHP_EOL, trim($content));
+$lines = array_values(array_filter(explode(PHP_EOL, trim($content))));
 $lastLine = end($lines);
-$record = json_decode($lastLine, true);
+$record = json_decode((string)$lastLine, true);
 $suite->assert("3.3 Entrée conforme JSON valide", is_array($record));
 $suite->assert("3.4 Horodatage ISO 8601 (ATOM) présent", isset($record['timestamp']) && preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/', $record['timestamp']) === 1);
 $suite->assert("3.5 Request ID présent dans l'entrée", isset($record['request_id']) && $record['request_id'] === $reqId);
-$suite->assert("3.6 Canal 'app' et niveau 'INFO' conformes", $record['channel'] === 'app' && $record['level'] === 'INFO');
+$suite->assert("3.6 Canal 'app' et niveau 'INFO' conformes", isset($record['channel']) && $record['channel'] === 'app' && isset($record['level']) && $record['level'] === 'INFO');
 $suite->assert("3.7 Contexte HTTP structuré", isset($record['http']['method']) && isset($record['http']['uri']));
 
 // 4. Test Canal PHP
