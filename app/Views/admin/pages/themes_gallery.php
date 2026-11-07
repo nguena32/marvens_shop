@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $active_tab = 'themes';
 /** @var App\Domain\Themes\Theme[] $themes */
 $themesList = $themes ?? [];
@@ -8,6 +8,7 @@ $previousThemeId = $previous_theme ?? null;
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <?php include dirname(__DIR__) . '/partials/favicon.php'; ?>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Bibliothèque de Thèmes & Apparence — Marvens Shop</title>

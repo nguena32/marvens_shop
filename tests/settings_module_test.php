@@ -251,6 +251,21 @@ class SettingsModuleTestSuite
         ]);
         $savedTz = $this->settingsService->getShopInfo();
         $this->assert($savedTz['timezone'] === 'Africa/Douala', "5.1 Sécurité - Repli sur Africa/Douala si fuseau horaire inconnu");
+
+        // Test synchronisation du Favicon Admin
+        $this->settingsService->updateShopInfo([
+            'shop_name' => 'Marvens Luxury Store',
+            'whatsapp_number' => '+237699112233',
+            'favicon_url' => '/uploads/branding/custom_favicon.ico',
+        ]);
+        $customFav = $this->settingsService->getShopInfo();
+        $this->assert($customFav['favicon_url'] === '/uploads/branding/custom_favicon.ico', "5.1 Favicon - Persistance du favicon personnalisé");
+
+        // Rendu partiel favicon admin
+        ob_start();
+        include dirname(__DIR__) . '/app/Views/admin/partials/favicon.php';
+        $faviconHtml = ob_get_clean();
+        $this->assert(str_contains($faviconHtml, '/uploads/branding/custom_favicon.ico'), "5.1 Favicon - Le favicon personnalisé configuré est injecté dans les pages admin");
     }
 
     private function testSection53DeliveryAndPickup(): void

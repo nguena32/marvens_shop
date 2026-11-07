@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Vue d'Administration : Paramètres → Apparence & Personnalisation des Couleurs
  * Exigence complète Module 3 (Sections 3.1, 3.2, 3.3, 3.4)
@@ -14,6 +14,7 @@ $themes = $all_themes ?? [];
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <?php include dirname(__DIR__) . '/partials/favicon.php'; ?>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Paramètres d'Apparence & Couleurs — Marvens Shop</title>

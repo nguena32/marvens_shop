@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Vue d'Administration : Paramètres → Personnalisation des Polices d'Écriture (Typographie)
  * Exigence complète Module 4 (Sections 4.1, 4.2, 4.3)
@@ -15,6 +15,7 @@ $themes = $all_themes ?? [];
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <?php include dirname(__DIR__) . '/partials/favicon.php'; ?>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Personnalisation des Polices d'Écriture — Marvens Shop</title>

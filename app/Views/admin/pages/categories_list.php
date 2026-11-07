@@ -1,9 +1,10 @@
-<?php
+﻿<?php
 $active_tab = 'categories';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <?php include dirname(__DIR__) . '/partials/favicon.php'; ?>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Gestion des Catégories — Marvens Shop</title>

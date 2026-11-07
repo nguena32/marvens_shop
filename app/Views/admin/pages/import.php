@@ -1,9 +1,10 @@
-<?php
+﻿<?php
 $active_tab = 'import';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <?php include dirname(__DIR__) . '/partials/favicon.php'; ?>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Importation de Catalogue — Marvens Shop</title>
