@@ -1209,7 +1209,7 @@ class ThemeService
     {
         try {
             $stmt = $this->pdo->prepare("INSERT INTO shop_settings (setting_key, setting_value) VALUES (:k, :v)
-                                          ON DUPLICATE KEY UPDATE setting_value = :v");
+                                          ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = CURRENT_TIMESTAMP");
             $stmt->execute(['k' => $key, 'v' => $value]);
         } catch (\Exception $e) {
             // Fallback SQLite / standard

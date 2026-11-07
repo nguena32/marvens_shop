@@ -66,7 +66,7 @@ class SettingsService
         $stmt = $this->pdo->prepare("
             INSERT INTO shop_settings (setting_key, setting_value)
             VALUES (:k, :v)
-            ON DUPLICATE KEY UPDATE setting_value = :v, updated_at = CURRENT_TIMESTAMP
+            ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = CURRENT_TIMESTAMP
         ");
         return $stmt->execute(['k' => $key, 'v' => $value]);
     }
