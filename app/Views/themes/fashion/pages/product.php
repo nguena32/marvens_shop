@@ -136,8 +136,9 @@
                         </form>
 
                         <?php 
-                            $directWaText = urlencode("Bonjour, je souhaite commander l'article *" . $product['name'] . "* au prix de " . number_format((float)($product['promotional_price'] ?? $product['price']), 0, ',', ' ') . " FCFA.");
-                            $directWaUrl = "https://wa.me/?text=" . $directWaText;
+                            $prodWaNum = preg_replace('/[^0-9]/', '', (string)($whatsapp_number ?? ($shop_info['whatsapp_number'] ?? '237699000000')));
+                            $directWaText = rawurlencode("Bonjour, je souhaite commander l'article *" . $product['name'] . "* au prix de " . number_format((float)($product['promotional_price'] ?? $product['price']), 0, ',', ' ') . " FCFA.");
+                            $directWaUrl = "https://wa.me/" . $prodWaNum . "?text=" . $directWaText;
                         ?>
                         <a href="<?= $directWaUrl ?>" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-space-md rounded-xl font-headline-sm font-bold text-center transition-colors shadow-sm flex items-center justify-center gap-2">
                             <span class="material-symbols-outlined text-[20px]">chat</span> Commander directement via WhatsApp

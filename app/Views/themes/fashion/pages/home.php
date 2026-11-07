@@ -1,3 +1,6 @@
+<?php
+$fashionWaNum = preg_replace('/[^0-9]/', '', (string)($whatsapp_number ?? ($shop_info['whatsapp_number'] ?? '237699000000')));
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -146,7 +149,7 @@
                     </span>
                 </a>
 
-                <a class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-space-md py-space-sm rounded-xl text-label-md transition-colors" data-path="whatsapp-chat" href="https://wa.me/?text=Bonjour%20Marvens%20Shop,%20je%20souhaite%20des%20renseignements." target="_blank">
+                <a class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-space-md py-space-sm rounded-xl text-label-md transition-colors" data-path="whatsapp-chat" href="https://wa.me/<?= $fashionWaNum ?>?text=<?= rawurlencode('Bonjour ' . ($shop_name ?? 'Marvens Shop') . ', je souhaite des renseignements.') ?>" target="_blank">
                     <span class="material-symbols-outlined text-[18px]">chat</span>
                     <span class="hidden sm:inline">WhatsApp</span>
                 </a>
@@ -203,7 +206,7 @@
                         <div class="bg-surface-container p-space-md rounded-xl mt-space-md">
                             <div class="text-label-md font-headline-sm text-primary mb-1">Service WhatsApp</div>
                             <p class="text-body-sm text-on-surface-variant mb-space-sm">Commandez directement pour un conseil personnalisé et confirmation immédiate.</p>
-                            <a class="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white py-space-sm rounded-lg text-label-md transition-colors" href="https://wa.me/?text=Bonjour,%20je%20souhaite%20un%20conseil%20pour%20une%20commande." target="_blank">
+                            <a class="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white py-space-sm rounded-lg text-label-md transition-colors" href="https://wa.me/<?= $fashionWaNum ?>?text=<?= rawurlencode('Bonjour, je souhaite un conseil pour une commande.') ?>" target="_blank">
                                 <span class="material-symbols-outlined text-[18px]">chat</span> Discuter sur WhatsApp
                             </a>
                         </div>
@@ -221,7 +224,7 @@
                                     <span>Découvrir la Boutique</span>
                                     <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                                 </a>
-                                <a class="bg-surface hover:bg-surface-bright text-on-surface border border-border px-space-xl py-space-md rounded-xl text-label-md font-medium transition-colors flex items-center gap-2" href="https://wa.me/?text=Bonjour,%20je%20souhaite%20passer%20une%20commande%20rapide." target="_blank">
+                                <a class="bg-surface hover:bg-surface-bright text-on-surface border border-border px-space-xl py-space-md rounded-xl text-label-md font-medium transition-colors flex items-center gap-2" href="https://wa.me/<?= $fashionWaNum ?>?text=<?= rawurlencode('Bonjour, je souhaite passer une commande rapide.') ?>" target="_blank">
                                     <span class="material-symbols-outlined text-[18px] text-emerald-600">chat</span> Commande Rapide
                                 </a>
                             </div>
@@ -339,8 +342,8 @@
                                                 </form>
 
                                                 <?php 
-                                                    $directWaText = urlencode("Bonjour, je souhaite commander l'article *" . $p['name'] . "* au prix de " . number_format((float)($p['promotional_price'] ?? $p['price']), 0, ',', ' ') . " FCFA.");
-                                                    $directWaUrl = "https://wa.me/?text=" . $directWaText;
+                                                    $directWaText = rawurlencode("Bonjour, je souhaite commander l'article *" . $p['name'] . "* au prix de " . number_format((float)($p['promotional_price'] ?? $p['price']), 0, ',', ' ') . " FCFA.");
+                                                    $directWaUrl = "https://wa.me/" . $fashionWaNum . "?text=" . $directWaText;
                                                 ?>
                                                 <a class="bg-emerald-600 hover:bg-emerald-700 text-white p-space-sm rounded-xl flex items-center justify-center transition-colors shadow-sm" href="<?= $directWaUrl ?>" target="_blank" title="Commander sur WhatsApp">
                                                     <span class="material-symbols-outlined text-[20px]">chat</span>
