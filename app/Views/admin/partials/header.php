@@ -29,8 +29,9 @@
         </a>
 
         <a href="/admin/produits/nouveau" 
-           class="bg-primary text-white px-3 sm:px-space-md py-2 rounded-xl text-xs sm:text-label-sm font-semibold hover:opacity-90 transition-all flex items-center gap-1 min-h-[40px] shadow-sm">
-            <span class="material-symbols-outlined text-[18px]">add</span>
+           class="bg-primary text-white p-2 sm:px-space-md sm:py-2 rounded-xl text-xs sm:text-label-sm font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-1 min-h-[40px] min-w-[40px] shadow-sm shrink-0"
+           title="Nouveau Produit">
+            <span class="material-symbols-outlined text-[20px]">add</span>
             <span class="hidden sm:inline">Nouveau Produit</span>
         </a>
 

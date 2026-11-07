@@ -57,8 +57,8 @@ $active_tab = 'products';
         <?php include dirname(__DIR__) . '/partials/header.php';
         include dirname(__DIR__) . '/partials/bottom_nav.php'; ?>
 
-        <main class="relative pt-16 bg-background min-h-screen p-space-lg">
-            <div class="max-w-7xl mx-auto flex flex-col gap-space-lg">
+        <main class="relative pt-16 bg-background min-h-screen p-3 sm:p-space-md md:p-space-lg">
+            <div class="max-w-7xl mx-auto flex flex-col gap-4 sm:gap-space-lg">
                 
                 <?php if (!empty($feedback)): ?>
                     <div class="p-space-md rounded-2xl border text-sm <?= ($feedback['type'] ?? 'info') === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800' ?>">
@@ -66,34 +66,34 @@ $active_tab = 'products';
                     </div>
                 <?php endif; ?>
 
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-space-md bg-surface p-space-lg rounded-2xl border border-border shadow-sm">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface p-4 sm:p-space-lg rounded-2xl border border-border shadow-sm">
                     <div>
-                        <h1 class="text-2xl font-bold text-on-surface tracking-tight">Catalogue des Produits</h1>
-                        <p class="text-sm text-outline">Gestion des fiches produits, prix, visuels, variantes et disponibilité</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight">Catalogue des Produits</h1>
+                        <p class="text-xs sm:text-sm text-outline">Gestion des fiches produits, prix, visuels, variantes et disponibilité</p>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <a href="/admin/categories" class="border border-border text-on-surface px-4 py-2 rounded-xl text-sm font-medium hover:bg-surface-container-low transition-all flex items-center gap-1.5">
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                        <a href="/admin/categories" class="border border-border text-on-surface px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold hover:bg-surface-container-low transition-all flex items-center justify-center gap-1.5 flex-1 sm:flex-initial min-h-[44px]">
                             <span class="material-symbols-outlined text-[18px]">folder</span> Catégories
                         </a>
-                        <a href="/admin/import" class="border border-border text-on-surface px-4 py-2 rounded-xl text-sm font-medium hover:bg-surface-container-low transition-all flex items-center gap-1.5">
+                        <a href="/admin/import" class="border border-border text-on-surface px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold hover:bg-surface-container-low transition-all flex items-center justify-center gap-1.5 flex-1 sm:flex-initial min-h-[44px]">
                             <span class="material-symbols-outlined text-[18px]">cloud_download</span> Importer
                         </a>
-                        <a href="/admin/produits/nouveau" class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-all flex items-center gap-1.5 shadow-sm">
+                        <a href="/admin/produits/nouveau" class="bg-primary text-white px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-1.5 shadow-sm w-full sm:w-auto min-h-[44px]">
                             <span class="material-symbols-outlined text-[18px]">add</span> Nouveau Produit
                         </a>
                     </div>
                 </div>
 
                 <!-- Filtres et recherche -->
-                <div class="bg-surface p-space-md rounded-2xl border border-border flex flex-wrap items-center justify-between gap-4">
-                    <form method="GET" action="/admin/produits" class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                        <div class="relative min-w-[240px]">
-                            <span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
-                            <input type="text" name="search" value="<?= htmlspecialchars($current_search ?? '') ?>" placeholder="Rechercher nom, SKU..." class="w-full pl-9 pr-3 py-1.5 bg-surface-container-low border border-border rounded-xl text-sm focus:outline-none">
+                <div class="bg-surface p-4 rounded-2xl border border-border flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-3 shadow-sm">
+                    <form method="GET" action="/admin/produits" class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full sm:w-auto">
+                        <div class="relative w-full sm:min-w-[240px]">
+                            <span class="material-symbols-outlined absolute left-3 top-3 text-outline text-[18px]">search</span>
+                            <input type="text" name="search" value="<?= htmlspecialchars($current_search ?? '') ?>" placeholder="Rechercher nom, SKU..." class="w-full pl-9 pr-3 py-2.5 bg-surface-container-low border border-border rounded-xl text-xs sm:text-sm focus:outline-none min-h-[44px]">
                         </div>
 
-                        <select name="category_id" onchange="this.form.submit()" class="bg-surface-container-low border border-border rounded-xl px-3 py-1.5 text-sm">
+                        <select name="category_id" onchange="this.form.submit()" class="bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-xs sm:text-sm min-h-[44px]">
                             <option value="">Toutes les catégories</option>
                             <?php foreach ($categories as $cat): ?>
                                 <option value="<?= (int)$cat['id'] ?>" <?= ((int)($current_category ?? 0) === (int)$cat['id']) ? 'selected' : '' ?>>
@@ -102,7 +102,7 @@ $active_tab = 'products';
                             <?php endforeach; ?>
                         </select>
 
-                        <select name="status" onchange="this.form.submit()" class="bg-surface-container-low border border-border rounded-xl px-3 py-1.5 text-sm">
+                        <select name="status" onchange="this.form.submit()" class="bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-xs sm:text-sm min-h-[44px]">
                             <option value="">Tous les statuts</option>
                             <option value="active" <?= ($current_status ?? '') === 'active' ? 'selected' : '' ?>>En ligne</option>
                             <option value="inactive" <?= ($current_status ?? '') === 'inactive' ? 'selected' : '' ?>>Masqués / Hors ligne</option>
@@ -111,8 +111,11 @@ $active_tab = 'products';
                         </select>
 
                         <?php if (!empty($current_search) || !empty($current_category) || !empty($current_status)): ?>
-                            <a href="/admin/produits" class="text-xs text-outline hover:text-on-surface underline">Réinitialiser</a>
+                            <a href="/admin/produits" class="text-xs text-outline hover:text-on-surface underline py-2 text-center sm:text-left">Réinitialiser</a>
                         <?php endif; ?>
+                    </form>
+                    <span class="text-xs text-outline font-semibold">Total : <?= count($products) ?> article(s)</span>
+                </div>
                     </form>
                     <div class="text-xs text-outline font-medium">
                         Total : <strong><?= count($products) ?></strong> article(s)
