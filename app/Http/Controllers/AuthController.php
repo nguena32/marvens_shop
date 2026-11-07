@@ -41,7 +41,16 @@ class AuthController extends Controller
 
     public function login(Request $request): Response
     {
-        $this->validateCsrf($request);
+        // Validation CSRF avec message utilisateur convivial au lieu d'une erreur 500/403 brute
+        $token = $request->input('_csrf_token');
+        if (!Session::validateCsrfToken($token)) {
+            Logger::security("Échec de validation du jeton CSRF à la connexion", [
+                'uri' => $request->getPath(),
+                'method' => $request->getMethod(),
+            ]);
+            Session::set('flash_error', 'Votre session a expiré. Veuillez renseigner à nouveau vos identifiants.');
+            return $this->redirect('/admin/login');
+        }
 
         $username = trim((string) $request->input('username', ''));
         $password = (string) $request->input('password', '');

@@ -143,7 +143,12 @@ class CartController extends Controller
 
     public function processCheckout(Request $request): Response
     {
-        $this->validateCsrf($request);
+        $token = $request->input('_csrf_token');
+        if (!Session::validateCsrfToken($token)) {
+            Session::set('checkout_errors', ['global' => ['Votre session a expiré ou le jeton de sécurité est invalide. Veuillez soumettre à nouveau votre commande.']]);
+            Session::set('checkout_old', $request->all());
+            return $this->redirect('/checkout');
+        }
 
         $data = $request->all();
         $validator = Validator::make($data, [
