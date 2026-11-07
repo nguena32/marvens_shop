@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <?php include dirname(__DIR__) . '/partials/favicon.php'; ?>

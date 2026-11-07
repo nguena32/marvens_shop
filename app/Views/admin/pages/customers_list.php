@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $active_tab = 'customers';
 ?>
 <!DOCTYPE html>
@@ -53,8 +53,9 @@ $active_tab = 'customers';
 
     <?php include dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
-    <div class="pl-72">
-        <?php include dirname(__DIR__) . '/partials/header.php'; ?>
+    <div class="md:pl-72 min-h-screen flex flex-col pb-16 md:pb-0">
+        <?php include dirname(__DIR__) . '/partials/header.php';
+        include dirname(__DIR__) . '/partials/bottom_nav.php'; ?>
 
         <main class="relative pt-16 bg-background min-h-screen p-space-lg">
             <div class="max-w-7xl mx-auto flex flex-col gap-space-lg">
@@ -91,7 +92,61 @@ $active_tab = 'customers';
 
                 <!-- Tableau des Clients (8.4 Nom, WhatsApp, Adresse, Quartier, Historique) -->
                 <div class="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
-                    <table class="w-full text-left border-collapse">
+                    <!-- Vue Cartes Mobile (< md) -->
+                    <div class="block md:hidden divide-y divide-border">
+                        <?php if (empty($customers)): ?>
+                            <div class="py-12 text-center text-outline text-xs">
+                                Aucun client enregistré pour l'instant.
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($customers as $cust): ?>
+                                <?php 
+                                    $clean = preg_replace('/[^0-9]/', '', (string)$cust['whatsapp']);
+                                    $waUrl = "https://wa.me/" . $clean;
+                                ?>
+                                <div class="p-4 flex flex-col gap-2.5 bg-surface hover:bg-surface-container-low/40 transition-colors">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-bold text-xs text-on-surface">
+                                                <?= mb_strtoupper(mb_substr($cust['name'], 0, 1)) ?>
+                                            </div>
+                                            <a href="/admin/clients/<?= (int) $cust['id'] ?>" class="font-bold text-sm text-primary hover:underline">
+                                                <?= htmlspecialchars($cust['name']) ?>
+                                            </a>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-surface-container text-on-surface">
+                                            <?= (int) $cust['orders_count'] ?> cmd
+                                        </span>
+                                    </div>
+
+                                    <div class="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                                        <a href="<?= $waUrl ?>" target="_blank" class="inline-flex items-center gap-1 text-[#25D366] font-semibold">
+                                            <span class="material-symbols-outlined text-[16px]">chat</span>
+                                            <?= htmlspecialchars($cust['whatsapp']) ?>
+                                        </a>
+                                        <span class="font-bold text-sm text-emerald-700">
+                                            <?= number_format((float)$cust['total_spent'], 0, ',', ' ') ?> FCFA
+                                        </span>
+                                    </div>
+
+                                    <div class="text-[11px] text-outline">
+                                        <?= htmlspecialchars(($cust['city'] ?? 'Douala') . (!empty($cust['district']) ? ' (' . $cust['district'] . ')' : '')) ?>
+                                        <?php if (!empty($cust['address'])): ?>
+                                            — <span class="italic"><?= htmlspecialchars($cust['address']) ?></span>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <a href="/admin/clients/<?= (int) $cust['id'] ?>" class="w-full py-2.5 rounded-xl bg-surface-container-high text-on-surface text-xs font-semibold text-center hover:bg-surface-container-highest transition-colors min-h-[44px] flex items-center justify-center border border-border mt-1">
+                                        Voir la fiche client & ses commandes &rarr;
+                                    </a>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Vue Tableau Desktop (>= md) -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-surface-container-low text-xs font-semibold uppercase text-outline border-b border-border">
                                 <th class="py-3 px-4">Client</th>
@@ -146,7 +201,7 @@ $active_tab = 'customers';
                                             <?= number_format((float)$cust['total_spent'], 0, ',', ' ') ?> FCFA
                                         </td>
                                         <td class="py-3 px-4 text-right">
-                                            <a href="/admin/clients/<?= (int) $cust['id'] ?>" class="inline-flex items-center gap-1 bg-surface-container-high text-on-surface px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border">
+                                            <a href="/admin/clients/<?= (int) $cust['id'] ?>" class="inline-flex items-center gap-1 bg-surface-container-high text-on-surface px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border min-h-[36px]">
                                                 Fiche & Commandes &rarr;
                                             </a>
                                         </td>
@@ -155,6 +210,7 @@ $active_tab = 'customers';
                             <?php endif; ?>
                         </tbody>
                     </table>
+                    </div>
 
                     <!-- Pagination -->
                     <?php if (($total_pages ?? 1) > 1): ?>

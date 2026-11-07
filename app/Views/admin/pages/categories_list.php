@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $active_tab = 'categories';
 ?>
 <!DOCTYPE html>
@@ -53,8 +53,9 @@ $active_tab = 'categories';
 
     <?php include dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
-    <div class="pl-72">
-        <?php include dirname(__DIR__) . '/partials/header.php'; ?>
+    <div class="md:pl-72 min-h-screen flex flex-col pb-16 md:pb-0">
+        <?php include dirname(__DIR__) . '/partials/header.php';
+        include dirname(__DIR__) . '/partials/bottom_nav.php'; ?>
 
         <main class="relative pt-16 bg-background min-h-screen p-space-lg">
             <div class="max-w-7xl mx-auto flex flex-col gap-space-lg">

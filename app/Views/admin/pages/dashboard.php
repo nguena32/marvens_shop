@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $active_tab = 'dashboard';
 ?>
 <!DOCTYPE html>
@@ -61,32 +61,33 @@ $active_tab = 'dashboard';
 
     <?php include dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
-    <div class="pl-72">
-        <?php include dirname(__DIR__) . '/partials/header.php'; ?>
+    <div class="md:pl-72 min-h-screen flex flex-col pb-16 md:pb-0">
+        <?php include dirname(__DIR__) . '/partials/header.php';
+        include dirname(__DIR__) . '/partials/bottom_nav.php'; ?>
 
         <main class="relative pt-16 bg-background min-h-screen">
-            <div class="flex flex-col w-full p-space-lg space-y-space-lg">
+            <div class="flex flex-col w-full p-3 sm:p-space-md md:p-space-lg space-y-4 sm:space-y-space-lg">
                 
                 <!-- En-tête avec raccourcis d'accès rapide (Module 8.1) -->
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-space-md bg-surface p-space-lg rounded-2xl border border-border shadow-sm">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-space-md bg-surface p-4 sm:p-space-lg rounded-2xl border border-border shadow-sm">
                     <div>
-                        <h1 class="text-2xl font-bold text-on-surface tracking-tight">Tableau de Bord Commercial</h1>
-                        <p class="text-sm text-outline">Supervision globale, accès direct aux commandes, catalogue, clients et réglages</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight">Tableau de Bord Commercial</h1>
+                        <p class="text-xs sm:text-sm text-outline">Supervision globale, accès direct aux commandes, catalogue, clients et réglages</p>
                     </div>
 
                     <!-- 8.1 Raccourcis d'accès rapide -->
-                    <div class="flex flex-wrap items-center gap-2">
-                        <a href="/admin/commandes" class="inline-flex items-center gap-1.5 bg-primary text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-all shadow-sm">
-                            <span class="material-symbols-outlined text-[16px]">shopping_bag</span> Commandes (<?= (int)$total_orders ?>)
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                        <a href="/admin/commandes" class="inline-flex items-center justify-center gap-1.5 bg-primary text-white px-3.5 py-2.5 rounded-xl text-xs font-semibold hover:opacity-90 transition-all shadow-sm flex-1 sm:flex-initial min-h-[44px]">
+                            <span class="material-symbols-outlined text-[18px]">shopping_bag</span> Commandes (<?= (int)$total_orders ?>)
                         </a>
-                        <a href="/admin/produits" class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border">
-                            <span class="material-symbols-outlined text-[16px]">inventory_2</span> Catalogue
+                        <a href="/admin/produits" class="inline-flex items-center justify-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2.5 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border flex-1 sm:flex-initial min-h-[44px]">
+                            <span class="material-symbols-outlined text-[18px]">inventory_2</span> Catalogue
                         </a>
-                        <a href="/admin/clients" class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border">
-                            <span class="material-symbols-outlined text-[16px]">group</span> Clients (<?= (int)($total_customers ?? 0) ?>)
+                        <a href="/admin/clients" class="inline-flex items-center justify-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2.5 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border min-h-[44px]">
+                            <span class="material-symbols-outlined text-[18px]">group</span> Clients
                         </a>
-                        <a href="/admin/parametres/boutique" class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border">
-                            <span class="material-symbols-outlined text-[16px]">settings</span> Paramètres
+                        <a href="/admin/parametres/boutique" class="inline-flex items-center justify-center gap-1.5 bg-surface-container-high text-on-surface px-3.5 py-2.5 rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-all border border-border min-h-[44px]">
+                            <span class="material-symbols-outlined text-[18px]">settings</span> Paramètres
                         </a>
                     </div>
                 </div>
@@ -227,24 +228,73 @@ $active_tab = 'dashboard';
 
                 <!-- Section 3: Interactive Recent Orders Table -->
                 <section class="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
-                    <div class="p-space-lg border-b border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+                    <div class="p-4 sm:p-space-lg border-b border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
                         <div>
-                            <h3 class="text-lg font-bold text-on-surface">Commandes Récentes</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-on-surface">Commandes Récentes</h3>
                             <p class="text-xs text-outline">Suivi en temps réel des flux clients et interactions WhatsApp</p>
                         </div>
                         
-                        <!-- Status Filters -->
-                        <div class="flex flex-wrap items-center gap-1 bg-surface-container-low p-1 rounded-xl border border-border text-xs">
-                            <a href="/admin/dashboard" class="px-3 py-1.5 rounded-lg <?= empty($current_filter) ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Toutes</a>
-                            <a href="/admin/dashboard?status=pending" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'pending') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">En attente</a>
-                            <a href="/admin/dashboard?status=confirmed" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'confirmed') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Confirmées</a>
-                            <a href="/admin/dashboard?status=paid" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'paid') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Payées</a>
-                            <a href="/admin/dashboard?status=shipped" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'shipped') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Expédiées</a>
-                            <a href="/admin/dashboard?status=delivered" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'delivered') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all">Livrées</a>
+                        <!-- Status Filters (Scrollable horizontal sur mobile sans bloquer) -->
+                        <div class="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+                            <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl border border-border text-xs whitespace-nowrap min-w-max">
+                                <a href="/admin/dashboard" class="px-3 py-1.5 rounded-lg <?= empty($current_filter) ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all min-h-[36px] flex items-center">Toutes</a>
+                                <a href="/admin/dashboard?status=pending" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'pending') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all min-h-[36px] flex items-center">En attente</a>
+                                <a href="/admin/dashboard?status=confirmed" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'confirmed') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all min-h-[36px] flex items-center">Confirmées</a>
+                                <a href="/admin/dashboard?status=paid" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'paid') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all min-h-[36px] flex items-center">Payées</a>
+                                <a href="/admin/dashboard?status=shipped" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'shipped') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all min-h-[36px] flex items-center">Expédiées</a>
+                                <a href="/admin/dashboard?status=delivered" class="px-3 py-1.5 rounded-lg <?= ($current_filter === 'delivered') ? 'bg-surface text-on-surface font-semibold shadow-sm' : 'text-outline hover:text-on-surface' ?> transition-all min-h-[36px] flex items-center">Livrées</a>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto">
+                    <!-- Vue Mobile : Cartes Dédiées (Visible < md) -->
+                    <div class="block md:hidden divide-y divide-border">
+                        <?php if (empty($recent_orders)): ?>
+                            <div class="p-8 text-center text-outline text-xs">
+                                Aucune commande ne correspond aux critères sélectionnés.
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($recent_orders as $ord): ?>
+                                <?php 
+                                    $cleanPhone = preg_replace('/[^0-9]/', '', (string)$ord['customer_whatsapp']);
+                                    $waMsg = urlencode("Bonjour " . $ord['customer_name'] . ", nous faisons le suivi de votre commande #" . $ord['order_number'] . " sur Marvens Shop.");
+                                    $waUrl = "https://wa.me/" . $cleanPhone . "?text=" . $waMsg;
+                                ?>
+                                <div class="p-4 flex flex-col gap-2.5 bg-surface hover:bg-surface-container-low/40 transition-colors">
+                                    <div class="flex items-center justify-between">
+                                        <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="font-bold text-primary hover:underline text-sm">
+                                            #<?= htmlspecialchars($ord['order_number']) ?>
+                                        </a>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border <?= \App\Domain\Entities\Order::getStatusBadgeClass($ord['order_status']) ?>">
+                                            <?= htmlspecialchars(\App\Domain\Entities\Order::getStatusLabel($ord['order_status'])) ?>
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div>
+                                            <span class="font-medium text-on-surface"><?= htmlspecialchars($ord['customer_name']) ?></span>
+                                            <span class="text-outline block text-[11px]"><?= htmlspecialchars($ord['customer_whatsapp']) ?></span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="font-bold text-sm text-on-surface"><?= number_format((float) $ord['total_amount'], 0, ',', ' ') ?> FCFA</span>
+                                            <span class="text-outline block text-[11px]"><?= htmlspecialchars(($ord['delivery_city'] ?? 'Douala') . (!empty($ord['delivery_district']) ? ' (' . $ord['delivery_district'] . ')' : '')) ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 pt-1 border-t border-border/50">
+                                        <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="flex-1 py-2 text-center rounded-xl border border-border bg-surface-container-low text-xs font-semibold hover:bg-surface-container transition-colors min-h-[44px] flex items-center justify-center">
+                                            Détails &rarr;
+                                        </a>
+                                        <a href="<?= $waUrl ?>" target="_blank" class="flex-1 py-2 text-center rounded-xl bg-[#25D366]/10 text-[#25D366] text-xs font-semibold hover:bg-[#25D366]/20 transition-colors flex items-center justify-center gap-1 min-h-[44px]">
+                                            <span class="material-symbols-outlined text-[18px]">chat</span>
+                                            <?= $ord['order_status'] === 'pending' ? 'Relancer WA' : 'Ouvrir WA' ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Vue Desktop / Tablette Large : Tableau Complet (Visible >= md) -->
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="w-full text-left border-collapse text-sm">
                             <thead>
                                 <tr class="bg-surface-container-low text-xs uppercase font-semibold text-outline border-b border-border">
@@ -292,7 +342,7 @@ $active_tab = 'dashboard';
                                                     $waMsg = urlencode("Bonjour " . $ord['customer_name'] . ", nous faisons le suivi de votre commande #" . $ord['order_number'] . " sur Marvens Shop.");
                                                     $waUrl = "https://wa.me/" . $cleanPhone . "?text=" . $waMsg;
                                                 ?>
-                                                <a href="<?= $waUrl ?>" target="_blank" class="inline-flex items-center gap-1 bg-[#25D366]/10 text-[#25D366] px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-[#25D366]/20 transition-all">
+                                                <a href="<?= $waUrl ?>" target="_blank" class="inline-flex items-center gap-1 bg-[#25D366]/10 text-[#25D366] px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-[#25D366]/20 transition-all min-h-[36px]">
                                                     <span class="material-symbols-outlined text-[16px]">chat</span> 
                                                     <?= $ord['order_status'] === 'pending' ? 'Relancer WA' : 'Ouvrir chat' ?>
                                                 </a>

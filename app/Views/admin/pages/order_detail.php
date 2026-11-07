@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $active_tab = 'orders';
 ?>
 <!DOCTYPE html>
@@ -53,11 +53,12 @@ $active_tab = 'orders';
 
     <?php include dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
-    <div class="pl-72">
-        <?php include dirname(__DIR__) . '/partials/header.php'; ?>
+    <div class="md:pl-72 min-h-screen flex flex-col pb-16 md:pb-0">
+        <?php include dirname(__DIR__) . '/partials/header.php';
+        include dirname(__DIR__) . '/partials/bottom_nav.php'; ?>
 
-        <main class="relative pt-16 bg-background min-h-screen p-space-lg">
-            <div class="max-w-5xl mx-auto flex flex-col gap-space-lg">
+        <main class="relative pt-16 bg-background min-h-screen p-3 sm:p-space-md md:p-space-lg">
+            <div class="max-w-5xl mx-auto flex flex-col gap-4 sm:gap-space-lg">
                 
                 <?php if (!empty($feedback)): ?>
                     <div class="p-4 rounded-xl border <?= $feedback['type'] === 'success' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-red-50 text-red-800 border-red-200' ?> flex items-center gap-2">
@@ -67,13 +68,13 @@ $active_tab = 'orders';
                 <?php endif; ?>
 
                 <!-- En-tête de la commande (8.2 Numéro, Date, WhatsApp) -->
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-space-md bg-surface p-space-lg rounded-2xl border border-border shadow-sm">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface p-4 sm:p-space-lg rounded-2xl border border-border shadow-sm">
                     <div>
-                        <a href="/admin/commandes" class="text-xs text-outline hover:text-on-surface flex items-center gap-1 mb-1 font-semibold">
-                            <span class="material-symbols-outlined text-[14px]">arrow_back</span> Retour aux commandes
+                        <a href="/admin/commandes" class="text-xs text-outline hover:text-on-surface flex items-center gap-1 mb-2 font-semibold min-h-[36px] items-center">
+                            <span class="material-symbols-outlined text-[16px]">arrow_back</span> Retour aux commandes
                         </a>
-                        <div class="flex items-center gap-3">
-                            <h1 class="text-2xl font-bold text-on-surface">Commande #<?= htmlspecialchars($order['order_number']) ?></h1>
+                        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                            <h1 class="text-xl sm:text-2xl font-bold text-on-surface">Commande #<?= htmlspecialchars($order['order_number']) ?></h1>
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border <?= \App\Domain\Entities\Order::getStatusBadgeClass($order['order_status']) ?>">
                                 <?= htmlspecialchars(\App\Domain\Entities\Order::getStatusLabel($order['order_status'])) ?>
                             </span>
@@ -86,15 +87,15 @@ $active_tab = 'orders';
                         $waMsg = urlencode("Bonjour " . $order['customer_name'] . ", nous faisons le suivi de votre commande #" . $order['order_number'] . " sur Marvens Shop.");
                         $waUrl = "https://wa.me/" . $cleanPhone . "?text=" . $waMsg;
                     ?>
-                    <a href="<?= $waUrl ?>" target="_blank" class="inline-flex items-center gap-2 bg-[#25D366] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition-colors shadow-sm">
+                    <a href="<?= $waUrl ?>" target="_blank" class="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition-colors shadow-sm w-full sm:w-auto min-h-[44px]">
                         <span class="material-symbols-outlined text-[18px]">chat</span> Échanger sur WhatsApp
                     </a>
                 </div>
 
                 <!-- 8.2 & 8.3 Traitement des Statuts & 7.9 Suivi des Paiements -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-space-lg">
                     <!-- Mise à jour du Statut de Commande (8.3) -->
-                    <div class="bg-surface rounded-2xl border border-border p-space-lg shadow-sm">
+                    <div class="bg-surface rounded-2xl border border-border p-4 sm:p-space-lg shadow-sm">
                         <h2 class="text-base font-bold text-on-surface mb-space-sm flex items-center gap-2">
                             <span class="material-symbols-outlined text-secondary">sync</span> Statut de Commande (8.3)
                         </h2>
@@ -103,7 +104,7 @@ $active_tab = 'orders';
                             
                             <div>
                                 <label class="block text-xs font-semibold text-outline uppercase mb-1">Modifier l'état</label>
-                                <select name="order_status" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm text-on-surface font-medium">
+                                <select name="order_status" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-sm text-on-surface font-medium min-h-[44px]">
                                     <option value="pending" <?= $order['order_status'] === 'pending' ? 'selected' : '' ?>>1. En attente</option>
                                     <option value="confirmed" <?= $order['order_status'] === 'confirmed' ? 'selected' : '' ?>>2. Confirmée</option>
                                     <option value="payment_pending" <?= $order['order_status'] === 'payment_pending' ? 'selected' : '' ?>>3. Paiement en attente</option>
@@ -117,17 +118,17 @@ $active_tab = 'orders';
 
                             <div>
                                 <label class="block text-xs font-semibold text-outline uppercase mb-1">Motif / Commentaire (Historisé)</label>
-                                <input type="text" name="comment" placeholder="Ex: Paiement reçu, colis préparé..." class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm text-on-surface">
+                                <input type="text" name="comment" placeholder="Ex: Paiement reçu, colis préparé..." class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-sm text-on-surface min-h-[44px]">
                             </div>
 
-                            <button type="submit" class="w-full bg-primary text-white py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-all">
+                            <button type="submit" class="w-full bg-primary text-white py-2.5 rounded-xl text-xs font-semibold hover:opacity-90 transition-all min-h-[44px]">
                                 Valider la transition de statut
                             </button>
                         </form>
                     </div>
 
                     <!-- Mise à jour du Paiement (7.9 & 8.5) -->
-                    <div class="bg-surface rounded-2xl border border-border p-space-lg shadow-sm">
+                    <div class="bg-surface rounded-2xl border border-border p-4 sm:p-space-lg shadow-sm">
                         <h2 class="text-base font-bold text-on-surface mb-space-sm flex items-center gap-2">
                             <span class="material-symbols-outlined text-teal-600">payments</span> Suivi du Paiement (7.9)
                         </h2>
@@ -136,7 +137,7 @@ $active_tab = 'orders';
                             
                             <div>
                                 <label class="block text-xs font-semibold text-outline uppercase mb-1">Statut du règlement</label>
-                                <select name="payment_status" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm text-on-surface font-medium">
+                                <select name="payment_status" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-sm text-on-surface font-medium min-h-[44px]">
                                     <option value="unpaid" <?= $order['payment_status'] === 'unpaid' ? 'selected' : '' ?>>Non payé (unpaid)</option>
                                     <option value="pending" <?= $order['payment_status'] === 'pending' ? 'selected' : '' ?>>En attente (pending)</option>
                                     <option value="paid" <?= $order['payment_status'] === 'paid' ? 'selected' : '' ?>>Payé & certifié (paid)</option>
@@ -146,10 +147,10 @@ $active_tab = 'orders';
 
                             <div>
                                 <label class="block text-xs font-semibold text-outline uppercase mb-1">Référence ou note de transaction</label>
-                                <input type="text" name="payment_note" placeholder="Ex: Reçu Orange Money #88219..." class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm text-on-surface">
+                                <input type="text" name="payment_note" placeholder="Ex: Reçu Orange Money #88219..." class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-sm text-on-surface min-h-[44px]">
                             </div>
 
-                            <button type="submit" class="w-full bg-teal-700 text-white py-2 rounded-xl text-xs font-semibold hover:bg-teal-800 transition-all">
+                            <button type="submit" class="w-full bg-teal-700 text-white py-2.5 rounded-xl text-xs font-semibold hover:bg-teal-800 transition-all min-h-[44px]">
                                 Enregistrer l'état du paiement
                             </button>
                         </form>
@@ -157,8 +158,8 @@ $active_tab = 'orders';
                 </div>
 
                 <!-- 8.2 Client, Adresse, Mode de livraison, Instructions -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
-                    <div class="bg-surface rounded-2xl border border-border p-space-lg shadow-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-space-lg">
+                    <div class="bg-surface rounded-2xl border border-border p-4 sm:p-space-lg shadow-sm">
                         <h3 class="text-base font-bold text-on-surface mb-space-sm flex items-center gap-2">
                             <span class="material-symbols-outlined text-outline">person</span> Informations Client (8.4)
                         </h3>
@@ -185,7 +186,7 @@ $active_tab = 'orders';
                         <?php endif; ?>
                     </div>
 
-                    <div class="bg-surface rounded-2xl border border-border p-space-lg shadow-sm">
+                    <div class="bg-surface rounded-2xl border border-border p-4 sm:p-space-lg shadow-sm">
                         <h3 class="text-base font-bold text-on-surface mb-space-sm flex items-center gap-2">
                             <span class="material-symbols-outlined text-outline">local_shipping</span> Modalités de Livraison (8.2)
                         </h3>
@@ -210,49 +211,84 @@ $active_tab = 'orders';
 
                 <!-- 8.2 Produits, Quantités, Montants -->
                 <div class="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
-                    <div class="p-space-md border-b border-border bg-surface-container-low font-bold text-sm flex items-center justify-between">
+                    <div class="p-4 border-b border-border bg-surface-container-low font-bold text-sm flex items-center justify-between">
                         <span>Articles de la commande (<?= count($items) ?> produit(s))</span>
                         <span class="text-xs text-outline font-normal">Calcul certifié serveur (MS-BIZ-03)</span>
                     </div>
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr class="text-xs uppercase text-outline border-b border-border">
-                                <th class="p-4">Produit & Déclinaison</th>
-                                <th class="p-4">Prix unitaire</th>
-                                <th class="p-4">Quantité</th>
-                                <th class="p-4 text-right">Sous-total</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border">
-                            <?php foreach ($items as $it): ?>
-                                <tr>
-                                    <td class="p-4 font-medium">
-                                        <?= htmlspecialchars($it['product_name']) ?>
+
+                    <!-- Cartes articles Mobile (< md) -->
+                    <div class="block md:hidden divide-y divide-border text-sm">
+                        <?php foreach ($items as $it): ?>
+                            <div class="p-4 flex flex-col gap-2">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <div class="font-semibold text-on-surface"><?= htmlspecialchars($it['product_name']) ?></div>
                                         <?php if (!empty($it['variant_info'])): ?>
-                                            <span class="text-xs text-outline block font-normal"><?= htmlspecialchars($it['variant_info']) ?></span>
+                                            <span class="text-xs text-outline block"><?= htmlspecialchars($it['variant_info']) ?></span>
                                         <?php endif; ?>
-                                    </td>
-                                    <td class="p-4"><?= number_format((float)$it['unit_price'], 0, ',', ' ') ?> FCFA</td>
-                                    <td class="p-4 font-semibold"><?= (int)$it['quantity'] ?></td>
-                                    <td class="p-4 font-semibold text-right"><?= number_format((float)$it['subtotal'], 0, ',', ' ') ?> FCFA</td>
+                                    </div>
+                                    <span class="font-bold text-sm"><?= number_format((float)$it['subtotal'], 0, ',', ' ') ?> FCFA</span>
+                                </div>
+                                <div class="flex justify-between text-xs text-outline pt-1">
+                                    <span><?= number_format((float)$it['unit_price'], 0, ',', ' ') ?> FCFA × <?= (int)$it['quantity'] ?></span>
+                                    <span class="font-medium text-on-surface">Qté : <?= (int)$it['quantity'] ?></span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <div class="p-4 bg-surface-container-low/50 space-y-1.5 text-xs">
+                            <div class="flex justify-between text-outline">
+                                <span>Frais de livraison :</span>
+                                <span class="font-medium text-on-surface"><?= number_format((float)$order['delivery_cost'], 0, ',', ' ') ?> FCFA</span>
+                            </div>
+                            <div class="flex justify-between text-base font-black text-primary pt-1 border-t border-border">
+                                <span>Total :</span>
+                                <span><?= number_format((float)$order['total_amount'], 0, ',', ' ') ?> FCFA</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tableau articles Desktop (>= md) -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="text-xs uppercase text-outline border-b border-border bg-surface-container-low">
+                                    <th class="p-4">Produit & Déclinaison</th>
+                                    <th class="p-4">Prix unitaire</th>
+                                    <th class="p-4">Quantité</th>
+                                    <th class="p-4 text-right">Sous-total</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                        <tfoot>
-                            <tr class="border-t border-border">
-                                <td colspan="3" class="p-4 text-right text-outline">Frais de livraison :</td>
-                                <td class="p-4 text-right font-medium"><?= number_format((float)$order['delivery_cost'], 0, ',', ' ') ?> FCFA</td>
-                            </tr>
-                            <tr class="bg-surface-container-low font-bold text-base">
-                                <td colspan="3" class="p-4 text-right text-primary">Montant Total :</td>
-                                <td class="p-4 text-right text-primary font-black"><?= number_format((float)$order['total_amount'], 0, ',', ' ') ?> FCFA</td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                            </thead>
+                            <tbody class="divide-y divide-border">
+                                <?php foreach ($items as $it): ?>
+                                    <tr>
+                                        <td class="p-4 font-medium">
+                                            <?= htmlspecialchars($it['product_name']) ?>
+                                            <?php if (!empty($it['variant_info'])): ?>
+                                                <span class="text-xs text-outline block font-normal"><?= htmlspecialchars($it['variant_info']) ?></span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="p-4"><?= number_format((float)$it['unit_price'], 0, ',', ' ') ?> FCFA</td>
+                                        <td class="p-4 font-semibold"><?= (int)$it['quantity'] ?></td>
+                                        <td class="p-4 font-semibold text-right"><?= number_format((float)$it['subtotal'], 0, ',', ' ') ?> FCFA</td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                                <tr class="border-t border-border">
+                                    <td colspan="3" class="p-4 text-right text-outline">Frais de livraison :</td>
+                                    <td class="p-4 text-right font-medium"><?= number_format((float)$order['delivery_cost'], 0, ',', ' ') ?> FCFA</td>
+                                </tr>
+                                <tr class="bg-surface-container-low font-bold text-base">
+                                    <td colspan="3" class="p-4 text-right text-primary">Montant Total :</td>
+                                    <td class="p-4 text-right text-primary font-black"><?= number_format((float)$order['total_amount'], 0, ',', ' ') ?> FCFA</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
 
                 <!-- 8.2 Historique Complet des Changements de Statut -->
-                <div class="bg-surface rounded-2xl border border-border p-space-lg shadow-sm">
+                <div class="bg-surface rounded-2xl border border-border p-4 sm:p-space-lg shadow-sm">
                     <h3 class="text-base font-bold text-on-surface mb-space-md flex items-center gap-2">
                         <span class="material-symbols-outlined text-outline">history</span> Journal d'Historique des Statuts (MS-BIZ-06)
                     </h3>
@@ -264,14 +300,14 @@ $active_tab = 'orders';
                                 <div class="flex items-start gap-3 p-3 rounded-xl bg-surface-container-low border border-border text-xs">
                                     <div class="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0"></div>
                                     <div class="flex-1">
-                                        <div class="flex items-center justify-between">
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                                             <span class="font-bold text-on-surface">
                                                 <?= htmlspecialchars(\App\Domain\Entities\Order::getStatusLabel($h['new_status'])) ?>
                                                 <?php if (!empty($h['previous_status'])): ?>
                                                     <span class="font-normal text-outline"> (depuis <?= htmlspecialchars(\App\Domain\Entities\Order::getStatusLabel($h['previous_status'])) ?>)</span>
                                                 <?php endif; ?>
                                             </span>
-                                            <span class="text-outline"><?= htmlspecialchars(date('d/m/Y H:i:s', strtotime($h['changed_at']))) ?></span>
+                                            <span class="text-outline text-[11px]"><?= htmlspecialchars(date('d/m/Y H:i:s', strtotime($h['changed_at']))) ?></span>
                                         </div>
                                         <?php if (!empty($h['comment'])): ?>
                                             <p class="text-on-surface-variant mt-1"><?= htmlspecialchars($h['comment']) ?></p>

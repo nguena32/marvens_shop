@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $active_tab = 'products';
 ?>
 <!DOCTYPE html>
@@ -53,8 +53,9 @@ $active_tab = 'products';
 
     <?php include dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
-    <div class="pl-72">
-        <?php include dirname(__DIR__) . '/partials/header.php'; ?>
+    <div class="md:pl-72 min-h-screen flex flex-col pb-16 md:pb-0">
+        <?php include dirname(__DIR__) . '/partials/header.php';
+        include dirname(__DIR__) . '/partials/bottom_nav.php'; ?>
 
         <main class="relative pt-16 bg-background min-h-screen p-space-lg">
             <div class="max-w-7xl mx-auto flex flex-col gap-space-lg">
@@ -119,7 +120,70 @@ $active_tab = 'products';
                 </div>
 
                 <div class="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
-                    <table class="w-full text-left border-collapse">
+                    <!-- Vue Cartes Mobile (< md) -->
+                    <div class="block md:hidden divide-y divide-border">
+                        <?php if (empty($products)): ?>
+                            <div class="py-12 text-center text-outline text-xs">
+                                Aucun produit trouvé selon les critères sélectionnés.
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($products as $p): ?>
+                                <div class="p-4 flex flex-col gap-3 bg-surface hover:bg-surface-container-low/40 transition-colors">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-16 h-16 rounded-xl bg-surface-container bg-cover bg-center shrink-0 border border-border" style="background-image: url('<?= htmlspecialchars(!empty($p['main_image_url']) ? (str_starts_with($p['main_image_url'], 'http') ? $p['main_image_url'] : '/' . ltrim($p['main_image_url'], '/')) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100') ?>')"></div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="font-bold text-sm text-on-surface flex items-center gap-1.5 truncate">
+                                                <?= htmlspecialchars($p['name']) ?>
+                                                <?php if (!empty($p['is_featured'])): ?>
+                                                    <span class="material-symbols-outlined text-amber-500 text-[16px] shrink-0">star</span>
+                                                <?php endif; ?>
+                                            </div>
+                                            <span class="text-xs text-outline font-mono block"><?= htmlspecialchars($p['sku'] ?? 'Sans SKU') ?></span>
+                                            <span class="text-xs text-outline block mt-0.5"><?= htmlspecialchars($p['category_name'] ?? 'Non classé') ?></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                                        <div>
+                                            <?php if (!empty($p['promotional_price'])): ?>
+                                                <span class="text-red-600 font-bold text-sm"><?= number_format((float)$p['promotional_price'], 0, ',', ' ') ?> FCFA</span>
+                                                <span class="text-outline line-through text-[11px] ml-1"><?= number_format((float)$p['price'], 0, ',', ' ') ?> FCFA</span>
+                                            <?php else: ?>
+                                                <span class="font-bold text-sm text-on-surface"><?= number_format((float)$p['price'], 0, ',', ' ') ?> FCFA</span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <form method="POST" action="/admin/produits/<?= (int)$p['id'] ?>/statut">
+                                                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                                                <button type="submit" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold <?= $p['is_active'] ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-800' ?>">
+                                                    <?= $p['is_active'] ? 'En ligne' : 'Masqué' ?>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 pt-1 border-t border-border/40">
+                                        <a href="/produit/<?= htmlspecialchars($p['slug']) ?>" target="_blank" class="flex-1 py-2 rounded-xl border border-border bg-surface-container-low text-xs font-semibold text-center hover:bg-surface-container min-h-[44px] flex items-center justify-center gap-1">
+                                            <span class="material-symbols-outlined text-[16px]">visibility</span> Voir
+                                        </a>
+                                        <a href="/admin/produits/<?= (int)$p['id'] ?>/modifier" class="flex-1 py-2 rounded-xl bg-primary text-white text-xs font-semibold text-center hover:opacity-90 min-h-[44px] flex items-center justify-center gap-1">
+                                            <span class="material-symbols-outlined text-[16px]">edit</span> Modifier
+                                        </a>
+                                        <form method="POST" action="/admin/produits/<?= (int)$p['id'] ?>/supprimer" onsubmit="return confirm('Confirmez-vous la suppression de ce produit ?');" class="shrink-0">
+                                            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
+                                            <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-xl border border-red-200 min-h-[44px] min-w-[44px] flex items-center justify-center" title="Supprimer">
+                                                <span class="material-symbols-outlined text-[18px]">delete</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Vue Tableau Desktop (>= md) -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-surface-container-low text-xs font-semibold uppercase text-outline border-b border-border">
                                 <th class="py-3 px-4">Article</th>
@@ -208,6 +272,7 @@ $active_tab = 'products';
                             <?php endif; ?>
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
             </div>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $active_tab = 'orders';
 ?>
 <!DOCTYPE html>
@@ -53,70 +53,73 @@ $active_tab = 'orders';
 
     <?php include dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
-    <div class="pl-72">
-        <?php include dirname(__DIR__) . '/partials/header.php'; ?>
+    <div class="md:pl-72 min-h-screen flex flex-col pb-16 md:pb-0">
+        <?php include dirname(__DIR__) . '/partials/header.php';
+        include dirname(__DIR__) . '/partials/bottom_nav.php'; ?>
 
-        <main class="relative pt-16 bg-background min-h-screen p-space-lg">
-            <div class="max-w-7xl mx-auto flex flex-col gap-space-lg">
+        <main class="relative pt-16 bg-background min-h-screen p-3 sm:p-space-md md:p-space-lg">
+            <div class="max-w-7xl mx-auto flex flex-col gap-4 sm:gap-space-lg">
                 
                 <!-- En-tête avec compteur total -->
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-space-md bg-surface p-space-lg rounded-2xl border border-border shadow-sm">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-space-md bg-surface p-4 sm:p-space-lg rounded-2xl border border-border shadow-sm">
                     <div>
-                        <h1 class="text-2xl font-bold text-on-surface tracking-tight">Gestion des Commandes</h1>
-                        <p class="text-sm text-outline">Suivi, filtrage par statut/période, recherche client et traitement des commandes</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight">Gestion des Commandes</h1>
+                        <p class="text-xs sm:text-sm text-outline">Suivi, filtrage par statut/période, recherche client et traitement des commandes</p>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs bg-surface-container-high text-on-surface font-semibold px-3 py-1.5 rounded-xl border border-border">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <span class="text-xs bg-surface-container-high text-on-surface font-semibold px-3 py-2 rounded-xl border border-border flex-1 sm:flex-initial text-center min-h-[44px] flex items-center justify-center">
                             Total : <?= (int)($total_count ?? count($orders)) ?> commande(s)
                         </span>
-                        <a href="/admin/statistiques" class="inline-flex items-center gap-1.5 bg-primary text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold hover:opacity-90 transition-all">
-                            <span class="material-symbols-outlined text-[16px]">query_stats</span> Statistiques
+                        <a href="/admin/statistiques" class="inline-flex items-center justify-center gap-1.5 bg-primary text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-all min-h-[44px]">
+                            <span class="material-symbols-outlined text-[18px]">query_stats</span> Statistiques
                         </a>
                     </div>
                 </div>
 
-                <!-- 8.2 & 8.3 Filtres de Statut Rapide -->
-                <div class="flex flex-wrap items-center gap-1.5 bg-surface p-2.5 rounded-2xl border border-border text-xs shadow-sm">
-                    <span class="text-outline font-semibold px-2">Statut :</span>
-                    <a href="/admin/commandes" class="px-3 py-1.5 rounded-xl <?= empty($current_status) ? 'bg-primary text-white font-semibold' : 'text-outline hover:text-on-surface bg-surface-container-low' ?>">
-                        Tous (<?= (int)($status_counts['total'] ?? 0) ?>)
-                    </a>
-                    <a href="/admin/commandes?status=pending" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'pending') ? 'bg-amber-600 text-white font-semibold' : 'text-amber-800 bg-amber-50 hover:bg-amber-100' ?>">
-                        En attente (<?= (int)($status_counts['pending'] ?? 0) ?>)
-                    </a>
-                    <a href="/admin/commandes?status=confirmed" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'confirmed') ? 'bg-blue-600 text-white font-semibold' : 'text-blue-800 bg-blue-50 hover:bg-blue-100' ?>">
-                        Confirmées (<?= (int)($status_counts['confirmed'] ?? 0) ?>)
-                    </a>
-                    <a href="/admin/commandes?status=payment_pending" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'payment_pending') ? 'bg-orange-600 text-white font-semibold' : 'text-orange-800 bg-orange-50 hover:bg-orange-100' ?>">
-                        Paiement att. (<?= (int)($status_counts['payment_pending'] ?? 0) ?>)
-                    </a>
-                    <a href="/admin/commandes?status=paid" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'paid') ? 'bg-teal-600 text-white font-semibold' : 'text-teal-800 bg-teal-50 hover:bg-teal-100' ?>">
-                        Payées (<?= (int)($status_counts['paid'] ?? 0) ?>)
-                    </a>
-                    <a href="/admin/commandes?status=preparing" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'preparing') ? 'bg-indigo-600 text-white font-semibold' : 'text-indigo-800 bg-indigo-50 hover:bg-indigo-100' ?>">
-                        En prép. (<?= (int)($status_counts['preparing'] ?? 0) ?>)
-                    </a>
-                    <a href="/admin/commandes?status=shipped" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'shipped') ? 'bg-purple-600 text-white font-semibold' : 'text-purple-800 bg-purple-50 hover:bg-purple-100' ?>">
-                        Expédiées (<?= (int)($status_counts['shipped'] ?? 0) ?>)
-                    </a>
-                    <a href="/admin/commandes?status=delivered" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'delivered') ? 'bg-emerald-600 text-white font-semibold' : 'text-emerald-800 bg-emerald-50 hover:bg-emerald-100' ?>">
-                        Livrées (<?= (int)($status_counts['delivered'] ?? 0) ?>)
-                    </a>
-                    <a href="/admin/commandes?status=cancelled" class="px-3 py-1.5 rounded-xl <?= ($current_status === 'cancelled') ? 'bg-red-600 text-white font-semibold' : 'text-red-800 bg-red-50 hover:bg-red-100' ?>">
-                        Annulées (<?= (int)($status_counts['cancelled'] ?? 0) ?>)
-                    </a>
+                <!-- 8.2 & 8.3 Filtres de Statut Rapide (Scrollable horizontal sur mobile) -->
+                <div class="overflow-x-auto pb-1 sm:pb-0">
+                    <div class="flex items-center gap-1.5 bg-surface p-2 rounded-2xl border border-border text-xs shadow-sm whitespace-nowrap min-w-max">
+                        <span class="text-outline font-semibold px-2 text-[11px] uppercase">Statut :</span>
+                        <a href="/admin/commandes" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= empty($current_status) ? 'bg-primary text-white font-semibold' : 'text-outline hover:text-on-surface bg-surface-container-low' ?>">
+                            Tous (<?= (int)($status_counts['total'] ?? 0) ?>)
+                        </a>
+                        <a href="/admin/commandes?status=pending" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= ($current_status === 'pending') ? 'bg-amber-600 text-white font-semibold' : 'text-amber-800 bg-amber-50 hover:bg-amber-100' ?>">
+                            En attente (<?= (int)($status_counts['pending'] ?? 0) ?>)
+                        </a>
+                        <a href="/admin/commandes?status=confirmed" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= ($current_status === 'confirmed') ? 'bg-blue-600 text-white font-semibold' : 'text-blue-800 bg-blue-50 hover:bg-blue-100' ?>">
+                            Confirmées (<?= (int)($status_counts['confirmed'] ?? 0) ?>)
+                        </a>
+                        <a href="/admin/commandes?status=payment_pending" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= ($current_status === 'payment_pending') ? 'bg-orange-600 text-white font-semibold' : 'text-orange-800 bg-orange-50 hover:bg-orange-100' ?>">
+                            Paiement att. (<?= (int)($status_counts['payment_pending'] ?? 0) ?>)
+                        </a>
+                        <a href="/admin/commandes?status=paid" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= ($current_status === 'paid') ? 'bg-teal-600 text-white font-semibold' : 'text-teal-800 bg-teal-50 hover:bg-teal-100' ?>">
+                            Payées (<?= (int)($status_counts['paid'] ?? 0) ?>)
+                        </a>
+                        <a href="/admin/commandes?status=preparing" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= ($current_status === 'preparing') ? 'bg-indigo-600 text-white font-semibold' : 'text-indigo-800 bg-indigo-50 hover:bg-indigo-100' ?>">
+                            En prép. (<?= (int)($status_counts['preparing'] ?? 0) ?>)
+                        </a>
+                        <a href="/admin/commandes?status=shipped" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= ($current_status === 'shipped') ? 'bg-purple-600 text-white font-semibold' : 'text-purple-800 bg-purple-50 hover:bg-purple-100' ?>">
+                            Expédiées (<?= (int)($status_counts['shipped'] ?? 0) ?>)
+                        </a>
+                        <a href="/admin/commandes?status=delivered" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= ($current_status === 'delivered') ? 'bg-emerald-600 text-white font-semibold' : 'text-emerald-800 bg-emerald-50 hover:bg-emerald-100' ?>">
+                            Livrées (<?= (int)($status_counts['delivered'] ?? 0) ?>)
+                        </a>
+                        <a href="/admin/commandes?status=cancelled" class="px-3.5 py-2 rounded-xl min-h-[38px] flex items-center <?= ($current_status === 'cancelled') ? 'bg-red-600 text-white font-semibold' : 'text-red-800 bg-red-50 hover:bg-red-100' ?>">
+                            Annulées (<?= (int)($status_counts['cancelled'] ?? 0) ?>)
+                        </a>
+                    </div>
                 </div>
 
                 <!-- 8.2 Formulaire de Recherche et Filtrage Avancé -->
-                <form method="GET" action="/admin/commandes" class="bg-surface p-space-md rounded-2xl border border-border grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 shadow-sm text-xs">
+                <form method="GET" action="/admin/commandes" class="bg-surface p-4 rounded-2xl border border-border grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 shadow-sm text-xs">
                     <div>
                         <label class="block text-outline font-semibold uppercase mb-1">Recherche</label>
-                        <input type="text" name="search" value="<?= htmlspecialchars($current_search ?? '') ?>" placeholder="N° commande, client, tel..." class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
+                        <input type="text" name="search" value="<?= htmlspecialchars($current_search ?? '') ?>" placeholder="N° commande, client, tel..." class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-on-surface min-h-[44px]">
                     </div>
                     <div>
                         <label class="block text-outline font-semibold uppercase mb-1">Statut Paiement</label>
-                        <select name="payment_status" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
+                        <select name="payment_status" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-on-surface min-h-[44px]">
                             <option value="">Tous</option>
                             <option value="unpaid" <?= ($current_payment_status ?? '') === 'unpaid' ? 'selected' : '' ?>>Non payé</option>
                             <option value="pending" <?= ($current_payment_status ?? '') === 'pending' ? 'selected' : '' ?>>En attente</option>
@@ -126,7 +129,7 @@ $active_tab = 'orders';
                     </div>
                     <div>
                         <label class="block text-outline font-semibold uppercase mb-1">Mode Livraison</label>
-                        <select name="delivery_mode" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
+                        <select name="delivery_mode" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-on-surface min-h-[44px]">
                             <option value="">Tous</option>
                             <option value="delivery" <?= ($current_delivery_mode ?? '') === 'delivery' ? 'selected' : '' ?>>Livraison à domicile</option>
                             <option value="pickup" <?= ($current_delivery_mode ?? '') === 'pickup' ? 'selected' : '' ?>>Retrait en boutique</option>
@@ -134,34 +137,131 @@ $active_tab = 'orders';
                     </div>
                     <div>
                         <label class="block text-outline font-semibold uppercase mb-1">Date début</label>
-                        <input type="date" name="date_from" value="<?= htmlspecialchars($current_date_from ?? '') ?>" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-on-surface">
+                        <input type="date" name="date_from" value="<?= htmlspecialchars($current_date_from ?? '') ?>" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2.5 text-on-surface min-h-[44px]">
                     </div>
                     <div class="flex items-end gap-2">
-                        <button type="submit" class="flex-1 bg-primary text-white py-2 rounded-xl font-semibold hover:opacity-90 transition-all">
+                        <button type="submit" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:opacity-90 transition-all min-h-[44px]">
                             Filtrer
                         </button>
-                        <a href="/admin/commandes" class="px-3 py-2 border border-border rounded-xl hover:bg-surface-container-low font-semibold text-center" title="Réinitialiser">
-                            <span class="material-symbols-outlined text-[16px]">refresh</span>
+                        <a href="/admin/commandes" class="px-3.5 py-2.5 border border-border rounded-xl hover:bg-surface-container-low font-semibold text-center min-h-[44px] flex items-center justify-center" title="Réinitialiser">
+                            <span class="material-symbols-outlined text-[18px]">refresh</span>
                         </a>
                     </div>
                 </form>
 
-                <!-- Tableau des Commandes (8.2 Liste des commandes) -->
+                <!-- Tableau & Cartes Mobiles des Commandes (8.2 Liste des commandes) -->
                 <div class="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-surface-container-low text-xs font-semibold uppercase text-outline border-b border-border">
-                                <th class="py-3 px-4">Numéro</th>
-                                <th class="py-3 px-4">Date</th>
-                                <th class="py-3 px-4">Client</th>
-                                <th class="py-3 px-4">Adresse & Quartier</th>
-                                <th class="py-3 px-4">Livraison</th>
-                                <th class="py-3 px-4">Paiement</th>
-                                <th class="py-3 px-4">Montant</th>
-                                <th class="py-3 px-4">Statut</th>
-                                <th class="py-3 px-4 text-right">Actions</th>
-                            </tr>
-                        </thead>
+                    <!-- Vue Mobile en Cartes (< md) -->
+                    <div class="block md:hidden divide-y divide-border">
+                        <?php if (empty($orders)): ?>
+                            <div class="py-12 text-center text-outline text-xs">
+                                Aucune commande trouvée selon les critères sélectionnés.
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($orders as $ord): ?>
+                                <div class="p-4 flex flex-col gap-2.5 bg-surface hover:bg-surface-container-low/40 transition-colors">
+                                    <div class="flex items-center justify-between">
+                                        <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="font-bold text-primary hover:underline text-sm">
+                                            #<?= htmlspecialchars($ord['order_number']) ?>
+                                        </a>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border <?= \App\Domain\Entities\Order::getStatusBadgeClass($ord['order_status']) ?>">
+                                            <?= htmlspecialchars(\App\Domain\Entities\Order::getStatusLabel($ord['order_status'])) ?>
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div>
+                                            <div class="font-medium text-on-surface"><?= htmlspecialchars($ord['customer_name']) ?></div>
+                                            <span class="text-outline block text-[11px]"><?= htmlspecialchars($ord['customer_whatsapp']) ?></span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="font-bold text-sm text-on-surface"><?= number_format((float)$ord['total_amount'], 0, ',', ' ') ?> FCFA</span>
+                                            <span class="text-outline block text-[11px]"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($ord['created_at']))) ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between text-[11px] text-outline pt-1 border-t border-border/40">
+                                        <span><?= $ord['delivery_mode'] === 'pickup' ? 'Retrait boutique' : 'Livraison domicile' ?></span>
+                                        <span class="font-semibold uppercase <?= $ord['payment_status'] === 'paid' ? 'text-teal-700' : 'text-amber-700' ?>">
+                                            Paiement: <?= htmlspecialchars($ord['payment_status']) ?>
+                                        </span>
+                                    </div>
+                                    <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="w-full py-2.5 text-center rounded-xl bg-primary text-white text-xs font-semibold hover:opacity-90 transition-all min-h-[44px] flex items-center justify-center mt-1">
+                                        Consulter la commande &rarr;
+                                    </a>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Vue Desktop / Tablette Large en Tableau (>= md) -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-surface-container-low text-xs font-semibold uppercase text-outline border-b border-border">
+                                    <th class="py-3 px-4">Numéro</th>
+                                    <th class="py-3 px-4">Date</th>
+                                    <th class="py-3 px-4">Client</th>
+                                    <th class="py-3 px-4">Adresse & Quartier</th>
+                                    <th class="py-3 px-4">Livraison</th>
+                                    <th class="py-3 px-4">Paiement</th>
+                                    <th class="py-3 px-4">Montant</th>
+                                    <th class="py-3 px-4">Statut</th>
+                                    <th class="py-3 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border text-sm text-on-surface">
+                                <?php if (empty($orders)): ?>
+                                    <tr>
+                                        <td colspan="9" class="py-12 text-center text-outline">
+                                            Aucune commande trouvée selon les critères sélectionnés.
+                                        </td>
+                                    </tr>
+                                <?php else: ?>
+                                    <?php foreach ($orders as $ord): ?>
+                                        <tr class="hover:bg-surface-container-low/50 transition-colors">
+                                            <td class="py-3 px-4 font-semibold text-primary">
+                                                <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="hover:underline">
+                                                    #<?= htmlspecialchars($ord['order_number']) ?>
+                                                </a>
+                                            </td>
+                                            <td class="py-3 px-4 text-xs text-outline">
+                                                <?= htmlspecialchars(date('d/m/Y H:i', strtotime($ord['created_at']))) ?>
+                                            </td>
+                                            <td class="py-3 px-4 font-medium">
+                                                <div><?= htmlspecialchars($ord['customer_name']) ?></div>
+                                                <span class="text-xs text-outline"><?= htmlspecialchars($ord['customer_whatsapp']) ?></span>
+                                            </td>
+                                            <td class="py-3 px-4 text-xs text-outline">
+                                                <?= htmlspecialchars(($ord['delivery_city'] ?? '') . (!empty($ord['delivery_district']) ? ' (' . $ord['delivery_district'] . ')' : '')) ?>
+                                            </td>
+                                            <td class="py-3 px-4 text-xs">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container text-on-surface">
+                                                    <?= $ord['delivery_mode'] === 'pickup' ? 'Retrait' : 'Domicile' ?>
+                                                </span>
+                                            </td>
+                                            <td class="py-3 px-4 text-xs">
+                                                <span class="font-semibold uppercase text-[11px] <?= $ord['payment_status'] === 'paid' ? 'text-teal-700' : 'text-amber-700' ?>">
+                                                    <?= htmlspecialchars($ord['payment_status']) ?>
+                                                </span>
+                                            </td>
+                                            <td class="py-3 px-4 font-semibold">
+                                                <?= number_format((float)$ord['total_amount'], 0, ',', ' ') ?> FCFA
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border <?= \App\Domain\Entities\Order::getStatusBadgeClass($ord['order_status']) ?>">
+                                                    <?= htmlspecialchars(\App\Domain\Entities\Order::getStatusLabel($ord['order_status'])) ?>
+                                                </span>
+                                            </td>
+                                            <td class="py-3 px-4 text-right">
+                                                <a href="/admin/commandes/<?= (int) $ord['id'] ?>" class="inline-flex items-center gap-1 bg-primary text-white px-3 py-1.5 rounded-xl text-xs font-semibold hover:opacity-90 transition-all min-h-[36px]">
+                                                    Détails &rarr;
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                         <tbody class="divide-y divide-border text-sm text-on-surface">
                             <?php if (empty($orders)): ?>
                                 <tr>
