@@ -109,9 +109,15 @@ class SettingsService
             $errors['email'] = 'Le format de l\'adresse e-mail est invalide.';
         }
 
-        $whatsapp = trim($data['whatsapp_number'] ?? '');
-        if (empty($whatsapp) || !preg_match('/^\+?[0-9\s\-]{8,20}$/', $whatsapp)) {
-            $errors['whatsapp_number'] = 'Le numéro WhatsApp est obligatoire et doit être au format valide (ex: +237699000000).';
+        $rawWhatsapp = trim($data['whatsapp_number'] ?? '');
+        // Nettoyage et normalisation du numéro : accepter les chiffres, espaces, tirets, points, parenthèses et indicatif +
+        $digitsOnly = preg_replace('/[^0-9]/', '', $rawWhatsapp);
+
+        if (empty($rawWhatsapp) || strlen($digitsOnly) < 8 || strlen($digitsOnly) > 16) {
+            $errors['whatsapp_number'] = 'Le numéro WhatsApp est obligatoire et doit comporter entre 8 et 15 chiffres (ex: +237 699 00 00 00).';
+        } else {
+            // Conserver le préfixe + si saisi par l'utilisateur ou le normaliser
+            $whatsapp = str_starts_with($rawWhatsapp, '+') ? '+' . $digitsOnly : $rawWhatsapp;
         }
 
         $allowedCurrencies = ['FCFA', 'EUR', 'USD', 'XAF', 'XOF'];
