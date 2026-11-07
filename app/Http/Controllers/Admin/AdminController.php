@@ -42,7 +42,7 @@ class AdminController extends Controller
         $this->productRepo = new ProductRepository($pdo);
         $this->categoryRepo = new CategoryRepository($pdo);
         $this->customerRepo = new CustomerRepository($pdo);
-        $this->storage = new FileStorageService(dirname(__DIR__, 3) . '/storage');
+        $this->storage = new FileStorageService(dirname(__DIR__, 3) . '/public');
         $this->csvImport = new CsvImportService($this->productRepo, $this->categoryRepo);
         $this->metaConnector = new MetaCatalogConnector();
         $this->themeService = new ThemeService($pdo);
@@ -380,6 +380,7 @@ class AdminController extends Controller
         if ($res = $this->requireAuth()) return $res;
 
         $errors = [];
+        $data = [];
         if ($request->isMethod('POST')) {
             $this->validateCsrf($request);
             $data = $request->all();
@@ -389,36 +390,51 @@ class AdminController extends Controller
                 'price' => 'required|numeric',
             ]);
 
+            // Gestion automatique et validation de la référence SKU unique (3.1)
+            $sku = trim((string)($data['sku'] ?? ''));
+            if ($sku === '') {
+                $sku = $this->productRepo->generateUniqueSku((string)$data['name'], !empty($data['category_id']) ? (int)$data['category_id'] : null);
+            } elseif ($this->productRepo->skuExists($sku)) {
+                $validator->addError('sku', "La référence SKU '{$sku}' est déjà utilisée par un autre produit.");
+            }
+            $data['sku'] = $sku;
+
             if ($validator->validate()) {
                 $imageFile = $request->file('image');
                 $imageUrl = null;
                 if ($imageFile && !empty($imageFile['tmp_name'])) {
                     try {
-                        $imageUrl = $this->storage->storePublicUpload($imageFile, 'products');
+                        $uploadedPath = $this->storage->storePublicUpload($imageFile, 'products');
+                        $imageUrl = '/' . ltrim($uploadedPath, '/');
                     } catch (\Exception $e) {
-                        // Tolérance
+                        $errors[] = "Erreur sur l'image principale : " . $e->getMessage();
                     }
                 }
 
-                $data['slug'] = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $data['name']), '-')) . '-' . random_int(100, 999);
-                $data['main_image_url'] = $imageUrl;
-                $this->productRepo->create($data);
+                if (empty($errors)) {
+                    $data['slug'] = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', (string)$data['name']), '-')) . '-' . random_int(100, 999);
+                    $data['main_image_url'] = $imageUrl;
+                    $productId = $this->productRepo->create($data);
 
-                Session::set('product_feedback', [
-                    'type' => 'success',
-                    'message' => "Le produit '{$data['name']}' a été créé avec succès."
-                ]);
+                    // Traitement d'éventuels médias additionnels (images / vidéos secondaires)
+                    $this->processUploadedMediaFiles($request, $productId);
 
-                return $this->redirect('/admin/produits');
+                    Session::set('product_feedback', [
+                        'type' => 'success',
+                        'message' => "Le produit '{$data['name']}' a été créé avec succès avec la SKU : {$sku}."
+                    ]);
+
+                    return $this->redirect('/admin/produits/' . $productId . '/modifier');
+                }
             } else {
-                $errors = $validator->errors();
+                $errors = array_merge($errors, $validator->errors());
             }
         }
 
         $categories = $this->categoryRepo->findAllActive();
         return $this->render('admin.pages.product_form', [
             'categories' => $categories,
-            'product' => [],
+            'product' => $data,
             'errors' => $errors,
             'csrf_token' => Session::getCsrfToken(),
         ]);
@@ -434,11 +450,15 @@ class AdminController extends Controller
             return Response::html("<h1>404 — Produit introuvable</h1>", 404);
         }
 
+        $feedback = Session::get('product_feedback');
+        Session::remove('product_feedback');
+
         $categories = $this->categoryRepo->findAllActive();
         return $this->render('admin.pages.product_form', [
             'product' => $product,
             'categories' => $categories,
             'errors' => [],
+            'feedback' => $feedback,
             'csrf_token' => Session::getCsrfToken(),
         ]);
     }
@@ -460,6 +480,15 @@ class AdminController extends Controller
             'price' => 'required|numeric',
         ]);
 
+        // Gestion de la SKU : conserver l'existante si non modifiée ou générer/vérifier l'unicité
+        $sku = trim((string)($data['sku'] ?? ''));
+        if ($sku === '') {
+            $sku = !empty($product['sku']) ? $product['sku'] : $this->productRepo->generateUniqueSku((string)$data['name']);
+        } elseif ($sku !== ($product['sku'] ?? '') && $this->productRepo->skuExists($sku, $id)) {
+            $validator->addError('sku', "La référence SKU '{$sku}' est déjà attribuée à un autre article.");
+        }
+        $data['sku'] = $sku;
+
         if (!$validator->validate()) {
             $categories = $this->categoryRepo->findAllActive();
             return $this->render('admin.pages.product_form', [
@@ -470,13 +499,21 @@ class AdminController extends Controller
             ]);
         }
 
+        // Upload Image Principale
         $imageFile = $request->file('image');
         $imageUrl = $product['main_image_url'];
         if ($imageFile && !empty($imageFile['tmp_name'])) {
             try {
-                $imageUrl = $this->storage->storePublicUpload($imageFile, 'products');
+                $uploadedPath = $this->storage->storePublicUpload($imageFile, 'products');
+                $imageUrl = '/' . ltrim($uploadedPath, '/');
             } catch (\Exception $e) {
-                // Tolérance
+                $categories = $this->categoryRepo->findAllActive();
+                return $this->render('admin.pages.product_form', [
+                    'product' => array_merge($product, $data),
+                    'categories' => $categories,
+                    'errors' => ["Erreur lors du téléversement de l'image principale : " . $e->getMessage()],
+                    'csrf_token' => Session::getCsrfToken(),
+                ]);
             }
         }
 
@@ -492,12 +529,121 @@ class AdminController extends Controller
 
         $this->productRepo->update($id, $data);
 
+        // Traitement de médias secondaires téléversés en même temps
+        $this->processUploadedMediaFiles($request, $id);
+
         Session::set('product_feedback', [
             'type' => 'success',
-            'message' => "Le produit '{$data['name']}' a été mis à jour avec succès."
+            'message' => "Le produit '{$data['name']}' et ses visuels ont été mis à jour avec succès."
         ]);
 
-        return $this->redirect('/admin/produits');
+        return $this->redirect('/admin/produits/' . $id . '/modifier');
+    }
+
+    /**
+     * Traite les fichiers médias (images/vidéos multiples) envoyés via le formulaire
+     */
+    private function processUploadedMediaFiles(Request $request, int $productId): void
+    {
+        $files = $_FILES['media_files'] ?? null;
+        if (!$files || empty($files['name']) || !is_array($files['name'])) {
+            return;
+        }
+
+        $count = count($files['name']);
+        for ($i = 0; $i < $count; $i++) {
+            if (empty($files['tmp_name'][$i]) || !is_uploaded_file($files['tmp_name'][$i])) {
+                continue;
+            }
+
+            $singleFile = [
+                'name' => $files['name'][$i],
+                'type' => $files['type'][$i] ?? '',
+                'tmp_name' => $files['tmp_name'][$i],
+                'error' => $files['error'][$i] ?? 0,
+                'size' => $files['size'][$i] ?? 0,
+            ];
+
+            try {
+                $uploaded = $this->storage->storePublicUpload($singleFile, 'products');
+                $mediaUrl = '/' . ltrim($uploaded, '/');
+                $mediaType = $this->storage->getMediaType($mediaUrl);
+                $this->productRepo->addMedia($productId, $mediaType, $mediaUrl, null, $i);
+            } catch (\Exception $e) {
+                // Journaliser ou ignorer les fichiers invalides
+            }
+        }
+    }
+
+    public function addProductMedia(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $id = (int)($params['id'] ?? 0);
+        $product = $this->productRepo->findById($id);
+        if (!$product) {
+            return Response::html("<h1>404 — Produit introuvable</h1>", 404);
+        }
+
+        $mediaFile = $request->file('media_file');
+        if ($mediaFile && !empty($mediaFile['tmp_name'])) {
+            try {
+                $uploaded = $this->storage->storePublicUpload($mediaFile, 'products');
+                $mediaUrl = '/' . ltrim($uploaded, '/');
+                $mediaType = $this->storage->getMediaType($mediaUrl);
+                $this->productRepo->addMedia($id, $mediaType, $mediaUrl);
+
+                Session::set('product_feedback', [
+                    'type' => 'success',
+                    'message' => "Média ajouté avec succès à la galerie."
+                ]);
+            } catch (\Exception $e) {
+                Session::set('product_feedback', [
+                    'type' => 'error',
+                    'message' => "Échec du téléversement du média : " . $e->getMessage()
+                ]);
+            }
+        }
+
+        return $this->redirect('/admin/produits/' . $id . '/modifier');
+    }
+
+    public function deleteProductMedia(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $productId = (int)($params['id'] ?? 0);
+        $mediaId = (int)($params['media_id'] ?? 0);
+
+        $this->productRepo->deleteMedia($mediaId, $productId);
+
+        Session::set('product_feedback', [
+            'type' => 'success',
+            'message' => "Média retiré de la galerie."
+        ]);
+
+        return $this->redirect('/admin/produits/' . $productId . '/modifier');
+    }
+
+    public function setProductMainMedia(Request $request, array $params): Response
+    {
+        if ($res = $this->requireAuth()) return $res;
+        $this->validateCsrf($request);
+
+        $productId = (int)($params['id'] ?? 0);
+        $mediaId = (int)($params['media_id'] ?? 0);
+
+        $success = $this->productRepo->setMainImageFromMedia($productId, $mediaId);
+        if ($success) {
+            Session::set('product_feedback', [
+                'type' => 'success',
+                'message' => "L'image principale du produit a été mise à jour depuis la galerie."
+            ]);
+        }
+
+        return $this->redirect('/admin/produits/' . $productId . '/modifier');
     }
 
     public function toggleProductStatus(Request $request, array $params): Response

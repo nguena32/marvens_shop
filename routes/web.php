@@ -72,6 +72,9 @@ $router->post('/admin/produits/{id}/modifier', [AdminController::class, 'updateP
 $router->post('/admin/produits/{id}/statut', [AdminController::class, 'toggleProductStatus'], 'admin.product.status');
 $router->post('/admin/produits/{id}/featured', [AdminController::class, 'toggleProductFeatured'], 'admin.product.featured');
 $router->post('/admin/produits/{id}/supprimer', [AdminController::class, 'deleteProduct'], 'admin.product.delete');
+$router->post('/admin/produits/{id}/media/ajouter', [AdminController::class, 'addProductMedia'], 'admin.product.media.add');
+$router->post('/admin/produits/{id}/media/{media_id}/supprimer', [AdminController::class, 'deleteProductMedia'], 'admin.product.media.delete');
+$router->post('/admin/produits/{id}/media/{media_id}/definir-principale', [AdminController::class, 'setProductMainMedia'], 'admin.product.media.set_main');
 
 // 6.2 Catégories Admin
 $router->get('/admin/categories', [AdminController::class, 'categories'], 'admin.categories');

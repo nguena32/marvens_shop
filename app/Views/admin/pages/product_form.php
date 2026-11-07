@@ -69,6 +69,13 @@ $isEdit = !empty($product['id']);
                     </div>
                 <?php endif; ?>
 
+                <?php if (!empty($feedback)): ?>
+                    <div class="p-space-md rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center gap-2">
+                        <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+                        <span><?= htmlspecialchars($feedback) ?></span>
+                    </div>
+                <?php endif; ?>
+
                 <div class="flex items-center justify-between bg-surface p-space-lg rounded-2xl border border-border shadow-sm">
                     <div>
                         <a href="/admin/produits" class="text-xs text-outline hover:text-on-surface flex items-center gap-1 mb-1">
@@ -106,8 +113,10 @@ $isEdit = !empty($product['id']);
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="sku" class="block text-xs font-semibold text-outline uppercase mb-1">Référence SKU</label>
-                                    <input type="text" id="sku" name="sku" value="<?= htmlspecialchars($product['sku'] ?? '') ?>" placeholder="Ex: ROBE-001" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm focus:outline-none font-mono text-xs">
+                                    <label for="sku" class="block text-xs font-semibold text-outline uppercase mb-1">
+                                        Référence SKU <span class="text-[10px] text-outline font-normal normal-case">(générée automatiquement si vide)</span>
+                                    </label>
+                                    <input type="text" id="sku" name="sku" value="<?= htmlspecialchars($product['sku'] ?? '') ?>" placeholder="Ex: ROBE-001 (ou laisser vide)" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm focus:outline-none font-mono text-xs">
                                 </div>
                             </div>
 
@@ -135,7 +144,7 @@ $isEdit = !empty($product['id']);
                             </div>
                         </div>
 
-                        <!-- Section 3 : Visuel Principal -->
+                        <!-- Section 3 : Visuel Principal & Médias -->
                         <div class="space-y-4 pt-2">
                             <h2 class="text-base font-bold text-on-surface border-b border-border pb-2 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-secondary">image</span> 3. Image Principale
@@ -145,16 +154,73 @@ $isEdit = !empty($product['id']);
                                 <div class="flex items-center gap-4 bg-surface-container-low p-3 rounded-xl border border-border">
                                     <img src="<?= htmlspecialchars(str_starts_with($product['main_image_url'], 'http') ? $product['main_image_url'] : '/' . ltrim($product['main_image_url'], '/')) ?>" alt="" class="w-16 h-16 rounded-lg object-cover border border-border">
                                     <div class="text-xs text-outline">
-                                        Image actuelle enregistrée. Choisissez un nouveau fichier ci-dessous pour la remplacer.
+                                        <span class="font-semibold text-on-surface block">Image principale active</span>
+                                        Choisissez un nouveau fichier ci-dessous pour la remplacer, ou sélectionnez une photo depuis la galerie ci-après.
                                     </div>
                                 </div>
                             <?php endif; ?>
 
                             <div>
-                                <label for="image" class="block text-xs font-semibold text-outline uppercase mb-1">Photo (JPEG, PNG, WEBP - Max 5 Mo)</label>
+                                <label for="image" class="block text-xs font-semibold text-outline uppercase mb-1">Sélectionner une image principale (JPEG, PNG, WEBP - Max 5 Mo)</label>
                                 <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm">
                             </div>
+
+                            <!-- Galerie d'images et vidéos additionnelles -->
+                            <div class="pt-3 border-t border-dashed border-border space-y-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-outline uppercase mb-1 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[16px] text-secondary">perm_media</span>
+                                        Ajouter des photos & vidéos additionnelles
+                                    </label>
+                                    <input type="file" name="media_files[]" multiple accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/ogg,video/quicktime" class="w-full bg-surface-container-low border border-border rounded-xl px-3 py-2 text-sm">
+                                    <p class="text-[11px] text-outline mt-1">Vous pouvez sélectionner plusieurs fichiers simultanément (Images max 5 Mo, Vidéos MP4/WebM max 30 Mo).</p>
+                                </div>
+                            </div>
                         </div>
+
+                        <?php if ($isEdit && !empty($product['media'])): ?>
+                            <!-- Section 3.2 : Médias enregistrés -->
+                            <div class="space-y-3 pt-2">
+                                <h3 class="text-xs font-bold text-outline uppercase tracking-wider flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px]">collections</span>
+                                    Galerie enregistrée (<?= count($product['media']) ?> média<?= count($product['media']) > 1 ? 's' : '' ?>)
+                                </h3>
+
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                    <?php foreach ($product['media'] as $mediaItem): ?>
+                                        <div class="relative bg-surface-container-low border border-border rounded-xl overflow-hidden group flex flex-col justify-between">
+                                            <div class="relative aspect-square bg-black/5 flex items-center justify-center overflow-hidden">
+                                                <?php if ($mediaItem['media_type'] === 'video'): ?>
+                                                    <video src="<?= htmlspecialchars(str_starts_with($mediaItem['media_url'], 'http') ? $mediaItem['media_url'] : '/' . ltrim($mediaItem['media_url'], '/')) ?>" class="w-full h-full object-cover" muted></video>
+                                                    <span class="absolute top-2 right-2 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 font-semibold">
+                                                        <span class="material-symbols-outlined text-[12px]">videocam</span> Vidéo
+                                                    </span>
+                                                <?php else: ?>
+                                                    <img src="<?= htmlspecialchars(str_starts_with($mediaItem['media_url'], 'http') ? $mediaItem['media_url'] : '/' . ltrim($mediaItem['media_url'], '/')) ?>" alt="" class="w-full h-full object-cover">
+                                                    <span class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded font-semibold">
+                                                        Image
+                                                    </span>
+                                                <?php endif; ?>
+                                            </div>
+
+                                            <div class="p-2 bg-white flex items-center justify-between gap-1 border-t border-border">
+                                                <?php if ($mediaItem['media_type'] === 'image'): ?>
+                                                    <button type="button" onclick="submitMediaAction('<?= (int)$mediaItem['id'] ?>', 'definir-principale')" title="Définir comme image principale" class="text-[11px] font-semibold text-primary hover:text-secondary flex items-center gap-0.5">
+                                                        <span class="material-symbols-outlined text-[14px]">star</span> Principale
+                                                    </button>
+                                                <?php else: ?>
+                                                    <span class="text-[11px] text-outline italic">Vidéo</span>
+                                                <?php endif; ?>
+
+                                                <button type="button" onclick="if(confirm('Supprimer définitivement ce média ?')) submitMediaAction('<?= (int)$mediaItem['id'] ?>', 'supprimer')" title="Supprimer ce média" class="text-red-500 hover:text-red-700 p-1">
+                                                    <span class="material-symbols-outlined text-[16px]">delete</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
 
                         <!-- Section 4 : Variantes & Stock (Tailles, Couleurs) -->
                         <div class="space-y-4 pt-2">
@@ -261,6 +327,23 @@ $isEdit = !empty($product['id']);
             `;
             container.appendChild(row);
         }
+
+        <?php if ($isEdit): ?>
+        function submitMediaAction(mediaId, action) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/admin/produits/<?= (int)$product['id'] ?>/media/${mediaId}/${action}`;
+
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_csrf_token';
+            csrfInput.value = '<?= htmlspecialchars($csrf_token ?? '') ?>';
+            form.appendChild(csrfInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+        <?php endif; ?>
     </script>
 </body>
 </html>

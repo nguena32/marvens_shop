@@ -31,28 +31,67 @@ $waDirectUrl = "https://wa.me/" . $waNum . "?text=" . rawurlencode($waDirectMsg)
     </nav>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
-        <!-- 1.3 Visuel & Photos Produit -->
-        <div class="card-theme bg-surface overflow-hidden aspect-square flex items-center justify-center relative">
-            <?php if (!empty($product['main_image_url'])): ?>
-                <img src="<?= htmlspecialchars($product['main_image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-full object-cover"/>
-            <?php else: ?>
-                <div class="text-outline text-center p-8">
-                    <span class="material-symbols-outlined text-6xl">image</span>
-                    <p class="text-xs mt-2">Visuel de présentation</p>
+        <!-- 1.3 Visuel & Galerie Photos/Vidéos Produit -->
+        <div class="space-y-4">
+            <div class="card-theme bg-surface overflow-hidden aspect-square flex items-center justify-center relative rounded-2xl border border-border shadow-sm" id="main-media-container">
+                <?php 
+                $mainUrl = !empty($product['main_image_url']) 
+                    ? (str_starts_with($product['main_image_url'], 'http') ? $product['main_image_url'] : '/' . ltrim($product['main_image_url'], '/'))
+                    : '';
+                ?>
+                <?php if (!empty($mainUrl)): ?>
+                    <img id="main-product-image" src="<?= htmlspecialchars($mainUrl) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-full object-cover transition-all duration-300"/>
+                    <video id="main-product-video" src="" controls playsinline class="w-full h-full object-cover hidden"></video>
+                <?php else: ?>
+                    <div class="text-outline text-center p-8">
+                        <span class="material-symbols-outlined text-6xl">image</span>
+                        <p class="text-xs mt-2">Visuel de présentation</p>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($hasPromo): ?>
+                    <span class="absolute top-4 left-4 bg-error text-white text-xs font-bold px-3 py-1 rounded badge-theme">
+                        OFFRE PROMOTIONNELLE
+                    </span>
+                <?php endif; ?>
+
+                <!-- Badge Disponibilité -->
+                <div class="absolute bottom-4 left-4 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-border">
+                    <span class="w-2 h-2 rounded-full <?= $isAvailable ? 'bg-emerald-500' : 'bg-red-500' ?>"></span>
+                    <span class="<?= $isAvailable ? 'text-emerald-700' : 'text-red-700' ?>"><?= $isAvailable ? 'En stock / Disponible' : 'Rupture de stock' ?></span>
+                </div>
+            </div>
+
+            <!-- Galerie de miniatures (Images & Vidéos) -->
+            <?php 
+            $mediaList = $product['media'] ?? [];
+            ?>
+            <?php if (!empty($mediaList) || !empty($mainUrl)): ?>
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                    <?php if (!empty($mainUrl)): ?>
+                        <button type="button" onclick="switchMainMedia('image', '<?= htmlspecialchars($mainUrl) ?>', this)" class="media-thumb-btn flex-shrink-0 w-16 h-16 rounded-xl border-2 border-primary overflow-hidden bg-surface relative focus:outline-none">
+                            <img src="<?= htmlspecialchars($mainUrl) ?>" alt="" class="w-full h-full object-cover">
+                        </button>
+                    <?php endif; ?>
+
+                    <?php foreach ($mediaList as $item): ?>
+                        <?php 
+                        $itemUrl = str_starts_with($item['media_url'], 'http') ? $item['media_url'] : '/' . ltrim($item['media_url'], '/');
+                        $isVideo = ($item['media_type'] === 'video');
+                        ?>
+                        <button type="button" onclick="switchMainMedia('<?= $isVideo ? 'video' : 'image' ?>', '<?= htmlspecialchars($itemUrl) ?>', this)" class="media-thumb-btn flex-shrink-0 w-16 h-16 rounded-xl border border-border hover:border-outline overflow-hidden bg-surface-container relative focus:outline-none transition">
+                            <?php if ($isVideo): ?>
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-zinc-900 text-white">
+                                    <span class="material-symbols-outlined text-[20px] text-amber-400">play_circle</span>
+                                    <span class="text-[9px] font-bold uppercase mt-0.5">Vidéo</span>
+                                </div>
+                            <?php else: ?>
+                                <img src="<?= htmlspecialchars($itemUrl) ?>" alt="" class="w-full h-full object-cover">
+                            <?php endif; ?>
+                        </button>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
-
-            <?php if ($hasPromo): ?>
-                <span class="absolute top-4 left-4 bg-error text-white text-xs font-bold px-3 py-1 rounded badge-theme">
-                    OFFRE PROMOTIONNELLE
-                </span>
-            <?php endif; ?>
-
-            <!-- Badge Disponibilité -->
-            <div class="absolute bottom-4 left-4 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-border">
-                <span class="w-2 h-2 rounded-full <?= $isAvailable ? 'bg-emerald-500' : 'bg-red-500' ?>"></span>
-                <span class="<?= $isAvailable ? 'text-emerald-700' : 'text-red-700' ?>"><?= $isAvailable ? 'En stock / Disponible' : 'Rupture de stock' ?></span>
-            </div>
         </div>
 
         <!-- 1.3 Détails, Variantes & Formulaire d'Achat -->
@@ -208,4 +247,35 @@ $waDirectUrl = "https://wa.me/" . $waNum . "?text=" . rawurlencode($waDirectMsg)
             </div>
         </div>
     <?php endif; ?>
+
+    <script>
+        function switchMainMedia(type, url, btn) {
+            const imgEl = document.getElementById('main-product-image');
+            const vidEl = document.getElementById('main-product-video');
+
+            if (!imgEl || !vidEl) return;
+
+            if (type === 'video') {
+                imgEl.classList.add('hidden');
+                vidEl.classList.remove('hidden');
+                vidEl.src = url;
+                vidEl.load();
+                vidEl.play().catch(() => {});
+            } else {
+                vidEl.pause();
+                vidEl.classList.add('hidden');
+                imgEl.classList.remove('hidden');
+                imgEl.src = url;
+            }
+
+            document.querySelectorAll('.media-thumb-btn').forEach(b => {
+                b.classList.remove('border-primary', 'border-2');
+                b.classList.add('border-border');
+            });
+            if (btn) {
+                btn.classList.add('border-primary', 'border-2');
+                btn.classList.remove('border-border');
+            }
+        }
+    </script>
 </section>

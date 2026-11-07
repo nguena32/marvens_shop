@@ -45,6 +45,11 @@ class SettingsController
         $success = Session::getFlash('success');
         $error = Session::getFlash('error');
 
+        $oldInput = Session::getFlash('old_input', []);
+        if (is_array($oldInput) && !empty($oldInput)) {
+            $shop = array_merge($shop, $oldInput);
+        }
+
         $html = View::render('admin.pages.settings_shop', [
             'active_tab' => 'settings_shop',
             'shop' => $shop,
@@ -101,6 +106,7 @@ class SettingsController
             );
             Session::flash('success', 'Les informations et visuels de la boutique ont été enregistrés avec succès.');
         } else {
+            Session::flash('old_input', $data);
             $errMsg = reset($res['errors']);
             Session::flash('error', $errMsg ?: 'Erreur lors de la validation du formulaire.');
         }

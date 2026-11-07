@@ -97,6 +97,7 @@ class CartAndOrderModuleTestSuite
                 delivery_city VARCHAR(100),
                 delivery_district VARCHAR(100),
                 delivery_address TEXT,
+                delivery_date DATE,
                 delivery_cost INTEGER,
                 total_amount INTEGER,
                 order_status VARCHAR(50),

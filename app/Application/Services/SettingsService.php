@@ -99,25 +99,34 @@ class SettingsService
     {
         $errors = [];
 
-        $name = trim($data['shop_name'] ?? '');
+        $name = trim((string)($data['shop_name'] ?? ''));
         if (empty($name) || mb_strlen($name) > 100) {
             $errors['shop_name'] = 'Le nom de la boutique est obligatoire (max 100 caractères).';
         }
 
-        $email = trim($data['email'] ?? '');
+        $email = trim((string)($data['email'] ?? ''));
         if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'Le format de l\'adresse e-mail est invalide.';
         }
 
-        $rawWhatsapp = trim($data['whatsapp_number'] ?? '');
-        // Nettoyage et normalisation du numéro : accepter les chiffres, espaces, tirets, points, parenthèses et indicatif +
-        $digitsOnly = preg_replace('/[^0-9]/', '', $rawWhatsapp);
+        $rawWhatsapp = trim((string)($data['whatsapp_number'] ?? ''));
+        // Nettoyage et normalisation du numéro : accepter les chiffres, espaces, tirets, points, parenthèses et indicatif + / 00
+        $cleanWhatsapp = trim($rawWhatsapp);
+        $hasLeadingPlus = str_starts_with($cleanWhatsapp, '+');
+        $hasLeadingDoubleZero = str_starts_with($cleanWhatsapp, '00');
+        $digitsOnly = preg_replace('/[^0-9]/', '', $cleanWhatsapp);
+
+        // Si le numéro commence par '00', convertir en indicatif international standard
+        if ($hasLeadingDoubleZero && strlen($digitsOnly) > 2) {
+            $digitsOnly = substr($digitsOnly, 2);
+            $hasLeadingPlus = true;
+        }
 
         if (empty($rawWhatsapp) || strlen($digitsOnly) < 8 || strlen($digitsOnly) > 16) {
             $errors['whatsapp_number'] = 'Le numéro WhatsApp est obligatoire et doit comporter entre 8 et 15 chiffres (ex: +237 699 00 00 00).';
         } else {
-            // Conserver le préfixe + si saisi par l'utilisateur ou le normaliser
-            $whatsapp = str_starts_with($rawWhatsapp, '+') ? '+' . $digitsOnly : $rawWhatsapp;
+            // Normaliser avec le '+' pour le stockage international canonique
+            $whatsapp = '+' . $digitsOnly;
         }
 
         $allowedCurrencies = ['FCFA', 'EUR', 'USD', 'XAF', 'XOF'];

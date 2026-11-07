@@ -16,8 +16,11 @@ class FileStorageService
 
     public function __construct(
         string $storageRoot,
-        int $maxSizeMb = 5,
-        array $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/svg+xml']
+        int $maxSizeMb = 30,
+        array $allowedMimeTypes = [
+            'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/svg+xml',
+            'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'
+        ]
     ) {
         $this->storageRoot = rtrim($storageRoot, '/\\');
         $this->maxSizeBytes = $maxSizeMb * 1024 * 1024;
@@ -25,7 +28,7 @@ class FileStorageService
     }
 
     /**
-     * Téléversement et sécurisation d'un fichier image produit ou logo/branding
+     * Téléversement et sécurisation d'un fichier média (image ou vidéo)
      */
     public function storePublicUpload(array $file, string $subFolder = 'products'): string
     {
@@ -49,7 +52,7 @@ class FileStorageService
         }
 
         if (!in_array($mime, $this->allowedMimeTypes, true)) {
-            throw new RuntimeException("Format de fichier non autorisé : {$mime}. Formats acceptés : JPEG, PNG, WEBP, ICO, SVG.");
+            throw new RuntimeException("Format de fichier non autorisé : {$mime}. Formats acceptés : JPEG, PNG, WEBP, GIF, MP4, WEBM.");
         }
 
         // Déterminer l'extension sûre
@@ -57,8 +60,13 @@ class FileStorageService
             'image/jpeg' => 'jpg',
             'image/png' => 'png',
             'image/webp' => 'webp',
+            'image/gif' => 'gif',
             'image/x-icon', 'image/vnd.microsoft.icon' => 'ico',
             'image/svg+xml' => 'svg',
+            'video/mp4' => 'mp4',
+            'video/webm' => 'webm',
+            'video/ogg' => 'ogv',
+            'video/quicktime' => 'mov',
             default => 'bin',
         };
 
@@ -76,5 +84,14 @@ class FileStorageService
         }
 
         return 'uploads/' . trim($subFolder, '/') . '/' . $filename;
+    }
+
+    public function getMediaType(string $filePath): string
+    {
+        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        if (in_array($ext, ['mp4', 'webm', 'ogv', 'mov'], true)) {
+            return 'video';
+        }
+        return 'image';
     }
 }

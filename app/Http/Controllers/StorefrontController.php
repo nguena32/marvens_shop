@@ -64,6 +64,10 @@ class StorefrontController extends Controller
         $data['cart_count'] = $cartCalc['count'];
         $data['shop_name'] = $shopInfo['shop_name'] ?? Config::get('app.name', 'Marvens Shop');
         $data['shop_info'] = $shopInfo;
+        $data['whatsapp_number'] = !empty($shopInfo['whatsapp_number']) ? $shopInfo['whatsapp_number'] : Config::get('app.whatsapp_number', '+237699000000');
+        $data['shop_phone'] = !empty($shopInfo['phone']) ? $shopInfo['phone'] : Config::get('app.phone', '+237699000000');
+        $data['shop_email'] = !empty($shopInfo['email']) ? $shopInfo['email'] : Config::get('app.email', 'contact@marvens-shop.cm');
+        $data['shop_address'] = !empty($shopInfo['address']) ? $shopInfo['address'] : Config::get('app.address', 'Douala, Cameroun');
         $data['analytics'] = $analytics;
         $data['preview_mode'] = $previewMode;
 
@@ -94,9 +98,6 @@ class StorefrontController extends Controller
             'promotions' => $promotions,
             'new_arrivals' => $newArrivals,
             'categories' => $categories,
-            'whatsapp_number' => Config::get('app.whatsapp_number', '+237699000000'),
-            'shop_phone' => Config::get('app.phone', '+237699000000'),
-            'shop_address' => Config::get('app.address', 'Douala, Cameroun'),
         ]);
     }
 
@@ -140,7 +141,6 @@ class StorefrontController extends Controller
             'active_tab' => 'product',
             'product' => $product,
             'similar_products' => $similarProducts,
-            'whatsapp_number' => Config::get('app.whatsapp_number', '+237699000000'),
         ]);
     }
 
@@ -160,10 +160,6 @@ class StorefrontController extends Controller
         return $this->renderStorefront('storefront.pages.contact', [
             'title' => 'Contactez-nous & Support',
             'active_tab' => 'contact',
-            'whatsapp_number' => Config::get('app.whatsapp_number', '+237699000000'),
-            'shop_phone' => Config::get('app.phone', '+237699000000'),
-            'shop_email' => Config::get('app.email', 'contact@marvens-shop.cm'),
-            'shop_address' => Config::get('app.address', 'Douala, Cameroun'),
         ]);
     }
 

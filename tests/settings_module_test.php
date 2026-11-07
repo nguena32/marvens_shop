@@ -106,6 +106,7 @@ class SettingsModuleTestSuite
                 delivery_city VARCHAR(100),
                 delivery_district VARCHAR(100),
                 delivery_address TEXT,
+                delivery_date DATE,
                 delivery_cost INTEGER,
                 total_amount INTEGER,
                 order_status VARCHAR(50),
@@ -201,6 +202,30 @@ class SettingsModuleTestSuite
         $saved = $this->settingsService->getShopInfo();
         $this->assert($saved['shop_name'] === 'Marvens Luxury Store', "5.1 - Persistance vérifiée pour le nom de boutique");
         $this->assert($saved['whatsapp_number'] === '+237699112233', "5.1 - Persistance vérifiée pour le numéro WhatsApp commercial");
+
+        // Test normalisation de différents formats réalistes de saisie commerçant
+        $testFormats = [
+            '+237 6 99 11 22 33' => '+237699112233',
+            '237699112233' => '+237699112233',
+            '00237 699-11-22-33' => '+237699112233',
+            '+33 6 12 34 56 78' => '+33612345678',
+        ];
+        foreach ($testFormats as $inputPhone => $expectedNormalized) {
+            $this->settingsService->updateShopInfo([
+                'shop_name' => 'Marvens Luxury Store',
+                'whatsapp_number' => $inputPhone,
+                'email' => 'contact@marvens-luxury.cm',
+            ]);
+            $checked = $this->settingsService->getShopInfo();
+            $this->assert($checked['whatsapp_number'] === $expectedNormalized, "5.1 Normalisation - Saisie '{$inputPhone}' normalisée en '{$expectedNormalized}'");
+        }
+
+        // Remettre le numéro WhatsApp de référence (+237699112233) pour la suite des tests d'intégration
+        $this->settingsService->updateShopInfo([
+            'shop_name' => 'Marvens Luxury Store',
+            'whatsapp_number' => '+237699112233',
+            'email' => 'contact@marvens-luxury.cm',
+        ]);
 
         // Test sécurité validation entrée invalide
         $badRes = $this->settingsService->updateShopInfo([

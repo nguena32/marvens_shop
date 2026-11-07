@@ -150,6 +150,9 @@ class ProductRepository
         $vStmt->execute(['p_id' => $product['id']]);
         $product['variants'] = $vStmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // Récupérer les médias associés (images et vidéos)
+        $product['media'] = $this->getMedia((int)$product['id']);
+
         return $product;
     }
 
@@ -174,7 +177,97 @@ class ProductRepository
             // Tolérance si la table product_variants n'est pas encore initialisée
         }
 
+        $product['media'] = $this->getMedia($id);
+
         return $product;
+    }
+
+    public function getMedia(int $productId): array
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM product_media WHERE product_id = :pid ORDER BY sort_order ASC, id ASC");
+            $stmt->execute(['pid' => $productId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function addMedia(int $productId, string $mediaType, string $mediaUrl, ?string $thumbnailUrl = null, int $sortOrder = 0): int
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO product_media (product_id, media_type, media_url, thumbnail_url, sort_order) 
+                                      VALUES (:pid, :type, :url, :thumb, :sort)");
+        $stmt->execute([
+            'pid' => $productId,
+            'type' => $mediaType,
+            'url' => $mediaUrl,
+            'thumb' => $thumbnailUrl,
+            'sort' => $sortOrder,
+        ]);
+        return (int)$this->pdo->lastInsertId();
+    }
+
+    public function deleteMedia(int $mediaId, int $productId): bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM product_media WHERE id = :id AND product_id = :pid");
+        return $stmt->execute(['id' => $mediaId, 'pid' => $productId]);
+    }
+
+    public function setMainImageFromMedia(int $productId, int $mediaId): bool
+    {
+        $stmt = $this->pdo->prepare("SELECT media_url FROM product_media WHERE id = :mid AND product_id = :pid LIMIT 1");
+        $stmt->execute(['mid' => $mediaId, 'pid' => $productId]);
+        $url = $stmt->fetchColumn();
+        if ($url) {
+            $uStmt = $this->pdo->prepare("UPDATE products SET main_image_url = :url WHERE id = :pid");
+            return $uStmt->execute(['url' => $url, 'pid' => $productId]);
+        }
+        return false;
+    }
+
+    public function skuExists(string $sku, ?int $excludeProductId = null): bool
+    {
+        $sql = "SELECT COUNT(*) FROM products WHERE sku = :sku";
+        $params = ['sku' => $sku];
+        if ($excludeProductId !== null) {
+            $sql .= " AND id != :id";
+            $params['id'] = $excludeProductId;
+        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return ((int)$stmt->fetchColumn()) > 0;
+    }
+
+    public function generateUniqueSku(string $name, ?int $categoryId = null): string
+    {
+        $words = preg_split('/[\s\-_]+/', strtoupper(trim($name)));
+        $prefix = '';
+        foreach ($words as $w) {
+            $wClean = preg_replace('/[^A-Z0-9]/', '', $w);
+            if (!empty($wClean)) {
+                $prefix .= substr($wClean, 0, 3);
+            }
+            if (strlen($prefix) >= 4) {
+                break;
+            }
+        }
+        if (strlen($prefix) < 3) {
+            $prefix = 'PRD';
+        }
+        $prefix = substr($prefix, 0, 4);
+
+        $attempts = 0;
+        do {
+            $randomNum = str_pad((string)random_int(100, 9999), 4, '0', STR_PAD_LEFT);
+            $skuCandidate = $prefix . '-' . $randomNum;
+            $attempts++;
+        } while ($this->skuExists($skuCandidate) && $attempts < 50);
+
+        if ($this->skuExists($skuCandidate)) {
+            $skuCandidate = 'MS-' . date('ym') . '-' . random_int(1000, 9999);
+        }
+
+        return $skuCandidate;
     }
 
     public function create(array $data): int

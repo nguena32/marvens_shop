@@ -228,10 +228,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Numéro WhatsApp Business (Réception commandes) *</label>
-                        <input type="text" name="whatsapp_number" value="<?= htmlspecialchars($shop['whatsapp_number'] ?? '') ?>" required
-                               placeholder="+237699000000"
-                               class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
-                        <p class="text-xs text-gray-500 mt-1">Format international recommandé (ex: +237699000000).</p>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-600">
+                                <span class="material-symbols-outlined text-[18px]">chat</span>
+                            </span>
+                            <input type="text" name="whatsapp_number" value="<?= htmlspecialchars($shop['whatsapp_number'] ?? '') ?>" required
+                                   placeholder="+237 699 00 00 00"
+                                   pattern="^\+?[0-9\s\-\.\(\)]{8,25}$"
+                                   title="Numéro de téléphone avec indicatif international recommandé (ex: +237 699 00 00 00 ou +33 6 12 34 56 78)"
+                                   class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-medium">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Format international recommandé (ex: +237 699 00 00 00 ou +33 6 12 34 56 78). Les espaces et tirets sont automatiquement nettoyés.</p>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Téléphone d'appel direct</label>
