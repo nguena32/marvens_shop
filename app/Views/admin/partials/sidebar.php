@@ -1,10 +1,24 @@
 <!-- Aside Sidebar conforme au design Swiss Editorial Commerce -->
 <aside class="fixed left-0 top-0 h-full w-72 bg-surface border-r border-border z-50 flex flex-col pt-space-lg pb-space-lg">
     <div class="px-space-lg mb-space-lg flex items-center gap-space-sm">
-        <div class="h-9 w-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-lg tracking-wider">
-            M
-        </div>
-        <span class="font-headline-md text-on-surface tracking-tight">Marvens Shop</span>
+        <?php 
+            $settingsHelper = new \App\Application\Services\SettingsService();
+            $adminShopInfo = $settingsHelper->getShopInfo();
+        ?>
+        <?php if (!empty($adminShopInfo['logo_url'])): ?>
+            <img src="<?= htmlspecialchars(str_starts_with($adminShopInfo['logo_url'], 'http') ? $adminShopInfo['logo_url'] : '/' . ltrim($adminShopInfo['logo_url'], '/')) ?>" 
+                 alt="<?= htmlspecialchars($adminShopInfo['shop_name'] ?? 'Marvens Shop') ?>" 
+                 class="h-9 max-w-[120px] object-contain rounded-lg"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+            <div class="h-9 w-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-lg tracking-wider" style="display:none;">
+                <?= strtoupper(substr($adminShopInfo['shop_name'] ?? 'M', 0, 1)) ?>
+            </div>
+        <?php else: ?>
+            <div class="h-9 w-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-lg tracking-wider">
+                <?= strtoupper(substr($adminShopInfo['shop_name'] ?? 'M', 0, 1)) ?>
+            </div>
+        <?php endif; ?>
+        <span class="font-headline-md text-on-surface tracking-tight truncate"><?= htmlspecialchars($adminShopInfo['shop_name'] ?? 'Marvens Shop') ?></span>
     </div>
     
     <nav class="flex-1 px-space-md space-y-space-xs">

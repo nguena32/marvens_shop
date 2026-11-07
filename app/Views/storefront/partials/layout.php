@@ -215,9 +215,19 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             <div class="flex items-center gap-6">
                 <a href="/" class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold font-headline text-base">
-                        <?= strtoupper(substr($shop_name ?? 'M', 0, 1)) ?>
-                    </div>
+                    <?php if (!empty($shop_info['logo_url'])): ?>
+                        <img src="<?= htmlspecialchars(str_starts_with($shop_info['logo_url'], 'http') ? $shop_info['logo_url'] : '/' . ltrim($shop_info['logo_url'], '/')) ?>" 
+                             alt="<?= htmlspecialchars($shop_name ?? 'Marvens Shop') ?>" 
+                             class="h-8 max-w-[140px] object-contain"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                        <div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold font-headline text-base" style="display:none;">
+                            <?= strtoupper(substr($shop_name ?? 'M', 0, 1)) ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold font-headline text-base">
+                            <?= strtoupper(substr($shop_name ?? 'M', 0, 1)) ?>
+                        </div>
+                    <?php endif; ?>
                     <span class="font-headline font-bold text-lg tracking-tight text-on-surface"><?= htmlspecialchars($shop_name ?? 'Marvens Shop') ?></span>
                 </a>
                 <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -268,9 +278,19 @@ $pageTitle = ($title ?? 'Accueil') . ' — ' . ($shop_name ?? 'Marvens Shop');
             <!-- 1. Identité & Réassurance -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-xs">
-                        <?= strtoupper(substr($shop_name ?? 'M', 0, 1)) ?>
-                    </div>
+                    <?php if (!empty($shop_info['logo_url'])): ?>
+                        <img src="<?= htmlspecialchars(str_starts_with($shop_info['logo_url'], 'http') ? $shop_info['logo_url'] : '/' . ltrim($shop_info['logo_url'], '/')) ?>" 
+                             alt="<?= htmlspecialchars($shop_name ?? 'Marvens Shop') ?>" 
+                             class="h-7 max-w-[120px] object-contain"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                        <div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-xs" style="display:none;">
+                            <?= strtoupper(substr($shop_name ?? 'M', 0, 1)) ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-xs">
+                            <?= strtoupper(substr($shop_name ?? 'M', 0, 1)) ?>
+                        </div>
+                    <?php endif; ?>
                     <span class="font-headline font-bold text-base text-on-surface"><?= htmlspecialchars($shop_name ?? 'Marvens Shop') ?></span>
                 </div>
                 <p class="text-xs text-outline leading-relaxed">

@@ -83,7 +83,7 @@
             </div>
         <?php endif; ?>
 
-        <form method="POST" action="/admin/parametres/boutique" enctype="multipart/form-data" class="space-y-8">
+        <form id="shopSettingsForm" method="POST" action="/admin/parametres/boutique" enctype="multipart/form-data" class="space-y-8">
             <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrf_token ?? '') ?>">
 
             <!-- 1. Identité de la boutique -->
@@ -277,7 +277,7 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Devise principale</label>
                         <select name="currency" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
-                            <option value="FCFA" <?= ($shop['currency'] ?? '') === 'FCFA' ? 'selected' : '' ?>>FCFA (Franc CFA)</option>
+                            <option value="FCFA" <?= in_array(($shop['currency'] ?? ''), ['FCFA', 'XAF', 'XOF']) ? 'selected' : '' ?>>FCFA (Franc CFA)</option>
                             <option value="EUR" <?= ($shop['currency'] ?? '') === 'EUR' ? 'selected' : '' ?>>EUR (€ - Euro)</option>
                             <option value="USD" <?= ($shop['currency'] ?? '') === 'USD' ? 'selected' : '' ?>>USD ($ - Dollar US)</option>
                         </select>
@@ -291,20 +291,58 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Fuseau horaire</label>
-                        <input type="text" name="timezone" value="<?= htmlspecialchars($shop['timezone'] ?? 'Africa/Douala') ?>"
-                               class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+                        <select name="timezone" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+                            <?php 
+                                $popularTimezones = [
+                                    'Africa/Douala' => 'Africa/Douala (Cameroun, WAT, UTC+1)',
+                                    'Africa/Lagos' => 'Africa/Lagos (Nigeria, WAT, UTC+1)',
+                                    'Africa/Libreville' => 'Africa/Libreville (Gabon, WAT, UTC+1)',
+                                    'Africa/Brazzaville' => 'Africa/Brazzaville (Congo, WAT, UTC+1)',
+                                    'Africa/Kinshasa' => 'Africa/Kinshasa (RDC Ouest, WAT, UTC+1)',
+                                    'Africa/Abidjan' => 'Africa/Abidjan (Côte d\'Ivoire, GMT, UTC+0)',
+                                    'Africa/Dakar' => 'Africa/Dakar (Sénégal, GMT, UTC+0)',
+                                    'Europe/Paris' => 'Europe/Paris (France, CET, UTC+1)',
+                                    'America/New_York' => 'America/New_York (USA Est, EST, UTC-5)',
+                                    'UTC' => 'UTC (Temps universel coordonné)',
+                                ];
+                                $currentTimezone = $shop['timezone'] ?? 'Africa/Douala';
+                                if (!array_key_exists($currentTimezone, $popularTimezones)) {
+                                    $popularTimezones[$currentTimezone] = $currentTimezone;
+                                }
+                                foreach ($popularTimezones as $tzCode => $tzLabel):
+                            ?>
+                                <option value="<?= htmlspecialchars($tzCode) ?>" <?= $currentTimezone === $tzCode ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($tzLabel) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-end pt-4">
-                <button type="submit" class="px-6 py-3 bg-primary hover:opacity-90 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
-                    <span class="material-symbols-outlined">save</span> Enregistrer les informations
+                <button type="submit" id="saveShopBtn" class="px-6 py-3 bg-primary hover:opacity-90 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer">
+                    <span class="material-symbols-outlined" id="saveShopIcon">save</span>
+                    <span id="saveShopText">Enregistrer les informations</span>
                 </button>
             </div>
         </form>
 
         <script>
+            // Anti double-soumission et état de chargement
+            const shopSettingsForm = document.getElementById('shopSettingsForm');
+            const saveShopBtn = document.getElementById('saveShopBtn');
+            const saveShopIcon = document.getElementById('saveShopIcon');
+            const saveShopText = document.getElementById('saveShopText');
+
+            if (shopSettingsForm && saveShopBtn) {
+                shopSettingsForm.addEventListener('submit', function() {
+                    saveShopBtn.disabled = true;
+                    saveShopBtn.classList.add('opacity-75', 'cursor-not-allowed');
+                    if (saveShopIcon) saveShopIcon.textContent = 'hourglass_empty';
+                    if (saveShopText) saveShopText.textContent = 'Enregistrement en cours...';
+                });
+            }
             // Prévisualisation instantanée du Logo
             const logoFileInput = document.getElementById('logoFileInput');
             const logoPreview = document.getElementById('logoPreview');

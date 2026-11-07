@@ -130,15 +130,45 @@ class SettingsService
         }
 
         $allowedCurrencies = ['FCFA', 'EUR', 'USD', 'XAF', 'XOF'];
-        $currency = trim($data['currency'] ?? 'FCFA');
+        $currency = trim((string)($data['currency'] ?? 'FCFA'));
         if (!in_array($currency, $allowedCurrencies, true)) {
             $currency = 'FCFA';
         }
 
         $allowedLanguages = ['fr', 'en'];
-        $language = trim($data['language'] ?? 'fr');
+        $language = trim((string)($data['language'] ?? 'fr'));
         if (!in_array($language, $allowedLanguages, true)) {
             $language = 'fr';
+        }
+
+        $timezone = trim((string)($data['timezone'] ?? 'Africa/Douala'));
+        if ($timezone === '' || !in_array($timezone, timezone_identifiers_list(), true)) {
+            $timezone = 'Africa/Douala';
+        }
+
+        // Validation facultative du numéro de téléphone direct s'il est renseigné
+        $phone = trim((string)($data['phone'] ?? ''));
+        if ($phone !== '' && !preg_match('/^[0-9\s\+\-\.\(\)]{6,30}$/', $phone)) {
+            $errors['phone'] = 'Le format du numéro de téléphone d\'appel direct est invalide.';
+        }
+
+        // Validation sécuritaire des URLs directes logo/favicon si fournies manuellement
+        $logoUrl = trim((string)($data['logo_url'] ?? ''));
+        if ($logoUrl !== '') {
+            $isSafePath = str_starts_with($logoUrl, '/') && !str_contains($logoUrl, '..');
+            $isSafeHttp = (str_starts_with($logoUrl, 'http://') || str_starts_with($logoUrl, 'https://')) && filter_var($logoUrl, FILTER_VALIDATE_URL);
+            if (!$isSafePath && !$isSafeHttp) {
+                $errors['logo_url'] = 'L\'URL directe du logo doit être une adresse HTTP(S) valide ou un chemin absolu commençant par / (ex: /uploads/branding/...).';
+            }
+        }
+
+        $faviconUrl = trim((string)($data['favicon_url'] ?? ''));
+        if ($faviconUrl !== '') {
+            $isSafePath = str_starts_with($faviconUrl, '/') && !str_contains($faviconUrl, '..');
+            $isSafeHttp = (str_starts_with($faviconUrl, 'http://') || str_starts_with($faviconUrl, 'https://')) && filter_var($faviconUrl, FILTER_VALIDATE_URL);
+            if (!$isSafePath && !$isSafeHttp) {
+                $errors['favicon_url'] = 'L\'URL directe du favicon doit être une adresse HTTP(S) valide ou un chemin absolu commençant par / (ex: /uploads/branding/...).';
+            }
         }
 
         if (!empty($errors)) {
@@ -147,23 +177,21 @@ class SettingsService
 
         // Sauvegarder
         $this->set('shop_name', $name);
-        $this->set('company_name', trim($data['company_name'] ?? ''));
-        $this->set('shop_description', trim($data['description'] ?? ''));
-        $this->set('shop_address', trim($data['address'] ?? ''));
-        $this->set('shop_city', trim($data['city'] ?? 'Douala'));
-        $this->set('shop_country', trim($data['country'] ?? 'Cameroun'));
-        $this->set('shop_phone', trim($data['phone'] ?? ''));
+        $this->set('company_name', trim((string)($data['company_name'] ?? '')));
+        $this->set('shop_description', trim((string)($data['description'] ?? '')));
+        $this->set('shop_address', trim((string)($data['address'] ?? '')));
+        $this->set('shop_city', trim((string)($data['city'] ?? 'Douala')));
+        $this->set('shop_country', trim((string)($data['country'] ?? 'Cameroun')));
+        $this->set('shop_phone', $phone);
         $this->set('whatsapp_number', $whatsapp);
         $this->set('shop_email', $email);
         $this->set('shop_language', $language);
         $this->set('shop_currency', $currency);
-        $this->set('shop_timezone', trim($data['timezone'] ?? 'Africa/Douala'));
+        $this->set('shop_timezone', $timezone);
 
-        $logoUrl = trim($data['logo_url'] ?? '');
         if ($logoUrl !== '') {
             $this->set('shop_logo_url', $logoUrl);
         }
-        $faviconUrl = trim($data['favicon_url'] ?? '');
         if ($faviconUrl !== '') {
             $this->set('shop_favicon_url', $faviconUrl);
         }

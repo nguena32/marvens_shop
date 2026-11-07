@@ -234,6 +234,23 @@ class SettingsModuleTestSuite
             'email' => 'not_an_email',
         ]);
         $this->assert($badRes['success'] === false && isset($badRes['errors']['shop_name']), "5.1 Sécurité - Rejet des coordonnées vides ou formats invalides");
+
+        // Test sécurité URLs directes logo/favicon
+        $badUrlRes = $this->settingsService->updateShopInfo([
+            'shop_name' => 'Marvens Luxury Store',
+            'whatsapp_number' => '+237699112233',
+            'logo_url' => 'javascript:alert(1)',
+        ]);
+        $this->assert($badUrlRes['success'] === false && isset($badUrlRes['errors']['logo_url']), "5.1 Sécurité - Rejet d'une URL de logo dangereuse ou malformée");
+
+        // Test repli fuseau horaire invalide
+        $tzRes = $this->settingsService->updateShopInfo([
+            'shop_name' => 'Marvens Luxury Store',
+            'whatsapp_number' => '+237699112233',
+            'timezone' => 'Invalid/Zone_Name',
+        ]);
+        $savedTz = $this->settingsService->getShopInfo();
+        $this->assert($savedTz['timezone'] === 'Africa/Douala', "5.1 Sécurité - Repli sur Africa/Douala si fuseau horaire inconnu");
     }
 
     private function testSection53DeliveryAndPickup(): void
