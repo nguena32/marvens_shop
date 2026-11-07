@@ -14,28 +14,82 @@ use App\Domain\Entities\Order;
 class OrderRepository
 {
     private PDO $pdo;
+    private static ?bool $hasDeliveryDateColumn = null;
 
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
+    private function supportsDeliveryDate(): bool
+    {
+        if (self::$hasDeliveryDateColumn !== null) {
+            return self::$hasDeliveryDateColumn;
+        }
+
+        try {
+            $driver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+            if ($driver === 'sqlite') {
+                $stmt = $this->pdo->query("PRAGMA table_info(orders)");
+                $columns = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
+                $colNames = array_column($columns, 'name');
+                self::$hasDeliveryDateColumn = in_array('delivery_date', $colNames, true);
+                if (!self::$hasDeliveryDateColumn) {
+                    $this->pdo->exec("ALTER TABLE orders ADD COLUMN delivery_date DATE NULL");
+                    self::$hasDeliveryDateColumn = true;
+                }
+            } else {
+                $stmt = $this->pdo->query("SHOW COLUMNS FROM orders LIKE 'delivery_date'");
+                $hasCol = $stmt && $stmt->fetch();
+                if (!$hasCol) {
+                    // Tente d'ajouter la colonne automatiquement si les permissions DDL le permettent
+                    try {
+                        $this->pdo->exec("ALTER TABLE orders ADD COLUMN delivery_date DATE NULL AFTER delivery_address");
+                        self::$hasDeliveryDateColumn = true;
+                    } catch (\Throwable $e) {
+                        self::$hasDeliveryDateColumn = false;
+                    }
+                } else {
+                    self::$hasDeliveryDateColumn = true;
+                }
+            }
+        } catch (\Throwable $e) {
+            self::$hasDeliveryDateColumn = false;
+        }
+
+        return self::$hasDeliveryDateColumn;
+    }
+
     public function createWithItems(array $orderData, array $items): int
     {
+        $hasDeliveryDate = $this->supportsDeliveryDate();
+
         $this->pdo->beginTransaction();
         try {
-            $sql = "INSERT INTO orders (
-                        order_number, customer_name, customer_whatsapp, delivery_mode, 
-                        delivery_city, delivery_district, delivery_address, delivery_date, delivery_cost, 
-                        total_amount, order_status, payment_status, payment_mode, customer_notes
-                    ) VALUES (
-                        :order_number, :customer_name, :customer_whatsapp, :delivery_mode, 
-                        :delivery_city, :delivery_district, :delivery_address, :delivery_date, :delivery_cost, 
-                        :total_amount, :order_status, :payment_status, :payment_mode, :customer_notes
-                    )";
+            if ($hasDeliveryDate) {
+                $sql = "INSERT INTO orders (
+                            order_number, customer_name, customer_whatsapp, delivery_mode, 
+                            delivery_city, delivery_district, delivery_address, delivery_date, delivery_cost, 
+                            total_amount, order_status, payment_status, payment_mode, customer_notes
+                        ) VALUES (
+                            :order_number, :customer_name, :customer_whatsapp, :delivery_mode, 
+                            :delivery_city, :delivery_district, :delivery_address, :delivery_date, :delivery_cost, 
+                            :total_amount, :order_status, :payment_status, :payment_mode, :customer_notes
+                        )";
+            } else {
+                $sql = "INSERT INTO orders (
+                            order_number, customer_name, customer_whatsapp, delivery_mode, 
+                            delivery_city, delivery_district, delivery_address, delivery_cost, 
+                            total_amount, order_status, payment_status, payment_mode, customer_notes
+                        ) VALUES (
+                            :order_number, :customer_name, :customer_whatsapp, :delivery_mode, 
+                            :delivery_city, :delivery_district, :delivery_address, :delivery_cost, 
+                            :total_amount, :order_status, :payment_status, :payment_mode, :customer_notes
+                        )";
+            }
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([
+            $params = [
                 'order_number' => $orderData['order_number'],
                 'customer_name' => $orderData['customer_name'],
                 'customer_whatsapp' => $orderData['customer_whatsapp'],
@@ -43,14 +97,19 @@ class OrderRepository
                 'delivery_city' => $orderData['delivery_city'] ?? null,
                 'delivery_district' => $orderData['delivery_district'] ?? null,
                 'delivery_address' => $orderData['delivery_address'] ?? null,
-                'delivery_date' => !empty($orderData['delivery_date']) ? $orderData['delivery_date'] : null,
                 'delivery_cost' => (int) ($orderData['delivery_cost'] ?? 0),
                 'total_amount' => (int) $orderData['total_amount'],
                 'order_status' => $orderData['order_status'] ?? Order::STATUS_PENDING,
                 'payment_status' => $orderData['payment_status'] ?? 'unpaid',
                 'payment_mode' => $orderData['payment_mode'] ?? 'cash_on_delivery',
                 'customer_notes' => $orderData['customer_notes'] ?? null,
-            ]);
+            ];
+
+            if ($hasDeliveryDate) {
+                $params['delivery_date'] = !empty($orderData['delivery_date']) ? $orderData['delivery_date'] : null;
+            }
+
+            $stmt->execute($params);
 
             $orderId = (int) $this->pdo->lastInsertId();
 
