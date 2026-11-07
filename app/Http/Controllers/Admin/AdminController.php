@@ -42,7 +42,7 @@ class AdminController extends Controller
         $this->productRepo = new ProductRepository($pdo);
         $this->categoryRepo = new CategoryRepository($pdo);
         $this->customerRepo = new CustomerRepository($pdo);
-        $this->storage = new FileStorageService(dirname(__DIR__, 3) . '/public');
+        $this->storage = new FileStorageService();
         $this->csvImport = new CsvImportService($this->productRepo, $this->categoryRepo);
         $this->metaConnector = new MetaCatalogConnector();
         $this->themeService = new ThemeService($pdo);
@@ -726,9 +726,10 @@ class AdminController extends Controller
                 $imageUrl = null;
                 if ($imageFile && !empty($imageFile['tmp_name'])) {
                     try {
-                        $imageUrl = $this->storage->storePublicUpload($imageFile, 'categories');
+                        $uploadedPath = $this->storage->storePublicUpload($imageFile, 'categories');
+                        $imageUrl = '/' . ltrim($uploadedPath, '/');
                     } catch (\Exception $e) {
-                        // Tolérance
+                        $errors[] = "Erreur sur l'image de la catégorie : " . $e->getMessage();
                     }
                 }
 
@@ -807,9 +808,14 @@ class AdminController extends Controller
         $imageUrl = $category['image_url'];
         if ($imageFile && !empty($imageFile['tmp_name'])) {
             try {
-                $imageUrl = $this->storage->storePublicUpload($imageFile, 'categories');
+                $uploadedPath = $this->storage->storePublicUpload($imageFile, 'categories');
+                $imageUrl = '/' . ltrim($uploadedPath, '/');
             } catch (\Exception $e) {
-                // Tolérance
+                return $this->render('admin.pages.category_form', [
+                    'category' => array_merge($category, $data),
+                    'errors' => ["Erreur lors du téléversement de l'image : " . $e->getMessage()],
+                    'csrf_token' => Session::getCsrfToken(),
+                ]);
             }
         }
 

@@ -19,7 +19,7 @@ class SettingsController
     public function __construct()
     {
         $this->settingsService = new SettingsService();
-        $this->storage = new FileStorageService(dirname(__DIR__, 3) . '/public');
+        $this->storage = new FileStorageService();
     }
 
     private function requireAuth(): ?Response

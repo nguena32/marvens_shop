@@ -14,15 +14,49 @@ class FileStorageService
     private int $maxSizeBytes;
     private array $allowedMimeTypes;
 
+    /**
+     * Détermine automatiquement le répertoire racine public web selon l'environnement (Local ou cPanel public_html)
+     */
+    public static function resolvePublicRoot(): string
+    {
+        // 1. Si la variable d'environnement ou config est explicitement définie
+        $configuredPath = \App\Core\Config::get('app.public_path');
+        if (!empty($configuredPath) && is_dir((string)$configuredPath)) {
+            return rtrim((string)$configuredPath, '/\\');
+        }
+
+        // 2. Détection via DOCUMENT_ROOT serveur web (Apache / cPanel)
+        if (!empty($_SERVER['DOCUMENT_ROOT']) && is_dir($_SERVER['DOCUMENT_ROOT'])) {
+            return rtrim($_SERVER['DOCUMENT_ROOT'], '/\\');
+        }
+
+        $baseDir = dirname(__DIR__, 3);
+
+        // 3. Cas cPanel hébergement mutualisé standard : /home/user/public_html
+        $siblingPublicHtml = dirname($baseDir) . '/public_html';
+        if (is_dir($siblingPublicHtml)) {
+            return $siblingPublicHtml;
+        }
+
+        // 4. Dossier public_html enfant
+        if (is_dir($baseDir . '/public_html')) {
+            return $baseDir . '/public_html';
+        }
+
+        // 5. Dossier public standard
+        return $baseDir . '/public';
+    }
+
     public function __construct(
-        string $storageRoot,
+        ?string $storageRoot = null,
         int $maxSizeMb = 30,
         array $allowedMimeTypes = [
             'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/svg+xml',
             'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'
         ]
     ) {
-        $this->storageRoot = rtrim($storageRoot, '/\\');
+        $root = $storageRoot ?? self::resolvePublicRoot();
+        $this->storageRoot = rtrim($root, '/\\');
         $this->maxSizeBytes = $maxSizeMb * 1024 * 1024;
         $this->allowedMimeTypes = $allowedMimeTypes;
     }

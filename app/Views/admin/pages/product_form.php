@@ -70,9 +70,15 @@ $isEdit = !empty($product['id']);
                 <?php endif; ?>
 
                 <?php if (!empty($feedback)): ?>
-                    <div class="p-space-md rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center gap-2">
-                        <span class="material-symbols-outlined text-emerald-600">check_circle</span>
-                        <span><?= htmlspecialchars($feedback) ?></span>
+                    <?php 
+                    $feedbackType = is_array($feedback) ? ($feedback['type'] ?? 'success') : 'success';
+                    $feedbackMsg = is_array($feedback) ? ($feedback['message'] ?? '') : (string)$feedback;
+                    ?>
+                    <div class="p-space-md rounded-2xl <?= $feedbackType === 'error' ? 'bg-rose-50 border border-rose-200 text-rose-800' : 'bg-emerald-50 border border-emerald-200 text-emerald-800' ?> text-sm flex items-center gap-2">
+                        <span class="material-symbols-outlined <?= $feedbackType === 'error' ? 'text-rose-600' : 'text-emerald-600' ?>">
+                            <?= $feedbackType === 'error' ? 'error' : 'check_circle' ?>
+                        </span>
+                        <span><?= htmlspecialchars($feedbackMsg) ?></span>
                     </div>
                 <?php endif; ?>
 
